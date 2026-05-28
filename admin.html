@@ -462,8 +462,8 @@ const RAW_BASE   = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}
 // ─── State ───────────────────────────────────────────────────
 let state = {
   screen: 'loading',   // loading | setup | list | form | settings | success
-  token: localStorage.getItem('gh_token') || atob('Z2hwX2ZGbmpHWFFIaElTTVNjWHFvVng0T1BTd1RDYXVuWjBucmM3Qg=='),
-  anthropicKey: localStorage.getItem('anthropic_key') || atob('c2stYW50LWFwaTAzLWJEeW82UFFQMzBsRlF1NkNlZGdxY3N1MG9qV2dGcTNiWGd2MGlIM0JLWEwzVnBmVEpZTmJqQUd3dnpielJ0eXA0QVdlbGFUMDhvdnJyTDl2eEVhd0x3LUNHcUZvUUFB'),
+  token: localStorage.getItem('gh_token') || '',
+  anthropicKey: localStorage.getItem('anthropic_key') || '',
   posts: [],
   editingPost: null,   // null = new, object = existing
   lastPublishedUrl: '',
