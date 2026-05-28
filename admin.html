@@ -586,6 +586,7 @@ Please expand these notes into a vivid, personal, first-person blog post body. A
     headers: {
       'x-api-key': state.anthropicKey,
       'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true',
       'content-type': 'application/json',
     },
     body: JSON.stringify({
