@@ -1189,6 +1189,15 @@ async function loadAndShowList() {
 }
 
 async function init() {
+  if (!sessionStorage.getItem('unlocked')) {
+    const pw = prompt('Enter password:');
+    if (pw !== '1690') {
+      document.getElementById('app').innerHTML =
+        '<div style="text-align:center;padding:80px 20px;color:var(--red);font-size:18px;">Wrong password.</div>';
+      return;
+    }
+    sessionStorage.setItem('unlocked', '1');
+  }
   if (!state.token) {
     state.screen = 'setup';
     render();
