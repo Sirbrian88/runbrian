@@ -1189,6 +1189,16 @@ async function loadAndShowList() {
 }
 
 async function init() {
+  // Read keys from URL hash if present (e.g. #t=TOKEN&a=ANTHROPIC_KEY)
+  // This lets you bookmark a URL with keys pre-loaded without embedding them in source
+  if (location.hash) {
+    const params = new URLSearchParams(location.hash.slice(1));
+    if (params.get('t')) { state.token = params.get('t'); localStorage.setItem('gh_token', state.token); }
+    if (params.get('a')) { state.anthropicKey = params.get('a'); localStorage.setItem('anthropic_key', state.anthropicKey); }
+    // Clear hash from URL so keys aren't visible in address bar after load
+    history.replaceState(null, '', location.pathname);
+  }
+
   if (!sessionStorage.getItem('unlocked')) {
     const pw = prompt('Enter password:');
     if (pw !== '1690') {
