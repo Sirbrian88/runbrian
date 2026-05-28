@@ -462,8 +462,8 @@ const RAW_BASE   = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}
 // ─── State ───────────────────────────────────────────────────
 let state = {
   screen: 'loading',   // loading | setup | list | form | settings | success
-  token: localStorage.getItem('gh_token') || '',
-  anthropicKey: localStorage.getItem('anthropic_key') || '',
+  token: localStorage.getItem('gh_token') || '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',
+  anthropicKey: localStorage.getItem('anthropic_key') || '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',
   posts: [],
   editingPost: null,   // null = new, object = existing
   lastPublishedUrl: '',
@@ -1189,6 +1189,15 @@ async function loadAndShowList() {
 }
 
 async function init() {
+  if (!sessionStorage.getItem('unlocked')) {
+    const pw = prompt('Enter password:');
+    if (pw !== '1690') {
+      document.getElementById('app').innerHTML =
+        '<div style="text-align:center;padding:80px 20px;color:var(--red);font-size:18px;">Wrong password.</div>';
+      return;
+    }
+    sessionStorage.setItem('unlocked', '1');
+  }
   if (!state.token) {
     state.screen = 'setup';
     render();
