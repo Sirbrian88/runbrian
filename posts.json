@@ -1,19 +1,30 @@
 [
   {
+    "id": "mpq29rkwdaou",
+    "category": "Aviation",
+    "title": "The long cross country Solo.",
+    "excerpt": "An exciting day piloting from Hillsboro OR to Bend, and back via The Dalles.",
+    "image": "IMG_2841.jpeg",
+    "date": "2026-05-21",
+    "readTime": 1,
+    "featured": false,
+    "body": "As one of the final parts of getting my private pilots license, I had to fly solo over 100 miles. I flew over the cascades to Bend. The view of the three sisters and Mt hood were epic. All went smoothly and time to get ready for that final check ride."
+  },
+  {
     "id": "gobi-400",
-    "category": "Ultra Running · China",
-    "title": "The Gobi 400 — 250 Miles Non-Stop Across China",
+    "category": "Ultra Running Â· China",
+    "title": "The Gobi 400 â 250 Miles Non-Stop Across China",
     "excerpt": "In October 2024, I flew to Dunhuang in Gansu Province to join 54 invited runners for a non-stop 400km journey through one of the world's most unforgiving landscapes.",
     "image": "gobi-desert.jpg",
     "date": "October 2024",
     "readTime": "8 min read",
     "featured": true,
-    "body": "Write your full story here. You can use multiple paragraphs — just keep everything inside these quotes and use \\n\\n between paragraphs."
+    "body": "Write your full story here. You can use multiple paragraphs â just keep everything inside these quotes and use \\n\\n between paragraphs."
   },
   {
     "id": "my-bees",
-    "category": "New Hobby · 2025",
-    "title": "My Bees — A New Hobby in 2025",
+    "category": "New Hobby Â· 2025",
+    "title": "My Bees â A New Hobby in 2025",
     "excerpt": "Just started my journey into beekeeping with my very first hive, and it's already fascinating.",
     "image": "my-bees.png",
     "date": "2025",
@@ -23,7 +34,7 @@
   },
   {
     "id": "bigfoot-double",
-    "category": "Ultra Running · Crewing",
+    "category": "Ultra Running Â· Crewing",
     "title": "The Bigfoot Double",
     "excerpt": "Crewing and pacing Jessica Wicks on her quest to become the first person to run the Bigfoot 200 both ways.",
     "image": "bigfoot-double.png",
