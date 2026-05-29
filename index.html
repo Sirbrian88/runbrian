@@ -5,6 +5,33 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Run Brian | Mountain Adventures</title>
 <meta name="description" content="Brian Hamilton — ultra endurance athlete, pilot, beekeeper, Weimaraner wrangler, and dad. Living every day to the fullest." />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Run Brian" />
+<meta property="og:url" content="https://sirbrian88.github.io/runbrian/" />
+<meta property="og:title" content="Run Brian | Ultra Running, Aviation & Adventure" />
+<meta property="og:description" content="Brian Hamilton — ultra endurance athlete, pilot, beekeeper. 16 x 200+ mile finishes. 36,000+ km on foot. Racing Moab 240 in 2026." />
+<meta property="og:image" content="https://raw.githubusercontent.com/Sirbrian88/runbrian/main/gobi-desert.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Run Brian | Ultra Running, Aviation & Adventure" />
+<meta name="twitter:description" content="Brian Hamilton — 16 x 200+ mile finishes, 36,000+ km on foot. Racing Moab 240 in 2026." />
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Sirbrian88/runbrian/main/gobi-desert.jpg" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://sirbrian88.github.io/runbrian/" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Brian Hamilton",
+  "url": "https://sirbrian88.github.io/runbrian/",
+  "image": "https://raw.githubusercontent.com/Sirbrian88/runbrian/main/gobi-desert.jpg",
+  "description": "Ultra endurance athlete, pilot, beekeeper. 16-time 200+ mile race finisher.",
+  "sameAs": ["https://www.strava.com/athletes/brianhamilton"],
+  "knowsAbout": ["Ultra Running", "Aviation", "Beekeeping", "Adventure Racing"]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -1120,12 +1147,25 @@ function openPost(id) {
   document.getElementById('home-page').style.display = 'none';
   document.getElementById('post-page').style.display = 'block';
   window.scrollTo(0, 0);
+  // Update meta for SEO / social sharing
+  const postUrl = `https://sirbrian88.github.io/runbrian/?post=${post.id}`;
+  document.title = `${post.title} | Run Brian`;
+  document.querySelector('meta[name="description"]')?.setAttribute('content', post.excerpt || post.title);
+  document.querySelector('meta[property="og:title"]')?.setAttribute('content', post.title);
+  document.querySelector('meta[property="og:description"]')?.setAttribute('content', post.excerpt || '');
+  document.querySelector('meta[property="og:url"]')?.setAttribute('content', postUrl);
+  document.querySelector('meta[property="og:image"]')?.setAttribute('content', post.images?.[0] || post.image ? `https://raw.githubusercontent.com/Sirbrian88/runbrian/main/${post.images?.[0]||post.image}` : '');
+  document.querySelector('link[rel="canonical"]')?.setAttribute('href', postUrl);
+  history.replaceState(null, '', `?post=${post.id}`);
+  setPostJsonLd(post);
 }
 
 function showHome() {
   document.getElementById('post-page').style.display = 'none';
   document.getElementById('home-page').style.display = 'block';
   window.scrollTo(0, 0);
+  document.title = 'Run Brian | Mountain Adventures';
+  history.replaceState(null, '', location.pathname);
 }
 
 // ===== SCROLL REVEAL =====
@@ -1254,6 +1294,23 @@ function updateMoabCountdown() {
 }
 updateMoabCountdown();
 setInterval(updateMoabCountdown, 60000);
+
+// ===== DYNAMIC JSON-LD FOR POSTS =====
+function setPostJsonLd(post) {
+  let el = document.getElementById('post-jsonld');
+  if (!el) { el = document.createElement('script'); el.type = 'application/ld+json'; el.id = 'post-jsonld'; document.head.appendChild(el); }
+  el.textContent = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": post.title,
+    "description": post.excerpt || '',
+    "author": { "@type": "Person", "name": "Brian Hamilton" },
+    "datePublished": post.date,
+    "url": `https://sirbrian88.github.io/runbrian/?post=${post.id}`,
+    "image": post.images?.[0] || post.image ? `https://raw.githubusercontent.com/Sirbrian88/runbrian/main/${post.images?.[0]||post.image}` : '',
+    "publisher": { "@type": "Person", "name": "Brian Hamilton" }
+  });
+}
 
 // ===== INIT =====
 loadPosts();
