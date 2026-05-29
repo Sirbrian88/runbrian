@@ -73,13 +73,20 @@ input[type=file] { display:none; }
 .toggle.on::after { left:25px; }
 
 /* Photo upload */
-.photo-area { background:var(--surface2); border:2px dashed var(--border); border-radius:var(--radius); padding:24px; text-align:center; cursor:pointer; transition:border-color .2s; }
+.photo-area { background:var(--surface2); border:2px dashed var(--border); border-radius:var(--radius); padding:20px; text-align:center; cursor:pointer; transition:border-color .2s; }
 .photo-area:active { border-color:var(--accent); }
-.photo-area .photo-icon { font-size:36px; margin-bottom:8px; }
-.photo-area p { color:var(--muted); font-size:14px; }
-.photo-preview-grid { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
-.photo-preview-grid img { width:72px; height:72px; object-fit:cover; border-radius:8px; }
-.photo-filename { font-size:12px; color:var(--accent2); margin-top:6px; word-break:break-all; }
+.photo-area .photo-icon { font-size:28px; margin-bottom:6px; }
+.photo-area p { color:var(--muted); font-size:13px; }
+.photo-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:8px; }
+.photo-thumb-wrap { position:relative; border-radius:8px; overflow:hidden; aspect-ratio:1; background:var(--surface2); }
+.photo-thumb-wrap img { width:100%; height:100%; object-fit:cover; display:block; }
+.photo-thumb-wrap .photo-del { position:absolute; top:4px; right:4px; background:rgba(244,67,54,0.9); color:#fff; border:none; border-radius:50%; width:22px; height:22px; font-size:14px; line-height:22px; text-align:center; cursor:pointer; padding:0; }
+.photo-thumb-wrap .photo-label { position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.5); color:#fff; font-size:10px; text-align:center; padding:3px; font-family:sans-serif; }
+.photo-add-btn { background:var(--surface2); border:1px dashed var(--border); border-radius:8px; aspect-ratio:1; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; color:var(--muted); font-size:24px; transition:border-color .2s; }
+.photo-add-btn:active { border-color:var(--accent); }
+.focal-row { display:flex; align-items:center; gap:10px; margin-top:8px; }
+.focal-label { font-size:12px; color:var(--muted); white-space:nowrap; }
+.focal-select { background:var(--surface2); border:1px solid var(--border); color:var(--text); font-size:13px; padding:6px 10px; border-radius:8px; flex:1; }
 
 /* Post list */
 .section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
@@ -377,13 +384,30 @@ function renderForm() {
       <input type="text" id="newCatInput" placeholder="e.g. Home Automation">
     </div>
     <div class="field">
-      <label>Photos <span style="color:var(--muted);font-size:11px;">(select multiple)</span></label>
-      <div class="photo-area" id="photoArea"><div class="photo-icon">&#x1F4F7;</div><p>Tap to choose photos&hellip;</p></div>
-      <input type="file" id="photoInput" accept="image/*" multiple>
-      <div class="photo-preview-grid" id="photoPreviewGrid">
-        ${existingImgs.map(f=>`<img src="${RAW_BASE}/${f}" alt="">`).join('')}
+      <label>Photos <span style="color:var(--muted);font-size:11px;">(tap + to add, X to remove)</span></label>
+      <div class="photo-grid" id="photoGrid">
+        ${existingImgs.map((f,i)=>`
+          <div class="photo-thumb-wrap" data-existing="${f}" data-idx="${i}">
+            <img src="${RAW_BASE}/${f}" alt="">
+            <button class="photo-del" onclick="removeExistingPhoto(this,'${f}')">&#x00D7;</button>
+            <div class="photo-label">${i===0?'Cover':''}</div>
+          </div>`).join('')}
+        <div class="photo-add-btn" id="photoAddBtn" onclick="document.getElementById('photoInput').click()">
+          <span>+</span>
+          <span style="font-size:10px;margin-top:4px;">Add</span>
+        </div>
       </div>
-      <div id="photoFilename" class="photo-filename">${existingImgs.length?`Current: ${existingImgs.join(', ')}`:''}</div>
+      <input type="file" id="photoInput" accept="image/*" multiple>
+      <div class="focal-row">
+        <span class="focal-label">&#x1F4CD; Focal point:</span>
+        <select class="focal-select" id="fFocalPoint">
+          <option value="center" ${(p?.focalPoint||'center')==='center'?'selected':''}>Center (default)</option>
+          <option value="top" ${p?.focalPoint==='top'?'selected':''}>Top — faces/peaks</option>
+          <option value="bottom" ${p?.focalPoint==='bottom'?'selected':''}>Bottom — ground/feet</option>
+          <option value="left" ${p?.focalPoint==='left'?'selected':''}>Left</option>
+          <option value="right" ${p?.focalPoint==='right'?'selected':''}>Right</option>
+        </select>
+      </div>
     </div>
     <div class="field">
       <label>YouTube Video URL <span style="color:var(--muted);font-size:11px;">(optional)</span></label>
@@ -573,7 +597,7 @@ function attachEvents() {
   const settingsBtn=$('settingsBtn');
   if(settingsBtn)settingsBtn.addEventListener('click',()=>{state.screen='settings';render();});
   const newPostBtn=$('newPostBtn');
-  if(newPostBtn)newPostBtn.addEventListener('click',()=>{state.editingPost=null;photoFiles=[];photoBases=[];state.screen='form';render();});
+  if(newPostBtn)newPostBtn.addEventListener('click',()=>{state.editingPost=null;photoFiles=[];photoBases=[];removedPhotos=[];state.screen='form';render();});
   const refreshBtn=$('refreshBtn');
   if(refreshBtn)refreshBtn.addEventListener('click',()=>loadAndShowList());
 
@@ -581,7 +605,7 @@ function attachEvents() {
   document.querySelectorAll('.post-card').forEach(card=>{
     card.addEventListener('click',()=>{
       const post=state.posts.find(p=>p.id===card.dataset.id);
-      if(post){state.editingPost=post;photoFiles=[];photoBases=[];state.screen='form';render();}
+      if(post){state.editingPost=post;photoFiles=[];photoBases=[];removedPhotos=[];state.screen='form';render();}
     });
   });
 
@@ -620,6 +644,17 @@ function attachEvents() {
   if(backToListBtn)backToListBtn.addEventListener('click',()=>loadAndShowList());
 }
 
+// ─── Photo management ───
+let removedPhotos = []; // track filenames to remove from images array
+
+function removeExistingPhoto(btn, filename) {
+  removedPhotos.push(filename);
+  btn.closest('.photo-thumb-wrap').remove();
+  // Re-label first photo as Cover
+  const first = document.querySelector('#photoGrid .photo-thumb-wrap');
+  if (first) first.querySelector('.photo-label').textContent = 'Cover';
+}
+
 // ─── Category change ───
 function handleCatChange(val) {
   const newField = document.getElementById('newCatField');
@@ -644,24 +679,33 @@ function getSelectedCategory() {
 // ─── Handlers ───
 function handlePhotoSelect(e) {
   const files = Array.from(e.target.files||[]);
-  if(!files.length)return;
-  photoFiles=files;photoBases=[];
-  const grid=document.getElementById('photoPreviewGrid');
-  const area=document.getElementById('photoArea');
-  const fn=document.getElementById('photoFilename');
-  if(grid)grid.innerHTML='';
-  if(area)area.style.display='none';
-  let loaded=0;
-  files.forEach((file,i)=>{
-    const reader=new FileReader();
-    reader.onload=ev=>{
-      photoBases[i]=ev.target.result.split(',')[1];
-      loaded++;
-      if(grid){const img=document.createElement('img');img.src=ev.target.result;img.style.cssText='width:72px;height:72px;object-fit:cover;border-radius:8px;';grid.appendChild(img);}
-      if(loaded===files.length&&fn)fn.textContent=files.length===1?`${files[0].name} (${(files[0].size/1024).toFixed(0)} KB)`:`${files.length} photos selected`;
+  if(!files.length) return;
+  const startIdx = photoFiles.length;
+  photoFiles = [...photoFiles, ...files];
+  const grid = document.getElementById('photoGrid');
+  const addBtn = document.getElementById('photoAddBtn');
+  files.forEach((file,i) => {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      photoBases[startIdx+i] = ev.target.result.split(',')[1];
+      const existingThumbs = grid ? grid.querySelectorAll('.photo-thumb-wrap').length : 0;
+      const wrap = document.createElement('div');
+      wrap.className = 'photo-thumb-wrap';
+      wrap.dataset.newIdx = startIdx+i;
+      wrap.innerHTML = `<img src="${ev.target.result}" alt="">
+        <button class="photo-del" onclick="removeNewPhoto(this,${startIdx+i})">&#x00D7;</button>
+        <div class="photo-label">${existingThumbs===0&&i===0?'Cover':''}</div>`;
+      if(addBtn&&grid) grid.insertBefore(wrap,addBtn); else if(grid) grid.appendChild(wrap);
     };
     reader.readAsDataURL(file);
   });
+  e.target.value='';
+}
+
+function removeNewPhoto(btn,idx) {
+  photoFiles=photoFiles.filter((_,i)=>i!==idx);
+  photoBases[idx]=null;
+  btn.closest('.photo-thumb-wrap').remove();
 }
 
 async function handleAIExpand() {
@@ -704,13 +748,12 @@ async function handlePublish() {
   function setStatus(steps){statusBox.innerHTML=`<div class="status-box">${steps.map(s=>`<div class="status-step"><span>${s.icon}</span> ${s.text}</div>`).join('')}</div>`;}
 
   try {
-    // Upload images
-    let existingImgs = state.editingPost ? (state.editingPost.images||(state.editingPost.image?[state.editingPost.image]:[])) : [];
-    let imageNames = [...existingImgs];
-
-    if(photoFiles.length>0&&photoBases.length>0){
-      setStatus([{icon:'&#x1F504;',text:`Uploading ${photoFiles.length} photo(s)&hellip;`},{icon:'&#x23F3;',text:'Updating posts.json&hellip;'}]);
-      imageNames=[];
+    // Build image list: keep existing minus removed, then add new uploads
+    const existingImgs = state.editingPost ? (state.editingPost.images||(state.editingPost.image?[state.editingPost.image]:[])) : [];
+    let imageNames = existingImgs.filter(f => !removedPhotos.includes(f));
+    const newFiles = photoFiles.filter((_,i) => photoBases[i]);
+    if(newFiles.length>0){
+      setStatus([{icon:'&#x1F504;',text:`Uploading ${newFiles.length} photo(s)&hellip;`},{icon:'&#x23F3;',text:'Updating posts.json&hellip;'}]);
       for(let i=0;i<photoFiles.length;i++){
         if(photoBases[i]){await uploadFile(photoFiles[i].name,photoBases[i]);imageNames.push(photoFiles[i].name);}
       }
@@ -728,6 +771,7 @@ async function handlePublish() {
       image:imageNames[0]||'',
       images:imageNames,
       video:document.getElementById('fVideo')?.value?.trim()||'',
+      focalPoint:document.getElementById('fFocalPoint')?.value||'center',
       date:date||today(),readTime,featured:isFeatured,body:body||'',
     };
     if(relatedIds.length>0)postObj.related=relatedIds;
