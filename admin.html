@@ -223,6 +223,30 @@ async function expandWithAI(excerpt, notes, title, category) {
   return d.content?.[0]?.text || null;
 }
 
+// ─── Category helpers ───
+const DEFAULT_CATS = ['Ultra Running','Aviation','Beekeeping','Home Automation','Weimaraners','Food & Wine','Travel'];
+
+function getCategories() {
+  const fromPosts = state.posts.map(p => (p.category||'').split('·')[0].trim()).filter(Boolean);
+  const saved = JSON.parse(localStorage.getItem('extra_cats')||'[]');
+  return [...new Set([...DEFAULT_CATS, ...fromPosts, ...saved])].sort();
+}
+
+function saveNewCategory(cat) {
+  const saved = JSON.parse(localStorage.getItem('extra_cats')||'[]');
+  if (!saved.includes(cat)) { saved.push(cat); localStorage.setItem('extra_cats', JSON.stringify(saved)); }
+}
+
+function renderCategorySelect(current) {
+  const cats = getCategories();
+  const opts = cats.map(c => `<option value="${escHtml(c)}" ${c===current?'selected':''}>${escHtml(c)}</option>`).join('');
+  return `<select id="fCategory" onchange="handleCatChange(this.value)">
+    <option value="">Select category&hellip;</option>
+    ${opts}
+    <option value="__new__">+ Add New Category&hellip;</option>
+  </select>`;
+}
+
 // ─── Render ───
 function render() {
   const app = document.getElementById('app');
@@ -329,8 +353,15 @@ function renderForm() {
     <div style="font-size:18px;font-weight:700;">${isEdit?'&#x270F;&#xFE0F; Edit Post':'&#x270D;&#xFE0F; New Post'}</div>
     <div class="field"><label>Title</label><input type="text" id="fTitle" value="${escHtml(p?.title||'')}" placeholder="Your post title&hellip;"></div>
     <div class="row2">
-      <div class="field"><label>Category</label><input type="text" id="fCategory" value="${escHtml(p?.category||'')}" placeholder="Ultra Running"></div>
+      <div class="field">
+        <label>Category</label>
+        ${renderCategorySelect(p?.category||'')}
+      </div>
       <div class="field"><label>Date</label><input type="text" id="fDate" value="${escHtml(p?.date||today())}" placeholder="2025-06-01"></div>
+    </div>
+    <div class="field" id="newCatField" style="display:none;">
+      <label>New Category Name</label>
+      <input type="text" id="newCatInput" placeholder="e.g. Home Automation">
     </div>
     <div class="field">
       <label>Photos <span style="color:var(--muted);font-size:11px;">(select multiple)</span></label>
@@ -491,6 +522,27 @@ function attachEvents() {
   if(backToListBtn)backToListBtn.addEventListener('click',()=>loadAndShowList());
 }
 
+// ─── Category change ───
+function handleCatChange(val) {
+  const newField = document.getElementById('newCatField');
+  if (val === '__new__') {
+    if (newField) { newField.style.display='flex'; document.getElementById('newCatInput')?.focus(); }
+  } else {
+    if (newField) newField.style.display='none';
+  }
+}
+
+function getSelectedCategory() {
+  const sel = document.getElementById('fCategory');
+  if (!sel) return '';
+  if (sel.value === '__new__') {
+    const newVal = document.getElementById('newCatInput')?.value?.trim();
+    if (newVal) { saveNewCategory(newVal); return newVal; }
+    return '';
+  }
+  return sel.value;
+}
+
 // ─── Handlers ───
 function handlePhotoSelect(e) {
   const files = Array.from(e.target.files||[]);
@@ -535,7 +587,7 @@ async function handleAIExpand() {
 
 async function handlePublish() {
   const title=document.getElementById('fTitle')?.value?.trim();
-  const category=document.getElementById('fCategory')?.value?.trim();
+  const category=getSelectedCategory();
   const date=document.getElementById('fDate')?.value?.trim();
   const excerpt=document.getElementById('fExcerpt')?.value?.trim();
   const body=document.getElementById('fBody')?.value?.trim();
