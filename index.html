@@ -729,6 +729,63 @@ footer {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* ===== CATEGORY FILTER ===== */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+.filter-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mist);
+  white-space: nowrap;
+}
+.filter-select {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--cream);
+  border: 1px solid rgba(26,20,16,0.25);
+  padding: 0.5rem 2rem 0.5rem 0.8rem;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%231a1410'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.6rem center;
+  transition: border-color 0.2s;
+}
+.filter-select:focus { outline: none; border-color: var(--rust); }
+/* ===== PHOTO GALLERY ===== */
+.post-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+.post-gallery img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  display: block;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.post-gallery img:hover { opacity: 0.85; }
+.post-gallery-single img {
+  width: 100%;
+  height: 520px;
+  object-fit: cover;
+  display: block;
+}
+
 </style>
 </head>
 <body>
@@ -812,6 +869,19 @@ footer {
       <span class="section-label">Latest</span>
       <h2 class="section-title">Stories from the Trail</h2>
     </div>
+    <div class="filter-bar reveal">
+      <span class="filter-label">Filter by:</span>
+      <select class="filter-select" id="posts-cat-select" onchange="filterCategory(this.value)">
+        <option value="all">All Adventures</option>
+        <option value="Ultra Running">Ultra Running</option>
+        <option value="Aviation">Aviation</option>
+        <option value="Beekeeping">Beekeeping</option>
+        <option value="Home Automation">Home Automation</option>
+        <option value="Weimaraners">Weimaraners</option>
+        <option value="Food &amp; Wine">Food &amp; Wine</option>
+        <option value="Travel">Travel</option>
+      </select>
+    </div>
     <div class="featured-grid reveal" id="posts-grid">
       <!-- Posts injected by JS -->
     </div>
@@ -878,9 +948,7 @@ footer {
 
 <!-- ===== POST PAGE ===== -->
 <div id="post-page">
-  <div class="post-page-hero">
-    <img id="post-hero-img" src="" alt="" />
-  </div>
+  <div class="post-page-hero"></div>
   <div class="post-page-body">
     <button class="back-link" onclick="showHome()">← All Stories</button>
     <div class="post-page-category" id="post-category"></div>
@@ -902,6 +970,7 @@ footer {
 <script>
 // ===== LOAD POSTS FROM posts.json =====
 let allPosts = [];
+let activeCategory = 'all';
 
 async function loadPosts() {
   try {
@@ -913,12 +982,31 @@ async function loadPosts() {
   }
 }
 
+function filterCategory(cat) {
+  activeCategory = cat;
+  // Sync both dropdowns
+  const d1 = document.getElementById('hero-cat-select');
+  const d2 = document.getElementById('posts-cat-select');
+  if (d1) d1.value = cat;
+  if (d2) d2.value = cat;
+  // Filter posts
+  const filtered = cat === 'all' ? allPosts : allPosts.filter(p =>
+    p.category && p.category.toLowerCase().includes(cat.toLowerCase())
+  );
+  renderPosts(filtered);
+  // Scroll to stories
+  document.getElementById('stories').scrollIntoView({ behavior: 'smooth' });
+}
+
 function renderPosts(posts) {
   const grid = document.getElementById('posts-grid');
   grid.innerHTML = '';
+  if (posts.length === 0) {
+    grid.innerHTML = '<div style="grid-column:1/-1;padding:3rem;text-align:center;font-family:DM Mono,monospace;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--mist);">No stories in this category yet.</div>';
+    return;
+  }
   const featured = posts.find(p => p.featured);
   const others = posts.filter(p => !p.featured);
-
   if (featured) grid.appendChild(makeCard(featured, true));
   others.forEach(p => grid.appendChild(makeCard(p, false)));
 }
@@ -927,19 +1015,26 @@ function makeCard(post, isFeatured) {
   const card = document.createElement('div');
   card.className = 'post-card' + (isFeatured ? ' featured' : '');
   card.onclick = () => openPost(post.id);
+  // First image: check images array then fall back to image field
+  const imgSrc = (post.images && post.images[0]) ? post.images[0] : (post.image || '');
+  const imgCount = post.images ? post.images.length : (post.image ? 1 : 0);
   card.innerHTML = `
     <div class="post-img-wrap">
-      <img class="post-img" src="${post.image}" alt="${post.title}"
-           onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
-      <div class="post-img-placeholder" style="display:none;"></div>
+      ${imgSrc
+        ? `<img class="post-img" src="${imgSrc}" alt="${post.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+           <div class="post-img-placeholder" style="display:none;"></div>`
+        : `<div class="post-img-placeholder"></div>`
+      }
+      ${imgCount > 1 ? `<div style="position:absolute;top:10px;right:10px;background:rgba(26,20,16,0.6);color:#fff;font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;padding:3px 8px;">${imgCount} PHOTOS</div>` : ''}
     </div>
     <div class="post-body">
       <div class="post-category">${post.category}</div>
       <h3 class="post-title">${post.title}</h3>
       <p class="post-excerpt">${post.excerpt}</p>
-      <div class="post-meta">${post.date} &nbsp;·&nbsp; ${post.readTime}</div>
+      <div class="post-meta">${post.date} &nbsp;·&nbsp; ${post.readTime} min read</div>
     </div>
   `;
+  card.querySelector('.post-img-wrap').style.position = 'relative';
   return card;
 }
 
@@ -948,13 +1043,28 @@ function openPost(id) {
   const post = allPosts.find(p => p.id === id);
   if (!post) return;
 
-  document.getElementById('post-hero-img').src = post.image;
-  document.getElementById('post-hero-img').alt = post.title;
+  // Build image list
+  const images = post.images && post.images.length ? post.images : (post.image ? [post.image] : []);
+
+  // Hero image area
+  const heroEl = document.querySelector('.post-page-hero');
+  if (images.length === 1) {
+    heroEl.className = 'post-page-hero post-gallery-single';
+    heroEl.innerHTML = `<img src="${images[0]}" alt="${post.title}" />`;
+  } else if (images.length > 1) {
+    heroEl.className = 'post-page-hero';
+    heroEl.innerHTML = `<div class="post-gallery">${images.map(src =>
+      `<img src="${src}" alt="${post.title}" onclick="window.open('${src}','_blank')" />`
+    ).join('')}</div>`;
+  } else {
+    heroEl.className = 'post-page-hero';
+    heroEl.innerHTML = '';
+  }
+
   document.getElementById('post-category').textContent = post.category;
   document.getElementById('post-title').textContent = post.title;
-  document.getElementById('post-meta').textContent = post.date + ' · ' + post.readTime;
+  document.getElementById('post-meta').textContent = post.date + ' · ' + post.readTime + ' min read';
 
-  // Render body — double newlines become paragraphs
   const content = document.getElementById('post-content');
   content.innerHTML = (post.body || '')
     .split(/\n\n+/)
