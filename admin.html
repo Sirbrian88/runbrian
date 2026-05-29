@@ -233,7 +233,7 @@ async function expandWithAI(excerpt, notes, title, category) {
 // ─── Video helpers ───
 function getYouTubeId(url) {
   if (!url) return null;
-  const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&?/]+)/);
+  const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([^&?/]+)/);
   return m ? m[1] : null;
 }
 function getVideoEmbed(url, preview=false) {
