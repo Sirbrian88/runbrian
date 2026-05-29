@@ -1,5 +1,16 @@
 [
   {
+    "id": "mpq9wgwzg5cb",
+    "category": "Travel",
+    "title": "Amalfi Coast",
+    "excerpt": "A cold beverage after a warm hike.",
+    "image": "IMG_3462.jpeg",
+    "date": "2026-04-29",
+    "readTime": 3,
+    "featured": true,
+    "body": "# A Week of Absolute Indulgence on the Amalfi Coast\n\nLook, I'm going to be straight with you: I'm a guy who spends most of his time covered in sweat and dirt, pushing his body to breaking points in the mountains. So when Donna suggested a week-long sailing adventure on the Amalfi coast, my first instinct was to find an ultramarathon to talk her out of it. But she gave me that look—you know the one—and here we are. And I'm absolutely not complaining.\n\nWe boarded the *Dream Yachts* catamaran with four other adventurers and promptly handed our lives over to our skipper, who actually knew what he was doing. Unlike me with a sailboat. I can navigate mountains blind, but ask me to trim a jib and I'm useless. The beauty of this setup? We didn't have to be useful. We just had to show up, breathe in the Mediterranean air, and let someone else do the heavy lifting for once.\n\nThe catamaran became our floating basecamp—a weird concept for someone whose basecamp usually involves a sleeping bag and the faint smell of regret. But this one came with a chef. An actual chef. Who prepared meals so good I stopped questioning my life choices around day two.\n\nThe highlights blurred together in the best way possible. We hiked the Path of Gods, that legendary trek along the Amalfi cliffside where you're basically walking along vertigo itself. The views are ridiculous—the kind that make you understand why humans have spent thousands of years writing poetry about this coast. My legs barely remembered they were legs by that point, which was somehow comforting. This I understood.\n\nCapri was impossibly blue and absurdly crowded, but there's something about sailing into those grottos and seeing the Blue Grotto for real that cuts through the tourist nonsense. Naples deserved more time than we gave it—I could taste the history in the air, feel the chaos in the narrow streets. That's a place that demands you slow down and actually pay attention.\n\nBut here's what I didn't expect: the simple peace of being on the water. No race clock. No summit waiting. Just the gentle rock of the boat, decent wine, good conversation, and my wife beside me. The chef would deliver another meal. Someone would point out a pod of dolphins. The skipper would adjust course for some new adventure, and we'd just... go.\n\nI'm already looking at calendars, pretending I'm thinking about my next 100-miler. But I'm really just counting down to when we can do this again. Sometimes the best adventures aren't about testing your limits—they're about expanding them in directions you didn't expect."
+  },
+  {
     "id": "mpq29rkwdaou",
     "category": "Aviation",
     "title": "The long cross country Solo.",
@@ -12,19 +23,19 @@
   },
   {
     "id": "gobi-400",
-    "category": "Ultra Running Â· China",
-    "title": "The Gobi 400 â 250 Miles Non-Stop Across China",
+    "category": "Ultra Running ÃÂ· China",
+    "title": "The Gobi 400 Ã¢ÂÂ 250 Miles Non-Stop Across China",
     "excerpt": "In October 2024, I flew to Dunhuang in Gansu Province to join 54 invited runners for a non-stop 400km journey through one of the world's most unforgiving landscapes.",
     "image": "gobi-desert.jpg",
     "date": "October 2024",
     "readTime": "8 min read",
     "featured": true,
-    "body": "Write your full story here. You can use multiple paragraphs â just keep everything inside these quotes and use \\n\\n between paragraphs."
+    "body": "Write your full story here. You can use multiple paragraphs Ã¢ÂÂ just keep everything inside these quotes and use \\n\\n between paragraphs."
   },
   {
     "id": "my-bees",
-    "category": "New Hobby Â· 2025",
-    "title": "My Bees â A New Hobby in 2025",
+    "category": "New Hobby ÃÂ· 2025",
+    "title": "My Bees Ã¢ÂÂ A New Hobby in 2025",
     "excerpt": "Just started my journey into beekeeping with my very first hive, and it's already fascinating.",
     "image": "my-bees.png",
     "date": "2025",
@@ -34,7 +45,7 @@
   },
   {
     "id": "bigfoot-double",
-    "category": "Ultra Running Â· Crewing",
+    "category": "Ultra Running ÃÂ· Crewing",
     "title": "The Bigfoot Double",
     "excerpt": "Crewing and pacing Jessica Wicks on her quest to become the first person to run the Bigfoot 200 both ways.",
     "image": "bigfoot-double.png",
