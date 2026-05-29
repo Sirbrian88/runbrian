@@ -36,7 +36,7 @@
     padding: 0 0 80px 0;
   }
 
-  /* ─── Header ─── */
+  /* ��������� Header ��������� */
   header {
     background: var(--surface);
     border-bottom: 1px solid var(--border);
@@ -58,7 +58,7 @@
 
   .header-btns { display: flex; gap: 8px; }
 
-  /* ─── Buttons ─── */
+  /* ��������� Buttons ��������� */
   button {
     font-family: inherit;
     font-size: 15px;
@@ -109,10 +109,10 @@
   }
   .btn-green { background: var(--green); color: #fff; }
 
-  /* ─── Sections / Screens ─── */
+  /* ��������� Sections / Screens ��������� */
   .screen { padding: 20px; }
 
-  /* ─── Setup / Token Screen ─── */
+  /* ��������� Setup / Token Screen ��������� */
   #setupScreen {
     padding: 40px 20px;
     display: flex;
@@ -136,7 +136,7 @@
     line-height: 1.6;
   }
 
-  /* ─── Form elements ─── */
+  /* ��������� Form elements ��������� */
   .field { display: flex; flex-direction: column; gap: 6px; }
   label { font-size: 13px; color: var(--muted); font-weight: 500; letter-spacing: 0.3px; text-transform: uppercase; }
   input[type="text"],
@@ -165,7 +165,7 @@
 
   .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
-  /* ─── Toggle ─── */
+  /* ��������� Toggle ��������� */
   .toggle-row {
     display: flex;
     align-items: center;
@@ -201,7 +201,7 @@
   .toggle.on { background: var(--accent); }
   .toggle.on::after { left: 25px; }
 
-  /* ─── Photo upload ─── */
+  /* ��������� Photo upload ��������� */
   .photo-area {
     background: var(--surface2);
     border: 2px dashed var(--border);
@@ -228,7 +228,7 @@
     word-break: break-all;
   }
 
-  /* ─── Post list ─── */
+  /* ��������� Post list ��������� */
   .section-header {
     display: flex;
     align-items: center;
@@ -301,7 +301,7 @@
     font-weight: 700;
   }
 
-  /* ─── Related posts checkboxes ─── */
+  /* ��������� Related posts checkboxes ��������� */
   .related-list {
     background: var(--surface2);
     border: 1px solid var(--border);
@@ -333,7 +333,7 @@
     line-height: 1.3;
   }
 
-  /* ─── Toast ─── */
+  /* ��������� Toast ��������� */
   #toast {
     position: fixed;
     bottom: 24px;
@@ -357,7 +357,7 @@
   #toast.success { border-color: var(--green); color: var(--green); }
   #toast.error { border-color: var(--red); color: var(--red); }
 
-  /* ─── Spinner ─── */
+  /* ��������� Spinner ��������� */
   .spinner {
     display: inline-block;
     width: 18px;
@@ -371,7 +371,7 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ─── Progress / status ─── */
+  /* ��������� Progress / status ��������� */
   .status-box {
     background: var(--surface2);
     border: 1px solid var(--border);
@@ -388,7 +388,7 @@
   }
   .step-icon { font-size: 16px; }
 
-  /* ─── Back button ─── */
+  /* ��������� Back button ��������� */
   .back-btn {
     background: none;
     color: var(--muted);
@@ -401,14 +401,14 @@
   }
   .back-btn:active { transform: none; opacity: 0.6; }
 
-  /* ─── Divider ─── */
+  /* ��������� Divider ��������� */
   .divider {
     height: 1px;
     background: var(--border);
     margin: 24px 0;
   }
 
-  /* ─── Empty state ─── */
+  /* ��������� Empty state ��������� */
   .empty {
     text-align: center;
     padding: 60px 20px;
@@ -417,7 +417,7 @@
   }
   .empty-icon { font-size: 48px; margin-bottom: 12px; }
 
-  /* ─── Settings screen ─── */
+  /* ��������� Settings screen ��������� */
   .settings-row {
     background: var(--surface2);
     border: 1px solid var(--border);
@@ -429,7 +429,7 @@
   .settings-row strong { display: block; margin-bottom: 4px; }
   .settings-row span { color: var(--muted); font-size: 12px; word-break: break-all; }
 
-  /* ─── Success screen ─── */
+  /* ��������� Success screen ��������� */
   .success-screen {
     text-align: center;
     padding: 40px 20px;
@@ -445,6 +445,18 @@
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* PIN screen */
+  #pinScreen { display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:24px;padding:40px 20px; }
+  .pin-logo { font-size:48px; }
+  .pin-title { font-size:22px;font-weight:700;color:var(--accent); }
+  .pin-dots { display:flex;gap:16px;margin:8px 0; }
+  .pin-dot { width:18px;height:18px;border-radius:50%;background:var(--border);transition:background 0.15s; }
+  .pin-dot.filled { background:var(--accent); }
+  .pin-pad { display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%;max-width:280px; }
+  .pin-key { background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:22px;font-weight:600;padding:18px;border-radius:12px;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background 0.1s,transform 0.1s;width:100%; }
+  .pin-key:active { background:var(--accent);transform:scale(0.93); }
+  .pin-error { color:var(--red);font-size:14px;min-height:20px; }
 </style>
 </head>
 <body>
@@ -452,14 +464,14 @@
 <div id="toast"></div>
 
 <script>
-// ─── Constants ───────────────────────────────────────────────
+// ��������� Constants ���������������������������������������������������������������������������������������������������������������������������������������������
 const REPO_OWNER = 'Sirbrian88';
 const REPO_NAME  = 'runbrian';
 const BRANCH     = 'main';
 const API_BASE   = 'https://api.github.com';
 const RAW_BASE   = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${BRANCH}`;
 
-// ─── State ───────────────────────────────────────────────────
+// ��������� State ���������������������������������������������������������������������������������������������������������������������������������������������������������
 let state = {
   screen: 'loading',   // loading | setup | list | form | settings | success
   token: localStorage.getItem('gh_token') || '',
@@ -474,7 +486,7 @@ let form = {};
 let photoFile = null;
 let photoBase64 = null;
 
-// ─── Utilities ───────────────────────────────────────────────
+// ��������� Utilities ���������������������������������������������������������������������������������������������������������������������������������������������
 function toast(msg, type = '', duration = 3000) {
   const el = document.getElementById('toast');
   el.textContent = msg;
@@ -505,7 +517,7 @@ function today() {
   return new Date().toISOString().split('T')[0];
 }
 
-// ─── GitHub API ───────────────────────────────────────────────
+// ��������� GitHub API ���������������������������������������������������������������������������������������������������������������������������������������������
 async function ghFetch(path, opts = {}) {
   const res = await fetch(`${API_BASE}${path}`, {
     ...opts,
@@ -567,7 +579,7 @@ async function savePostsJson(posts, sha) {
   });
 }
 
-// ─── Anthropic AI Expansion ───────────────────────────────────
+// ��������� Anthropic AI Expansion ���������������������������������������������������������������������������������������������������������
 async function expandWithAI(excerpt, notes, title, category) {
   if (!state.anthropicKey) {
     toast('No Anthropic API key set. Go to Settings.', 'error');
@@ -592,7 +604,7 @@ Please expand these notes into a vivid, personal, first-person blog post body. A
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 1024,
-      system: "You are helping Brian Hamilton write blog posts about ultrarunning and outdoor adventures. Expand the notes into a vivid, personal, first-person narrative. Keep Brian's voice — direct, honest, self-deprecating.",
+      system: "You are helping Brian Hamilton write blog posts about ultrarunning and outdoor adventures. Expand the notes into a vivid, personal, first-person narrative. Keep Brian's voice ��� direct, honest, self-deprecating.",
       messages: [{ role: 'user', content: prompt }],
     }),
   });
@@ -606,11 +618,12 @@ Please expand these notes into a vivid, personal, first-person blog post body. A
   return data.content?.[0]?.text || null;
 }
 
-// ─── Rendering ────────────────────────────────────────────────
+// ��������� Rendering ������������������������������������������������������������������������������������������������������������������������������������������������
 function render() {
   const app = document.getElementById('app');
   switch (state.screen) {
     case 'loading':  app.innerHTML = renderLoading(); break;
+    case 'pin':      app.innerHTML = renderPin(); break;
     case 'setup':    app.innerHTML = renderSetup(); break;
     case 'list':     app.innerHTML = renderList(); break;
     case 'form':     app.innerHTML = renderForm(); break;
@@ -620,13 +633,32 @@ function render() {
   attachEvents();
 }
 
+function renderPin() {
+  return `
+    <div id="pinScreen">
+      <div class="pin-logo"><���</div>
+      <div class="pin-title">RunBrian Admin</div>
+      <div class="pin-dots">
+        <div class="pin-dot" id="d0"></div><div class="pin-dot" id="d1"></div>
+        <div class="pin-dot" id="d2"></div><div class="pin-dot" id="d3"></div>
+      </div>
+      <div class="pin-error" id="pinError"></div>
+      <div class="pin-pad">
+        ${[1,2,3,4,5,6,7,8,9].map(n => `<button class="pin-key" data-digit="${n}">${n}</button>`).join('')}
+        <div></div>
+        <button class="pin-key" data-digit="0">0</button>
+        <button class="pin-key" id="pinDel">+</button>
+      </div>
+    </div>`;
+}
+
 function renderLoading() {
   return `
     <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:16px;color:var(--muted);">
-      <div style="font-size:48px;">🏃</div>
+      <div style="font-size:48px;">����</div>
       <div style="display:flex;align-items:center;gap:8px;">
         <span class="spinner" style="border-top-color:var(--accent);"></span>
-        Loading…
+        Loading���
       </div>
     </div>`;
 }
@@ -634,7 +666,7 @@ function renderLoading() {
 function renderSetup() {
   return `
     <div id="setupScreen">
-      <div class="setup-logo">🏔️</div>
+      <div class="setup-logo">�������</div>
       <div class="setup-title">RunBrian Admin</div>
       <div class="setup-sub">Connect your GitHub account to manage your posts. Your token stays on this device only.</div>
       <div class="field">
@@ -643,14 +675,14 @@ function renderSetup() {
       </div>
       <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;font-size:13px;color:var(--muted);">
         <strong style="color:var(--text);display:block;margin-bottom:4px;">How to get a token:</strong>
-        GitHub → Settings → Developer Settings → Personal access tokens → Fine-grained tokens<br><br>
+        GitHub ��� Settings ��� Developer Settings ��� Personal access tokens ��� Fine-grained tokens<br><br>
         Required permissions: <strong style="color:var(--accent2);">Contents: Read &amp; Write</strong>
       </div>
       <div class="field">
         <label>Anthropic API Key <span style="color:var(--muted);font-size:11px;">(optional, for AI expansion)</span></label>
         <input type="password" id="anthropicInput" placeholder="sk-ant-xxxxxxxxxxxx" value="${state.anthropicKey}" autocomplete="off" spellcheck="false">
       </div>
-      <button class="btn-primary" id="saveSetupBtn">Connect →</button>
+      <button class="btn-primary" id="saveSetupBtn">Connect ���</button>
     </div>`;
 }
 
@@ -660,17 +692,17 @@ function renderList() {
     <header>
       <h1>Run<span>Brian</span></h1>
       <div class="header-btns">
-        <button class="btn-icon" id="settingsBtn" title="Settings">⚙️</button>
+        <button class="btn-icon" id="settingsBtn" title="Settings">������</button>
         <button class="btn-secondary btn-sm" id="newPostBtn">+ New Post</button>
       </div>
     </header>
     <div class="screen">
       <div class="section-header">
         <div class="section-title">Posts <span style="color:var(--muted);font-weight:400;font-size:14px;">(${posts.length})</span></div>
-        <button class="btn-secondary btn-sm" id="refreshBtn">↻ Refresh</button>
+        <button class="btn-secondary btn-sm" id="refreshBtn">��� Refresh</button>
       </div>
       ${posts.length === 0
-        ? `<div class="empty"><div class="empty-icon">📝</div>No posts yet. Create your first one!</div>`
+        ? `<div class="empty"><div class="empty-icon">����</div>No posts yet. Create your first one!</div>`
         : posts.map(p => renderPostCard(p)).join('')
       }
     </div>`;
@@ -680,16 +712,16 @@ function renderPostCard(p) {
   const imageUrl = p.image ? `${RAW_BASE}/${p.image}` : null;
   const thumb = imageUrl
     ? `<img class="post-thumb" src="${imageUrl}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-       <div class="post-thumb-placeholder" style="display:none;">🏔️</div>`
-    : `<div class="post-thumb-placeholder">🏔️</div>`;
+       <div class="post-thumb-placeholder" style="display:none;">�������</div>`
+    : `<div class="post-thumb-placeholder">�������</div>`;
 
   return `
     <div class="post-card" data-id="${p.id}">
       ${thumb}
       <div class="post-info">
-        <div class="post-cat">${p.category || 'Uncategorized'}${p.featured ? '<span class="badge-featured">★ Featured</span>' : ''}</div>
+        <div class="post-cat">${p.category || 'Uncategorized'}${p.featured ? '<span class="badge-featured">��� Featured</span>' : ''}</div>
         <div class="post-title">${p.title}</div>
-        <div class="post-meta">${p.date || ''} · ${p.readTime || '?'} min read</div>
+        <div class="post-meta">${p.date || ''} �� ${p.readTime || '?'} min read</div>
       </div>
     </div>`;
 }
@@ -719,23 +751,23 @@ function renderForm() {
 
   return `
     <header>
-      <button class="back-btn" id="backBtn">← Posts</button>
+      <button class="back-btn" id="backBtn">��� Posts</button>
       <div class="header-btns">
         ${isEdit ? `<button class="btn-secondary btn-sm btn-danger" id="deleteBtn">Delete</button>` : ''}
       </div>
     </header>
     <div class="screen" style="display:flex;flex-direction:column;gap:20px;">
-      <div style="font-size:18px;font-weight:700;">${isEdit ? '✏️ Edit Post' : '✍️ New Post'}</div>
+      <div style="font-size:18px;font-weight:700;">${isEdit ? '������ Edit Post' : '������ New Post'}</div>
 
       <div class="field">
         <label>Title</label>
-        <input type="text" id="fTitle" value="${escHtml(title)}" placeholder="Your post title…">
+        <input type="text" id="fTitle" value="${escHtml(title)}" placeholder="Your post title���">
       </div>
 
       <div class="row2">
         <div class="field">
           <label>Category</label>
-          <input type="text" id="fCategory" value="${escHtml(category)}" placeholder="Ultra Running · Race">
+          <input type="text" id="fCategory" value="${escHtml(category)}" placeholder="Ultra Running �� Race">
         </div>
         <div class="field">
           <label>Date</label>
@@ -746,7 +778,7 @@ function renderForm() {
       <div class="field">
         <label>Photo</label>
         <div class="photo-area" id="photoArea">
-          <div class="photo-icon">📷</div>
+          <div class="photo-icon">����</div>
           <p>Tap to choose a photo</p>
         </div>
         <input type="file" id="photoInput" accept="image/*">
@@ -756,15 +788,15 @@ function renderForm() {
 
       <div class="field">
         <label>Excerpt <span style="color:var(--muted);">(~2 sentences)</span></label>
-        <textarea id="fExcerpt" rows="3" placeholder="A short teaser for the post…">${escHtml(excerpt)}</textarea>
+        <textarea id="fExcerpt" rows="3" placeholder="A short teaser for the post���">${escHtml(excerpt)}</textarea>
       </div>
 
       <div class="field">
         <label>Full Body</label>
-        <textarea id="fBody" rows="10" placeholder="Write your full post here…">${escHtml(body)}</textarea>
+        <textarea id="fBody" rows="10" placeholder="Write your full post here���">${escHtml(body)}</textarea>
       </div>
 
-      <button class="btn-ai" id="aiExpandBtn">✨ Expand with AI</button>
+      <button class="btn-ai" id="aiExpandBtn">��� Expand with AI</button>
 
       <div class="field">
         <label>Read Time (min)</label>
@@ -777,14 +809,14 @@ function renderForm() {
       </div>
 
       <div class="toggle-row">
-        <span class="toggle-label">⭐ Featured Post</span>
+        <span class="toggle-label">��� Featured Post</span>
         <div class="toggle ${featured ? 'on' : ''}" id="featuredToggle"></div>
       </div>
 
       <div id="publishStatus" style="display:none;"></div>
 
       <button class="btn-primary" id="publishBtn">
-        🚀 ${isEdit ? 'Update Post' : 'Publish Post'}
+        ���� ${isEdit ? 'Update Post' : 'Publish Post'}
       </button>
 
       <div style="height:20px;"></div>
@@ -796,19 +828,19 @@ function renderSettings() {
   const hasAI = !!state.anthropicKey;
   return `
     <header>
-      <button class="back-btn" id="backBtn">← Posts</button>
+      <button class="back-btn" id="backBtn">��� Posts</button>
       <div></div>
     </header>
     <div class="screen" style="display:flex;flex-direction:column;gap:16px;">
-      <div style="font-size:18px;font-weight:700;">⚙️ Settings</div>
+      <div style="font-size:18px;font-weight:700;">������ Settings</div>
 
       <div class="settings-row">
         <strong>GitHub Token</strong>
-        <span>${hasToken ? '●●●●●●●● (set)' : 'Not set'}</span>
+        <span>${hasToken ? '������������������������ (set)' : 'Not set'}</span>
       </div>
       <div class="settings-row">
         <strong>Anthropic API Key</strong>
-        <span>${hasAI ? '●●●●●●●● (set)' : 'Not set — AI expansion disabled'}</span>
+        <span>${hasAI ? '������������������������ (set)' : 'Not set ��� AI expansion disabled'}</span>
       </div>
 
       <div class="divider"></div>
@@ -827,7 +859,7 @@ function renderSettings() {
 
       <div style="color:var(--muted);font-size:13px;text-align:center;">
         Repo: <a href="https://github.com/${REPO_OWNER}/${REPO_NAME}" target="_blank" style="color:var(--accent2);">${REPO_OWNER}/${REPO_NAME}</a><br>
-        Live site: <a href="https://${REPO_OWNER}.github.io/${REPO_NAME}" target="_blank" style="color:var(--accent2);">View site ↗</a>
+        Live site: <a href="https://${REPO_OWNER}.github.io/${REPO_NAME}" target="_blank" style="color:var(--accent2);">View site ���</a>
       </div>
 
       <button class="btn-secondary" id="clearCredsBtn" style="margin-top:8px;color:var(--red);">Clear All Credentials</button>
@@ -837,14 +869,14 @@ function renderSettings() {
 function renderSuccess() {
   return `
     <div class="success-screen">
-      <div class="success-icon">🎉</div>
+      <div class="success-icon">����</div>
       <div class="success-title">Published!</div>
-      <div style="color:var(--muted);font-size:14px;text-align:center;">Your post is live on GitHub Pages.<br>Changes may take 1–2 minutes to appear.</div>
+      <div style="color:var(--muted);font-size:14px;text-align:center;">Your post is live on GitHub Pages.<br>Changes may take 1���2 minutes to appear.</div>
       <a href="https://${REPO_OWNER}.github.io/${REPO_NAME}" target="_blank"
          style="display:block;background:var(--surface2);color:var(--accent2);padding:14px 24px;border-radius:var(--radius);text-decoration:none;font-size:14px;border:1px solid var(--border);">
-        View Live Site ↗
+        View Live Site ���
       </a>
-      <button class="btn-primary" id="backToListBtn">← Back to Posts</button>
+      <button class="btn-primary" id="backToListBtn">��� Back to Posts</button>
     </div>`;
 }
 
@@ -857,9 +889,32 @@ function escHtml(str) {
     .replace(/>/g, '&gt;');
 }
 
-// ─── Event Attachment ──────────────────────────────────────────
+// ��������� Event Attachment ������������������������������������������������������������������������������������������������������������������������������
 function attachEvents() {
   const $ = id => document.getElementById(id);
+
+
+  // PIN screen
+  let pinEntry = '';
+  document.querySelectorAll('.pin-key[data-digit]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (pinEntry.length >= 4) return;
+      pinEntry += btn.dataset.digit;
+      for (let i = 0; i < 4; i++) { const d = document.getElementById('d'+i); if(d) d.classList.toggle('filled', i < pinEntry.length); }
+      if (pinEntry.length === 4) {
+        if (pinEntry === '1690') {
+          sessionStorage.setItem('unlocked','1');
+          if (!state.token) { state.screen = 'setup'; render(); } else { loadAndShowList(); }
+        } else {
+          const err = document.getElementById('pinError');
+          if(err) err.textContent = 'Wrong PIN, try again';
+          setTimeout(() => { pinEntry=''; for(let i=0;i<4;i++){const d=document.getElementById('d'+i);if(d)d.classList.remove('filled');} if(err)err.textContent=''; }, 800);
+        }
+      }
+    });
+  });
+  const pinDel = $('pinDel');
+  if (pinDel) { pinDel.addEventListener('click', () => { if(pinEntry.length>0){pinEntry=pinEntry.slice(0,-1); for(let i=0;i<4;i++){const d=document.getElementById('d'+i);if(d)d.classList.toggle('filled',i<pinEntry.length);}} }); }
 
   // Setup screen
   const saveSetupBtn = $('saveSetupBtn');
@@ -1001,7 +1056,7 @@ function attachEvents() {
   }
 }
 
-// ─── Handlers ─────────────────────────────────────────────────
+// ��������� Handlers ���������������������������������������������������������������������������������������������������������������������������������������������������
 function handlePhotoSelect(e) {
   const file = e.target.files?.[0];
   if (!file) return;
@@ -1017,7 +1072,7 @@ function handlePhotoSelect(e) {
     const area = document.getElementById('photoArea');
     if (preview) { preview.src = result; preview.style.display = 'block'; }
     if (area) area.style.display = 'none';
-    if (filename) filename.textContent = `📎 ${file.name} (${(file.size/1024).toFixed(0)} KB)`;
+    if (filename) filename.textContent = `���� ${file.name} (${(file.size/1024).toFixed(0)} KB)`;
   };
   reader.readAsDataURL(file);
 }
@@ -1034,7 +1089,7 @@ async function handleAIExpand() {
   }
 
   const btn = document.getElementById('aiExpandBtn');
-  btn.innerHTML = '<span class="spinner"></span>Expanding…';
+  btn.innerHTML = '<span class="spinner"></span>Expanding���';
   btn.disabled = true;
 
   try {
@@ -1042,12 +1097,12 @@ async function handleAIExpand() {
     if (expanded) {
       document.getElementById('fBody').value = expanded;
       document.getElementById('fReadTime').value = estimateReadTime(expanded);
-      toast('✨ AI expansion complete!', 'success');
+      toast('��� AI expansion complete!', 'success');
     }
   } catch (e) {
     toast('AI error: ' + e.message, 'error');
   } finally {
-    btn.innerHTML = '✨ Expand with AI';
+    btn.innerHTML = '��� Expand with AI';
     btn.disabled = false;
   }
 }
@@ -1074,7 +1129,7 @@ async function handlePublish() {
   const publishBtn = document.getElementById('publishBtn');
   statusBox.style.display = 'block';
   publishBtn.disabled = true;
-  publishBtn.innerHTML = '<span class="spinner"></span>Publishing…';
+  publishBtn.innerHTML = '<span class="spinner"></span>Publishing���';
 
   function setStatus(steps) {
     statusBox.innerHTML = `<div class="status-box">${steps.map(s =>
@@ -1083,8 +1138,8 @@ async function handlePublish() {
   }
 
   const steps = [
-    { icon: '⏳', text: 'Uploading image…' },
-    { icon: '⏳', text: 'Updating posts.json…' },
+    { icon: '���', text: 'Uploading image���' },
+    { icon: '���', text: 'Updating posts.json���' },
   ];
 
   try {
@@ -1092,13 +1147,13 @@ async function handlePublish() {
 
     // Step 1: Upload image if new file selected
     if (photoFile && photoBase64) {
-      setStatus([{ icon: '🔄', text: 'Uploading image…' }, { icon: '⏳', text: 'Updating posts.json…' }]);
+      setStatus([{ icon: '����', text: 'Uploading image���' }, { icon: '���', text: 'Updating posts.json���' }]);
       imageName = photoFile.name;
       await uploadFile(imageName, photoBase64);
     }
 
     // Step 2: Fetch current posts.json
-    setStatus([{ icon: '✅', text: 'Image uploaded' }, { icon: '🔄', text: 'Fetching posts.json…' }]);
+    setStatus([{ icon: '���', text: 'Image uploaded' }, { icon: '����', text: 'Fetching posts.json���' }]);
     const { posts, sha } = await fetchPosts();
 
     // Step 3: Build post object
@@ -1135,10 +1190,10 @@ async function handlePublish() {
     }
 
     // Step 4: Save posts.json
-    setStatus([{ icon: '✅', text: 'Image uploaded' }, { icon: '🔄', text: 'Saving posts.json…' }]);
+    setStatus([{ icon: '���', text: 'Image uploaded' }, { icon: '����', text: 'Saving posts.json���' }]);
     await savePostsJson(updatedPosts, sha);
 
-    setStatus([{ icon: '✅', text: 'Image uploaded' }, { icon: '✅', text: 'posts.json updated' }]);
+    setStatus([{ icon: '���', text: 'Image uploaded' }, { icon: '���', text: 'posts.json updated' }]);
 
     // Update local state
     state.posts = updatedPosts;
@@ -1148,8 +1203,8 @@ async function handlePublish() {
   } catch (e) {
     toast('Error: ' + e.message, 'error', 5000);
     publishBtn.disabled = false;
-    publishBtn.innerHTML = `🚀 ${state.editingPost ? 'Update Post' : 'Publish Post'}`;
-    setStatus([{ icon: '❌', text: e.message }]);
+    publishBtn.innerHTML = `���� ${state.editingPost ? 'Update Post' : 'Publish Post'}`;
+    setStatus([{ icon: '���', text: e.message }]);
   }
 }
 
@@ -1172,7 +1227,7 @@ async function handleDelete() {
   }
 }
 
-// ─── Init ─────────────────────────────────────────────────────
+// ��������� Init ���������������������������������������������������������������������������������������������������������������������������������������������������������������
 async function loadAndShowList() {
   state.screen = 'loading';
   render();
@@ -1189,14 +1244,20 @@ async function loadAndShowList() {
 }
 
 async function init() {
+  // Read keys from URL hash if present (e.g. #t=TOKEN&a=ANTHROPIC_KEY)
+  // This lets you bookmark a URL with keys pre-loaded without embedding them in source
+  if (location.hash) {
+    const params = new URLSearchParams(location.hash.slice(1));
+    if (params.get('t')) { state.token = params.get('t'); localStorage.setItem('gh_token', state.token); }
+    if (params.get('a')) { state.anthropicKey = params.get('a'); localStorage.setItem('anthropic_key', state.anthropicKey); }
+    // Clear hash from URL so keys aren't visible in address bar after load
+    history.replaceState(null, '', location.pathname);
+  }
+
   if (!sessionStorage.getItem('unlocked')) {
-    const pw = prompt('Enter password:');
-    if (pw !== '1690') {
-      document.getElementById('app').innerHTML =
-        '<div style="text-align:center;padding:80px 20px;color:var(--red);font-size:18px;">Wrong password.</div>';
-      return;
-    }
-    sessionStorage.setItem('unlocked', '1');
+    state.screen = 'pin';
+    render();
+    return;
   }
   if (!state.token) {
     state.screen = 'setup';
