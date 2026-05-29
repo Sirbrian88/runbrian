@@ -97,7 +97,7 @@ nav {
   position: absolute;
   inset: 0;
   background: url('gobi-desert.jpg') center/cover no-repeat;
-  opacity: 0.35;
+  opacity: 0.6;
 }
 
 .hero-eyebrow {
@@ -786,6 +786,41 @@ footer {
   display: block;
 }
 
+
+.tag { cursor: pointer; transition: all 0.2s; }
+.tag:hover, .tag.active { background: var(--sage); border-color: var(--sage); color: var(--cream); opacity: 1; }
+/* Currently widget */
+.currently-widget {
+  margin-top: 2rem;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.9s forwards;
+}
+.currently-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--mist);
+  margin-bottom: 0.75rem;
+}
+.currently-items { display: flex; flex-direction: column; gap: 0.5rem; }
+.currently-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+}
+.currently-key {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--rust);
+  white-space: nowrap;
+  min-width: 80px;
+}
+.currently-val { color: rgba(26,20,16,0.75); line-height: 1.4; }
+
 </style>
 </head>
 <body>
@@ -831,16 +866,19 @@ footer {
           <div class="stat-label">Teenager Surviving</div>
         </div>
       </div>
-      <div class="hero-tags">
-        <span class="tag active">Ultra Running</span>
-        <span class="tag">Aviation</span>
-        <span class="tag">Beekeeping</span>
-        <span class="tag">Weimaraners</span>
-        <span class="tag">Food & Wine</span>
-        <span class="tag">Travel</span>
-        <span class="tag">Parenting</span>
+      
+      <div class="hero-tags" id="hero-tags">
+        <!-- populated by JS from posts.json categories -->
       </div>
-    </div>
+      <div class="currently-widget">
+        <div class="currently-label">Currently</div>
+        <div class="currently-items">
+          <div class="currently-item"><span class="currently-key">Training</span><span class="currently-val">Base miles &amp; strength work</span></div>
+          <div class="currently-item"><span class="currently-key">Flying</span><span class="currently-val">Building hours toward PPL</span></div>
+          <div class="currently-item"><span class="currently-key">Hives</span><span class="currently-val">2 active hives, spring flow on</span></div>
+          <div class="currently-item"><span class="currently-key">Reading</span><span class="currently-val">Endure — Alex Hutchinson</span></div>
+        </div>
+      </div></div>
   </section>
 
   <!-- MARQUEE -->
@@ -976,25 +1014,39 @@ async function loadPosts() {
   try {
     const res = await fetch('posts.json?v=' + Date.now());
     allPosts = await res.json();
+    renderCategoryTags();
     renderPosts(allPosts);
   } catch(e) {
     console.error('Could not load posts.json', e);
   }
 }
 
+function renderCategoryTags() {
+  const cats = ['All', ...new Set(allPosts.map(p => (p.category||'').split('·')[0].trim()).filter(Boolean))];
+  const container = document.getElementById('hero-tags');
+  if (!container) return;
+  container.innerHTML = cats.map(c =>
+    `<span class="tag" data-cat="${c}" onclick="filterCategory('${c}')">${c}</span>`
+  ).join('');
+}
+
 function filterCategory(cat) {
   activeCategory = cat;
-  // Sync both dropdowns
-  const d1 = document.getElementById('hero-cat-select');
-  const d2 = document.getElementById('posts-cat-select');
-  if (d1) d1.value = cat;
-  if (d2) d2.value = cat;
-  // Filter posts
-  const filtered = cat === 'all' ? allPosts : allPosts.filter(p =>
+  // Sync dropdowns if present
+  ['posts-cat-select'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = cat;
+  });
+  // Update tag active states
+  document.querySelectorAll('.tag[data-cat]').forEach(t => {
+    t.classList.toggle('active', t.dataset.cat === cat);
+  });
+  // Filter
+  const isAll = (cat === 'all' || cat === 'All');
+  const filtered = isAll ? allPosts : allPosts.filter(p =>
     p.category && p.category.toLowerCase().includes(cat.toLowerCase())
   );
   renderPosts(filtered);
-  // Scroll to stories
   document.getElementById('stories').scrollIntoView({ behavior: 'smooth' });
 }
 
