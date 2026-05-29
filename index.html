@@ -1279,6 +1279,11 @@ async function loadStrava() {
     if (ytdKm > 0)          rows.push(`<div class="currently-item"><span class="currently-key">YTD Running</span><span class="currently-val">${ytdKm} km &middot; ${ytdRuns} runs</span></div>`);
     if (allKm > 0)          rows.push(`<div class="currently-item"><span class="currently-key">Lifetime</span><span class="currently-val">${allKm.toLocaleString()} km</span></div>`);
 
+    // Elevation rows
+    const ytdElev = Math.round((stats.ytd_run_totals?.elevation_gain || 0));
+    const allElev = Math.round((stats.all_run_totals?.elevation_gain || 0));
+    if (ytdElev > 0)  rows.push(`<div class="currently-item"><span class="currently-key">YTD Climb</span><span class="currently-val">${ytdElev.toLocaleString()} m gain</span></div>`);
+    if (allElev > 0)  rows.push(`<div class="currently-item"><span class="currently-key">Lifetime Climb</span><span class="currently-val">${allElev.toLocaleString()} m gain</span></div>`);
     if (rows.length) {
       const tmp = document.createElement('div');
       tmp.innerHTML = rows.join('');
