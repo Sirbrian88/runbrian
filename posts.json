@@ -39,8 +39,8 @@
   },
   {
     "id": "gobi-400",
-    "category": "Ultra Running ÃÂ· China",
-    "title": "The Gobi 400 Ã¢ÂÂ 250 Miles Non-Stop Across China",
+    "category": "Ultra Running",
+    "title": "The Gobi 400 — 250 Miles Non-Stop Across China",
     "excerpt": "In October 2024, I flew to Dunhuang in Gansu Province to join 54 invited runners for a non-stop 400km journey through one of the world's most unforgiving landscapes.",
     "image": "gobi-desert.jpg",
     "date": "October 2024",
@@ -50,8 +50,8 @@
   },
   {
     "id": "my-bees",
-    "category": "New Hobby ÃÂ· 2025",
-    "title": "My Bees Ã¢ÂÂ A New Hobby in 2025",
+    "category": "Beekeeping",
+    "title": "My Bees — A New Hobby in 2025",
     "excerpt": "Just started my journey into beekeeping with my very first hive, and it's already fascinating.",
     "image": "my-bees.png",
     "date": "2025",
@@ -61,7 +61,7 @@
   },
   {
     "id": "bigfoot-double",
-    "category": "Ultra Running ÃÂ· Crewing",
+    "category": "Ultra Running",
     "title": "The Bigfoot Double",
     "excerpt": "Crewing and pacing Jessica Wicks on her quest to become the first person to run the Bigfoot 200 both ways.",
     "image": "bigfoot-double.png",
