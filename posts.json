@@ -8,10 +8,13 @@
     "images": [
       "IMG_3713.jpeg",
       "IMG_3719.jpeg",
-      "IMG_3705.jpeg"
+      "IMG_3705.jpeg",
+      "IMG_3702.jpeg"
     ],
     "video": "https://youtube.com/shorts/yIVaYT53w3E?si=mCboKoncJoCX7qxs",
-    "focalPoint": "center",
+    "focalPoints": {
+      "IMG_3702.jpeg": "center"
+    },
     "date": "2026-05-02",
     "readTime": 3,
     "featured": false,
