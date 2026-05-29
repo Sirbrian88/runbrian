@@ -424,7 +424,7 @@ function makeCard(post, isFeatured) {
   card.innerHTML = `
     <div class="post-img-wrap">
       ${imgSrc
-        ? `<img class="post-img" src="${imgSrc}" alt="${post.title}" style="object-position:${post.focalPoint||'center'}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        ? `<img class="post-img" src="${imgSrc}" alt="${post.title}" style="object-position:${(post.focalPoints||{})[imgSrc]||'center'}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
            <div class="post-img-placeholder" style="display:none;"></div>`
         : `<div class="post-img-placeholder"></div>`}
       ${imgCount > 1 ? `<div style="position:absolute;top:10px;right:10px;background:rgba(26,20,16,0.6);color:#fff;font-family:'DM Mono',monospace;font-size:0.6rem;padding:3px 8px;">${imgCount} PHOTOS</div>` : ''}
