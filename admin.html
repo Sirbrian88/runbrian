@@ -313,7 +313,7 @@ function renderPostCard(p) {
 function renderForm() {
   const p = state.editingPost;
   const isEdit = !!p;
-  const existingImgs = p ? (p.images|||(p.image?[p.image]:[]))||[] : [];
+  const existingImgs = p ? (p.images||(p.image?[p.image]:[]))||[] : [];
   const existingRelated = p ? (p.related||[]) : [];
   const otherPosts = state.posts.filter(x => !p || x.id!==p.id);
   const relatedHTML = otherPosts.length===0
