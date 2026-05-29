@@ -1183,10 +1183,11 @@ async function loadCurrently() {
 // ===== STRAVA =====
 async function loadStrava() {
   const refreshToken = localStorage.getItem('strava_refresh');
-  const clientId = localStorage.getItem('strava_client_id');
-  const clientSecret = localStorage.getItem('strava_client_secret');
-  if (!refreshToken || !clientId || !clientSecret) return;
+  const clientId = localStorage.getItem('strava_client_id') || '252608';
+  const clientSecret = localStorage.getItem('strava_client_secret') || '1807ba66a14418a1255ec114bcfaebda8a4440b6';
+  if (!refreshToken) return;
   try {
+    // Refresh access token
     const tr = await fetch('https://www.strava.com/oauth/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -1194,11 +1195,15 @@ async function loadStrava() {
     });
     const td = await tr.json();
     if (!td.access_token) return;
-    const sr = await fetch('https://www.strava.com/api/v3/athlete/stats', {
-      headers: { 'Authorization': 'Bearer ' + td.access_token }
+    const accessToken = td.access_token;
+    const athleteId = td.athlete?.id;
+    // Get stats using athlete ID
+    const sr = await fetch(`https://www.strava.com/api/v3/athletes/${athleteId}/stats`, {
+      headers: { 'Authorization': 'Bearer ' + accessToken }
     });
     const stats = await sr.json();
     const ytdKm = Math.round((stats.ytd_run_totals?.distance || 0) / 1000);
+    const ytdRuns = stats.ytd_run_totals?.count || 0;
     const allKm = Math.round((stats.all_run_totals?.distance || 0) / 1000);
     if (ytdKm > 0) {
       const widget = document.getElementById('currently-widget');
@@ -1206,13 +1211,11 @@ async function loadStrava() {
       if (items && widget) {
         const el = document.createElement('div');
         el.className = 'currently-item';
-        el.innerHTML = `<span class="currently-key">YTD Runs</span><span class="currently-val">${ytdKm} km (${allKm.toLocaleString()} km all time)</span>`;
+        el.innerHTML = `<span class="currently-key">YTD Running</span><span class="currently-val">${ytdKm} km &middot; ${ytdRuns} runs (${allKm.toLocaleString()} km lifetime)</span>`;
         items.prepend(el);
         widget.style.display = 'block';
       }
     }
-    // Save new access token to avoid rate limits
-    localStorage.setItem('strava_access', td.access_token);
   } catch(e) { console.log('Strava error', e); }
 }
 
