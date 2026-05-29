@@ -391,19 +391,50 @@ function renderForm() {
 }
 
 function renderSettings() {
+  const sc = JSON.parse(localStorage.getItem('strava_client_id')||'""');
+  const sr = localStorage.getItem('strava_refresh')||'';
   return `<header><button class="back-btn" id="backBtn">&larr; Posts</button><div></div></header>
   <div class="screen" style="display:flex;flex-direction:column;gap:16px;">
     <div style="font-size:18px;font-weight:700;">&#x2699;&#xFE0F; Settings</div>
+
+    <!-- API Keys -->
     <div class="settings-row"><strong>GitHub Token</strong><span>${state.token?'&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull; (set)':'Not set'}</span></div>
     <div class="settings-row"><strong>Anthropic API Key</strong><span>${state.anthropicKey?'&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull; (set)':'Not set &mdash; AI disabled'}</span></div>
-    <div class="divider"></div>
     <div class="field"><label>Update GitHub Token</label><input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off"></div>
     <div class="field"><label>Update Anthropic Key</label><input type="password" id="anthropicInput" placeholder="sk-ant-xxxxxxxxxxxx" autocomplete="off"></div>
-    <button class="btn-primary" id="saveSettingsBtn">Save Changes</button>
+    <button class="btn-primary" id="saveSettingsBtn">Save API Keys</button>
+
+    <div class="divider"></div>
+
+    <!-- Currently Editor -->
+    <div style="font-size:16px;font-weight:700;">&#x1F4CD; Currently</div>
+    <div style="color:var(--muted);font-size:13px;">These appear on your homepage. Save to update live.</div>
+    <div class="field"><label>Training</label><input type="text" id="cur_training" placeholder="e.g. Base miles &amp; strength work"></div>
+    <div class="field"><label>Flying</label><input type="text" id="cur_flying" placeholder="e.g. Building hours toward PPL"></div>
+    <div class="field"><label>Hives</label><input type="text" id="cur_hives" placeholder="e.g. 1 active hive, spring flow on"></div>
+    <div class="field"><label>Reading</label><input type="text" id="cur_reading" placeholder="e.g. Endure — Alex Hutchinson"></div>
+    <div class="field"><label>Next Race</label><input type="text" id="cur_nextRace" placeholder="e.g. Coastal Challenge 2026"></div>
+    <button class="btn-primary" id="saveCurrentlyBtn">&#x1F4BE; Save Currently</button>
+
+    <div class="divider"></div>
+
+    <!-- Strava -->
+    <div style="font-size:16px;font-weight:700;">&#x1F3C3; Strava Integration</div>
+    <div style="color:var(--muted);font-size:13px;">Shows your YTD run distance live on the homepage.</div>
+    <div class="field"><label>Strava Client ID</label><input type="text" id="stravaClientId" value="${sc||''}" placeholder="12345" autocomplete="off"></div>
+    <div class="field"><label>Strava Client Secret</label><input type="password" id="stravaClientSecret" placeholder="xxxxxxxxxxxx" autocomplete="off"></div>
+    <div class="field"><label>Strava Refresh Token</label><input type="password" id="stravaRefresh" value="${sr?'set (hidden)':''}" placeholder="paste from setup script" autocomplete="off"></div>
+    <button class="btn-primary" id="saveStravaBtn">Save Strava Settings</button>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;font-size:13px;color:var(--muted);">
+      <strong style="color:var(--text);display:block;margin-bottom:4px;">Setup:</strong>
+      1. Create app at strava.com/settings/api<br>
+      2. Run the Strava setup script from Terminal<br>
+      3. Paste the refresh token above
+    </div>
+
     <div class="divider"></div>
     <div style="color:var(--muted);font-size:13px;text-align:center;">
-      Repo: <a href="https://github.com/${REPO_OWNER}/${REPO_NAME}" target="_blank" style="color:var(--accent2);">${REPO_OWNER}/${REPO_NAME}</a><br>
-      Site: <a href="https://${REPO_OWNER}.github.io/${REPO_NAME}" target="_blank" style="color:var(--accent2);">View live site &rarr;</a>
+      Site: <a href="https://${REPO_OWNER}.github.io/${REPO_NAME}" target="_blank" style="color:var(--accent2);">View live &rarr;</a>
     </div>
     <button class="btn-secondary" id="clearCredsBtn" style="color:var(--red);">Clear All Credentials</button>
   </div>`;
@@ -465,6 +496,55 @@ function attachEvents() {
     if(a){state.anthropicKey=a;localStorage.setItem('anthropic_key',a);}
     toast('Saved!','success');
   });
+  // Load currently.json into settings fields
+  if ($('cur_training')) {
+    (async()=>{
+      try {
+        const r = await ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/currently.json`);
+        const c = JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(r.content.replace(/\n/g,'')),x=>x.charCodeAt(0))));
+        ['training','flying','hives','reading','nextRace'].forEach(k=>{ const el=$('cur_'+k); if(el&&c[k])el.value=c[k]; });
+        $('cur_training')._sha = r.sha;
+      } catch(e){}
+    })();
+  }
+
+  // Save Currently
+  const saveCurrentlyBtn=$('saveCurrentlyBtn');
+  if(saveCurrentlyBtn)saveCurrentlyBtn.addEventListener('click',async()=>{
+    saveCurrentlyBtn.innerHTML='<span class="spinner"></span>Saving&hellip;';saveCurrentlyBtn.disabled=true;
+    try {
+      // Get current SHA
+      const existing = await ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/currently.json`);
+      const c = {
+        training:$('cur_training').value.trim(),
+        flying:$('cur_flying').value.trim(),
+        hives:$('cur_hives').value.trim(),
+        reading:$('cur_reading').value.trim(),
+        nextRace:$('cur_nextRace').value.trim(),
+        custom:[],
+      };
+      const enc=new TextEncoder().encode(JSON.stringify(c,null,2));
+      let b='';for(let i=0;i<enc.length;i+=8192)b+=String.fromCharCode(...enc.slice(i,i+8192));
+      await ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/currently.json`,{
+        method:'PUT', body:JSON.stringify({message:'Update currently.json',content:btoa(b),sha:existing.sha,branch:BRANCH})
+      });
+      toast('Currently updated! Site refreshes in ~1 min.','success');
+    } catch(e){toast('Error: '+e.message,'error');}
+    saveCurrentlyBtn.innerHTML='&#x1F4BE; Save Currently';saveCurrentlyBtn.disabled=false;
+  });
+
+  // Save Strava
+  const saveStravaBtn=$('saveStravaBtn');
+  if(saveStravaBtn)saveStravaBtn.addEventListener('click',()=>{
+    const id=$('stravaClientId').value.trim();
+    const sec=$('stravaClientSecret').value.trim();
+    const ref=$('stravaRefresh').value.trim();
+    if(id)localStorage.setItem('strava_client_id',id);
+    if(sec)localStorage.setItem('strava_client_secret',sec);
+    if(ref&&ref!=='set (hidden)')localStorage.setItem('strava_refresh',ref);
+    toast('Strava settings saved!','success');
+  });
+
   const clearCredsBtn=$('clearCredsBtn');
   if(clearCredsBtn)clearCredsBtn.addEventListener('click',()=>{
     if(!confirm('Clear all credentials?'))return;
