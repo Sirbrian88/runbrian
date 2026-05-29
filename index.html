@@ -187,29 +187,6 @@ footer { background: var(--ink); padding: 3rem 2.5rem; display: flex; justify-co
 /* SCROLL REVEAL */
 .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s, transform 0.7s; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
-
-/* Share bar */
-.share-bar {
-  display: flex; align-items: center; gap: 1rem;
-  margin-top: 2.5rem; padding-top: 2rem;
-  border-top: 1px solid rgba(26,20,16,0.1);
-}
-.share-label {
-  font-family: 'DM Mono', monospace; font-size: 0.65rem;
-  letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--mist); white-space: nowrap;
-}
-.share-btns { display: flex; gap: 0.6rem; flex-wrap: wrap; }
-.share-btn {
-  font-family: 'DM Mono', monospace; font-size: 0.65rem;
-  letter-spacing: 0.12em; text-transform: uppercase;
-  padding: 0.5rem 1rem; border: 1px solid rgba(26,20,16,0.2);
-  color: var(--ink); text-decoration: none; background: var(--cream);
-  transition: all 0.2s; cursor: pointer; white-space: nowrap;
-}
-.share-btn:hover { background: var(--rust); border-color: var(--rust); color: #fff; }
-.share-btn.native { background: var(--rust); border-color: var(--rust); color: #fff; }
-.share-btn.native:hover { background: var(--ink); border-color: var(--ink); }
 </style>
 </head>
 <body>
@@ -365,10 +342,6 @@ footer { background: var(--ink); padding: 3rem 2.5rem; display: flex; justify-co
       <span class="share-label">Share</span>
       <div class="share-btns" id="share-btns"></div>
     </div>
-    <div class="share-bar" id="share-bar">
-      <span class="share-label">Share</span>
-      <div class="share-btns" id="share-btns"></div>
-    </div>
   </div>
   <footer>
     <div class="footer-logo">Run <span>Brian</span></div>
@@ -451,7 +424,7 @@ function makeCard(post, isFeatured) {
   card.innerHTML = `
     <div class="post-img-wrap">
       ${imgSrc
-        ? `<img class="post-img" src="${imgSrc}" alt="${post.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        ? `<img class="post-img" src="${imgSrc}" alt="${post.title}" style="object-position:${post.focalPoint||'center'}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
            <div class="post-img-placeholder" style="display:none;"></div>`
         : `<div class="post-img-placeholder"></div>`}
       ${imgCount > 1 ? `<div style="position:absolute;top:10px;right:10px;background:rgba(26,20,16,0.6);color:#fff;font-family:'DM Mono',monospace;font-size:0.6rem;padding:3px 8px;">${imgCount} PHOTOS</div>` : ''}
