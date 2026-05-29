@@ -4,14 +4,14 @@
     "category": "Travel",
     "title": "Playing in Naples",
     "excerpt": "Naples street night life was epic",
-    "image": "IMG_3703.jpeg",
+    "image": "IMG_3713.jpeg",
     "images": [
-      "IMG_3703.jpeg",
       "IMG_3713.jpeg",
       "IMG_3719.jpeg",
       "IMG_3705.jpeg"
     ],
     "video": "https://youtube.com/shorts/yIVaYT53w3E?si=mCboKoncJoCX7qxs",
+    "focalPoint": "center",
     "date": "2026-05-02",
     "readTime": 3,
     "featured": false,
