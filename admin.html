@@ -223,6 +223,19 @@ async function expandWithAI(excerpt, notes, title, category) {
   return d.content?.[0]?.text || null;
 }
 
+// ─── Video helpers ───
+function getYouTubeId(url) {
+  if (!url) return null;
+  const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&?/]+)/);
+  return m ? m[1] : null;
+}
+function getVideoEmbed(url, preview=false) {
+  const id = getYouTubeId(url);
+  if (!id) return '';
+  const h = preview ? '200' : '360';
+  return `<iframe width="100%" height="${h}" src="https://www.youtube.com/embed/${id}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius:8px;display:block;"></iframe>`;
+}
+
 // ─── Category helpers ───
 const DEFAULT_CATS = ['Ultra Running','Aviation','Beekeeping','Home Automation','Weimaraners','Food & Wine','Travel'];
 
@@ -371,6 +384,11 @@ function renderForm() {
         ${existingImgs.map(f=>`<img src="${RAW_BASE}/${f}" alt="">`).join('')}
       </div>
       <div id="photoFilename" class="photo-filename">${existingImgs.length?`Current: ${existingImgs.join(', ')}`:''}</div>
+    </div>
+    <div class="field">
+      <label>YouTube Video URL <span style="color:var(--muted);font-size:11px;">(optional)</span></label>
+      <input type="text" id="fVideo" value="${escHtml(p?.video||'')}" placeholder="https://youtube.com/watch?v=...">
+      ${p?.video ? `<div style="margin-top:8px;border-radius:8px;overflow:hidden;">${getVideoEmbed(p.video, true)}</div>` : ''}
     </div>
     <div class="field"><label>Excerpt <span style="color:var(--muted);">(~2 sentences)</span></label>
       <textarea id="fExcerpt" rows="3" placeholder="A short teaser&hellip;">${escHtml(p?.excerpt||'')}</textarea></div>
@@ -709,6 +727,7 @@ async function handlePublish() {
       excerpt:excerpt||'',
       image:imageNames[0]||'',
       images:imageNames,
+      video:document.getElementById('fVideo')?.value?.trim()||'',
       date:date||today(),readTime,featured:isFeatured,body:body||'',
     };
     if(relatedIds.length>0)postObj.related=relatedIds;
