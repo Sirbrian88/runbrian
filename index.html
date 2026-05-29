@@ -1196,7 +1196,14 @@ async function loadStrava() {
     const td = await tr.json();
     if (!td.access_token) return;
     const accessToken = td.access_token;
-    const athleteId = td.athlete?.id;
+    // Get athlete ID (not in refresh response, need to call /athlete)
+    let athleteId = localStorage.getItem('strava_athlete_id');
+    if (!athleteId) {
+      const ar = await fetch('https://www.strava.com/api/v3/athlete', { headers: { 'Authorization': 'Bearer ' + accessToken } });
+      const ath = await ar.json();
+      athleteId = ath.id;
+      if (athleteId) localStorage.setItem('strava_athlete_id', athleteId);
+    }
     // Get stats using athlete ID
     const sr = await fetch(`https://www.strava.com/api/v3/athletes/${athleteId}/stats`, {
       headers: { 'Authorization': 'Bearer ' + accessToken }
