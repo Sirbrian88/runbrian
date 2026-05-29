@@ -485,6 +485,8 @@ let state = {
 let form = {};
 let photoFile = null;
 let photoBase64 = null;
+let photoFiles = [];
+let photoBases = [];
 
 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Utilities ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 function toast(msg, type = '', duration = 3000) {
@@ -781,8 +783,8 @@ function renderForm() {
           <div class="photo-icon">ï¿½ï¿½ï¿½ï¿½</div>
           <p>Tap to choose a photo</p>
         </div>
-        <input type="file" id="photoInput" accept="image/*">
-        <img id="photoPreview" class="photo-preview" alt="Preview">
+        <input type="file" id="photoInput" accept="image/*" multiple>
+        <div id="photoPreviewList" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;"></div>
         <div id="photoFilename" class="photo-filename">${existingImage ? `Current: ${existingImage}` : ''}</div>
       </div>
 
@@ -967,6 +969,8 @@ function attachEvents() {
       state.editingPost = null;
       photoFile = null;
       photoBase64 = null;
+      photoFiles = [];
+      photoBases = [];
       state.screen = 'form';
       render();
     });
@@ -1166,6 +1170,7 @@ async function handlePublish() {
       title,
       excerpt: excerpt || '',
       image: imageName || '',
+      images: imageNames.length > 0 ? imageNames : (imageName ? [imageName] : []),
       date: date || today(),
       readTime,
       featured: isFeatured,
