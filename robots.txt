@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://sirbrian88.github.io/runbrian/sitemap.xml
