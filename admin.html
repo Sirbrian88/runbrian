@@ -5,1271 +5,625 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>RunBrian Admin</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0f0f0f; --surface: #1a1a1a; --surface2: #242424;
+  --border: #333; --accent: #e8642c; --accent2: #f0a05a;
+  --text: #f0f0f0; --muted: #888; --green: #4caf50; --red: #f44336; --radius: 12px;
+}
+body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; font-size:16px; line-height:1.5; min-height:100vh; }
+#app { max-width:480px; margin:0 auto; padding:0 0 80px; }
 
-  :root {
-    --bg: #0f0f0f;
-    --surface: #1a1a1a;
-    --surface2: #242424;
-    --border: #333;
-    --accent: #e8642c;
-    --accent2: #f0a05a;
-    --text: #f0f0f0;
-    --muted: #888;
-    --green: #4caf50;
-    --red: #f44336;
-    --radius: 12px;
-  }
+/* Header */
+header { background:var(--surface); border-bottom:1px solid var(--border); padding:16px 20px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
+header h1 { font-size:20px; font-weight:700; color:var(--accent); letter-spacing:-0.5px; }
+header h1 span { color:var(--text); }
+.header-btns { display:flex; gap:8px; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    font-size: 16px;
-    line-height: 1.5;
-    min-height: 100vh;
-  }
+/* Buttons */
+button { font-family:inherit; font-size:15px; border:none; cursor:pointer; border-radius:10px; transition:opacity .15s,transform .1s; -webkit-tap-highlight-color:transparent; }
+button:active { transform:scale(.96); opacity:.85; }
+.btn-primary { background:var(--accent); color:#fff; padding:12px 20px; font-weight:600; width:100%; font-size:16px; border-radius:var(--radius); }
+.btn-secondary { background:var(--surface2); color:var(--text); padding:10px 16px; border:1px solid var(--border); }
+.btn-sm { padding:8px 14px; font-size:14px; }
+.btn-icon { background:var(--surface2); color:var(--muted); padding:8px 12px; font-size:18px; border-radius:10px; border:1px solid var(--border); }
+.btn-danger { background:var(--red); color:#fff; }
+.btn-ai { background:linear-gradient(135deg,#6e3ccc,#a855f7); color:#fff; padding:12px 20px; font-weight:600; width:100%; font-size:15px; border-radius:var(--radius); }
 
-  #app {
-    max-width: 480px;
-    margin: 0 auto;
-    padding: 0 0 80px 0;
-  }
+/* Screens */
+.screen { padding:20px; }
 
-  /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Header ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
-  header {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 16px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  header h1 {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--accent);
-    letter-spacing: -0.5px;
-  }
-  header h1 span { color: var(--text); }
+/* PIN screen */
+#pinScreen { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; gap:24px; padding:40px 20px; }
+.pin-logo { font-size:48px; }
+.pin-title { font-size:22px; font-weight:700; color:var(--accent); }
+.pin-dots { display:flex; gap:16px; margin:8px 0; }
+.pin-dot { width:18px; height:18px; border-radius:50%; background:var(--border); transition:background .15s; }
+.pin-dot.filled { background:var(--accent); }
+.pin-pad { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; width:100%; max-width:280px; }
+.pin-key { background:var(--surface2); border:1px solid var(--border); color:var(--text); font-size:22px; font-weight:600; padding:18px; border-radius:12px; text-align:center; cursor:pointer; -webkit-tap-highlight-color:transparent; transition:background .1s,transform .1s; width:100%; }
+.pin-key:active { background:var(--accent); transform:scale(.93); }
+.pin-error { color:var(--red); font-size:14px; min-height:20px; }
 
-  .header-btns { display: flex; gap: 8px; }
+/* Setup screen */
+#setupScreen { padding:40px 20px; display:flex; flex-direction:column; gap:20px; }
+.setup-logo { font-size:48px; text-align:center; }
+.setup-title { text-align:center; font-size:24px; font-weight:700; color:var(--accent); }
+.setup-sub { text-align:center; color:var(--muted); font-size:14px; line-height:1.6; }
 
-  /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Buttons ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
-  button {
-    font-family: inherit;
-    font-size: 15px;
-    border: none;
-    cursor: pointer;
-    border-radius: 10px;
-    transition: opacity 0.15s, transform 0.1s;
-    -webkit-tap-highlight-color: transparent;
-  }
-  button:active { transform: scale(0.96); opacity: 0.85; }
+/* Form */
+.field { display:flex; flex-direction:column; gap:6px; }
+label { font-size:13px; color:var(--muted); font-weight:500; letter-spacing:.3px; text-transform:uppercase; }
+input[type=text], input[type=password], input[type=number], textarea, select {
+  background:var(--surface2); border:1px solid var(--border); color:var(--text);
+  font-family:inherit; font-size:16px; padding:12px 14px; border-radius:10px;
+  width:100%; outline:none; transition:border-color .15s; -webkit-appearance:none;
+}
+input:focus, textarea:focus, select:focus { border-color:var(--accent); }
+textarea { resize:vertical; min-height:100px; }
+input[type=file] { display:none; }
+.row2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
 
-  .btn-primary {
-    background: var(--accent);
-    color: #fff;
-    padding: 12px 20px;
-    font-weight: 600;
-    width: 100%;
-    font-size: 16px;
-    border-radius: var(--radius);
-  }
-  .btn-secondary {
-    background: var(--surface2);
-    color: var(--text);
-    padding: 10px 16px;
-    border: 1px solid var(--border);
-  }
-  .btn-sm {
-    padding: 8px 14px;
-    font-size: 14px;
-  }
-  .btn-icon {
-    background: var(--surface2);
-    color: var(--muted);
-    padding: 8px 12px;
-    font-size: 18px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-  }
-  .btn-danger { background: var(--red); color: #fff; }
-  .btn-ai {
-    background: linear-gradient(135deg, #6e3ccc, #a855f7);
-    color: #fff;
-    padding: 12px 20px;
-    font-weight: 600;
-    width: 100%;
-    font-size: 15px;
-    border-radius: var(--radius);
-  }
-  .btn-green { background: var(--green); color: #fff; }
+/* Toggle */
+.toggle-row { display:flex; align-items:center; justify-content:space-between; background:var(--surface2); border:1px solid var(--border); padding:14px; border-radius:10px; }
+.toggle-label { font-size:15px; }
+.toggle { width:50px; height:28px; background:var(--border); border-radius:14px; position:relative; cursor:pointer; transition:background .2s; flex-shrink:0; }
+.toggle::after { content:''; position:absolute; width:22px; height:22px; background:#fff; border-radius:50%; top:3px; left:3px; transition:left .2s; box-shadow:0 1px 4px rgba(0,0,0,.4); }
+.toggle.on { background:var(--accent); }
+.toggle.on::after { left:25px; }
 
-  /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Sections / Screens ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
-  .screen { padding: 20px; }
+/* Photo upload */
+.photo-area { background:var(--surface2); border:2px dashed var(--border); border-radius:var(--radius); padding:24px; text-align:center; cursor:pointer; transition:border-color .2s; }
+.photo-area:active { border-color:var(--accent); }
+.photo-area .photo-icon { font-size:36px; margin-bottom:8px; }
+.photo-area p { color:var(--muted); font-size:14px; }
+.photo-preview-grid { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+.photo-preview-grid img { width:72px; height:72px; object-fit:cover; border-radius:8px; }
+.photo-filename { font-size:12px; color:var(--accent2); margin-top:6px; word-break:break-all; }
 
-  /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Setup / Token Screen ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
-  #setupScreen {
-    padding: 40px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  .setup-logo {
-    font-size: 48px;
-    text-align: center;
-  }
-  .setup-title {
-    text-align: center;
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--accent);
-  }
-  .setup-sub {
-    text-align: center;
-    color: var(--muted);
-    font-size: 14px;
-    line-height: 1.6;
-  }
+/* Post list */
+.section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+.section-title { font-size:18px; font-weight:700; }
+.post-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:16px; margin-bottom:12px; cursor:pointer; transition:border-color .15s,background .15s; display:flex; gap:12px; align-items:flex-start; }
+.post-card:active { background:var(--surface2); border-color:var(--accent); }
+.post-thumb { width:64px; height:64px; border-radius:8px; object-fit:cover; flex-shrink:0; background:var(--surface2); }
+.post-thumb-placeholder { width:64px; height:64px; border-radius:8px; background:var(--surface2); display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0; }
+.post-info { flex:1; min-width:0; }
+.post-title { font-size:15px; font-weight:600; line-height:1.3; margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.post-meta { font-size:12px; color:var(--muted); }
+.post-cat { display:inline-block; background:rgba(232,100,44,.15); color:var(--accent2); font-size:11px; padding:2px 8px; border-radius:20px; margin-bottom:4px; }
+.badge-featured { background:rgba(232,100,44,.3); color:var(--accent); font-size:10px; padding:2px 6px; border-radius:10px; margin-left:4px; font-weight:700; }
 
-  /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Form elements ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
-  .field { display: flex; flex-direction: column; gap: 6px; }
-  label { font-size: 13px; color: var(--muted); font-weight: 500; letter-spacing: 0.3px; text-transform: uppercase; }
-  input[type="text"],
-  input[type="date"],
-  input[type="password"],
-  input[type="number"],
-  textarea,
-  select {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    font-family: inherit;
-    font-size: 16px;
-    padding: 12px 14px;
-    border-radius: 10px;
-    width: 100%;
-    outline: none;
-    transition: border-color 0.15s;
-    -webkit-appearance: none;
-  }
-  input:focus, textarea:focus, select:focus {
-    border-color: var(--accent);
-  }
-  textarea { resize: vertical; min-height: 100px; }
-  input[type="file"] { display: none; }
+/* Related posts */
+.related-list { background:var(--surface2); border:1px solid var(--border); border-radius:10px; max-height:200px; overflow-y:auto; }
+.related-item { display:flex; align-items:center; gap:12px; padding:12px 14px; border-bottom:1px solid var(--border); cursor:pointer; }
+.related-item:last-child { border-bottom:none; }
+.related-item input[type=checkbox] { width:20px; height:20px; accent-color:var(--accent); flex-shrink:0; }
+.related-item label { font-size:14px; color:var(--text); text-transform:none; letter-spacing:0; cursor:pointer; line-height:1.3; }
 
-  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+/* Toast */
+#toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(100px); background:var(--surface); color:var(--text); padding:14px 24px; border-radius:100px; font-size:14px; font-weight:500; border:1px solid var(--border); z-index:9999; transition:transform .3s ease; white-space:nowrap; max-width:calc(100% - 40px); text-align:center; box-shadow:0 4px 24px rgba(0,0,0,.5); }
+#toast.show { transform:translateX(-50%) translateY(0); }
+#toast.success { border-color:var(--green); color:var(--green); }
+#toast.error { border-color:var(--red); color:var(--red); }
 
-  /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Toggle ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
-  .toggle-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    padding: 14px;
-    border-radius: 10px;
-  }
-  .toggle-label { font-size: 15px; }
-  .toggle {
-    width: 50px;
-    height: 28px;
-    background: var(--border);
-    border-radius: 14px;
-    position: relative;
-    cursor: pointer;
-    transition: background 0.2s;
-    flex-shrink: 0;
-  }
-  .toggle::after {
-    content: '';
-    position: absolute;
-    width: 22px;
-    height: 22px;
-    background: #fff;
-    border-radius: 50%;
-    top: 3px;
-    left: 3px;
-    transition: left 0.2s;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.4);
-  }
-  .toggle.on { background: var(--accent); }
-  .toggle.on::after { left: 25px; }
+/* Spinner */
+.spinner { display:inline-block; width:18px; height:18px; border:2px solid rgba(255,255,255,.3); border-top-color:#fff; border-radius:50%; animation:spin .7s linear infinite; vertical-align:middle; margin-right:6px; }
+@keyframes spin { to { transform:rotate(360deg); } }
 
-  /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Photo upload ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
-  .photo-area {
-    background: var(--surface2);
-    border: 2px dashed var(--border);
-    border-radius: var(--radius);
-    padding: 24px;
-    text-align: center;
-    cursor: pointer;
-    transition: border-color 0.2s;
-  }
-  .photo-area:active { border-color: var(--accent); }
-  .photo-area .photo-icon { font-size: 36px; margin-bottom: 8px; }
-  .photo-area p { color: var(--muted); font-size: 14px; }
-  .photo-preview {
-    width: 100%;
-    border-radius: var(--radius);
-    max-height: 200px;
-    object-fit: cover;
-    display: none;
-  }
-  .photo-filename {
-    font-size: 12px;
-    color: var(--accent2);
-    margin-top: 6px;
-    word-break: break-all;
-  }
+/* Status */
+.status-box { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:16px; font-size:14px; color:var(--muted); }
+.status-step { padding:6px 0; display:flex; align-items:center; gap:8px; }
 
-  /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Post list ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
-  .section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-  }
-  .section-title { font-size: 18px; font-weight: 700; }
+/* Back button */
+.back-btn { background:none; color:var(--muted); font-size:15px; padding:0; border-radius:0; display:flex; align-items:center; gap:4px; }
+.back-btn:active { transform:none; opacity:.6; }
 
-  .post-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 16px;
-    margin-bottom: 12px;
-    cursor: pointer;
-    transition: border-color 0.15s, background 0.15s;
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-  }
-  .post-card:active { background: var(--surface2); border-color: var(--accent); }
+/* Divider */
+.divider { height:1px; background:var(--border); margin:24px 0; }
 
-  .post-thumb {
-    width: 64px;
-    height: 64px;
-    border-radius: 8px;
-    object-fit: cover;
-    flex-shrink: 0;
-    background: var(--surface2);
-  }
-  .post-thumb-placeholder {
-    width: 64px;
-    height: 64px;
-    border-radius: 8px;
-    background: var(--surface2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    flex-shrink: 0;
-  }
+/* Empty */
+.empty { text-align:center; padding:60px 20px; color:var(--muted); font-size:14px; }
+.empty-icon { font-size:48px; margin-bottom:12px; }
 
-  .post-info { flex: 1; min-width: 0; }
-  .post-title {
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 1.3;
-    margin-bottom: 4px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .post-meta { font-size: 12px; color: var(--muted); }
-  .post-cat {
-    display: inline-block;
-    background: rgba(232, 100, 44, 0.15);
-    color: var(--accent2);
-    font-size: 11px;
-    padding: 2px 8px;
-    border-radius: 20px;
-    margin-bottom: 4px;
-  }
-  .badge-featured {
-    background: rgba(232, 100, 44, 0.3);
-    color: var(--accent);
-    font-size: 10px;
-    padding: 2px 6px;
-    border-radius: 10px;
-    margin-left: 4px;
-    font-weight: 700;
-  }
+/* Settings */
+.settings-row { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:14px; margin-bottom:10px; font-size:14px; }
+.settings-row strong { display:block; margin-bottom:4px; }
+.settings-row span { color:var(--muted); font-size:12px; word-break:break-all; }
 
-  /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Related posts checkboxes ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
-  .related-list {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    max-height: 200px;
-    overflow-y: auto;
-  }
-  .related-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 14px;
-    border-bottom: 1px solid var(--border);
-    cursor: pointer;
-  }
-  .related-item:last-child { border-bottom: none; }
-  .related-item input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
-    accent-color: var(--accent);
-    flex-shrink: 0;
-  }
-  .related-item label {
-    font-size: 14px;
-    color: var(--text);
-    text-transform: none;
-    letter-spacing: 0;
-    cursor: pointer;
-    line-height: 1.3;
-  }
+/* Success */
+.success-screen { text-align:center; padding:40px 20px; display:flex; flex-direction:column; gap:16px; align-items:center; }
+.success-icon { font-size:64px; }
+.success-title { font-size:22px; font-weight:700; color:var(--green); }
 
-  /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Toast ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
-  #toast {
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%) translateY(100px);
-    background: var(--surface);
-    color: var(--text);
-    padding: 14px 24px;
-    border-radius: 100px;
-    font-size: 14px;
-    font-weight: 500;
-    border: 1px solid var(--border);
-    z-index: 9999;
-    transition: transform 0.3s ease;
-    white-space: nowrap;
-    max-width: calc(100% - 40px);
-    text-align: center;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.5);
-  }
-  #toast.show { transform: translateX(-50%) translateY(0); }
-  #toast.success { border-color: var(--green); color: var(--green); }
-  #toast.error { border-color: var(--red); color: var(--red); }
-
-  /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Spinner ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
-  .spinner {
-    display: inline-block;
-    width: 18px;
-    height: 18px;
-    border: 2px solid rgba(255,255,255,0.3);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    vertical-align: middle;
-    margin-right: 6px;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Progress / status ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
-  .status-box {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px;
-    font-size: 14px;
-    color: var(--muted);
-  }
-  .status-step {
-    padding: 6px 0;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .step-icon { font-size: 16px; }
-
-  /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Back button ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
-  .back-btn {
-    background: none;
-    color: var(--muted);
-    font-size: 15px;
-    padding: 0;
-    border-radius: 0;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .back-btn:active { transform: none; opacity: 0.6; }
-
-  /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Divider ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
-  .divider {
-    height: 1px;
-    background: var(--border);
-    margin: 24px 0;
-  }
-
-  /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Empty state ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
-  .empty {
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--muted);
-    font-size: 14px;
-  }
-  .empty-icon { font-size: 48px; margin-bottom: 12px; }
-
-  /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Settings screen ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
-  .settings-row {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px;
-    margin-bottom: 10px;
-    font-size: 14px;
-  }
-  .settings-row strong { display: block; margin-bottom: 4px; }
-  .settings-row span { color: var(--muted); font-size: 12px; word-break: break-all; }
-
-  /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Success screen ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
-  .success-screen {
-    text-align: center;
-    padding: 40px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    align-items: center;
-  }
-  .success-icon { font-size: 64px; }
-  .success-title { font-size: 22px; font-weight: 700; color: var(--green); }
-
-  /* Scrollbar */
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-  /* PIN screen */
-  #pinScreen { display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:24px;padding:40px 20px; }
-  .pin-logo { font-size:48px; }
-  .pin-title { font-size:22px;font-weight:700;color:var(--accent); }
-  .pin-dots { display:flex;gap:16px;margin:8px 0; }
-  .pin-dot { width:18px;height:18px;border-radius:50%;background:var(--border);transition:background 0.15s; }
-  .pin-dot.filled { background:var(--accent); }
-  .pin-pad { display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%;max-width:280px; }
-  .pin-key { background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:22px;font-weight:600;padding:18px;border-radius:12px;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background 0.1s,transform 0.1s;width:100%; }
-  .pin-key:active { background:var(--accent);transform:scale(0.93); }
-  .pin-error { color:var(--red);font-size:14px;min-height:20px; }
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
 </style>
 </head>
 <body>
 <div id="app"></div>
 <div id="toast"></div>
-
 <script>
-// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Constants ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 const REPO_OWNER = 'Sirbrian88';
 const REPO_NAME  = 'runbrian';
 const BRANCH     = 'main';
 const API_BASE   = 'https://api.github.com';
 const RAW_BASE   = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${BRANCH}`;
 
-// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ State ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 let state = {
-  screen: 'loading',   // loading | setup | list | form | settings | success
+  screen: 'loading',
   token: localStorage.getItem('gh_token') || '',
   anthropicKey: localStorage.getItem('anthropic_key') || '',
-  posts: [],
-  editingPost: null,   // null = new, object = existing
-  lastPublishedUrl: '',
+  posts: [], editingPost: null,
 };
 
-// Form data
-let form = {};
-let photoFile = null;
-let photoBase64 = null;
 let photoFiles = [];
 let photoBases = [];
 
-// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Utilities ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-function toast(msg, type = '', duration = 3000) {
+// ─── Utilities ───
+function toast(msg, type='', dur=3000) {
   const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.className = `show ${type}`;
-  clearTimeout(el._timer);
-  el._timer = setTimeout(() => { el.className = ''; }, duration);
+  el.textContent = msg; el.className = `show ${type}`;
+  clearTimeout(el._t); el._t = setTimeout(() => el.className='', dur);
 }
-
-function slugify(str) {
-  return str.toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, '')
-    .trim()
-    .replace(/\s+/g, '-')
-    .slice(0, 60);
-}
-
 function estimateReadTime(body) {
   if (!body) return 3;
-  const words = body.trim().split(/\s+/).length;
-  return Math.max(1, Math.ceil(words / 200));
+  return Math.max(1, Math.ceil(body.trim().split(/\s+/).length / 200));
+}
+function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+function today() { return new Date().toISOString().split('T')[0]; }
+function escHtml(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-function genId() {
-  return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
-}
-
-function today() {
-  return new Date().toISOString().split('T')[0];
-}
-
-// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ GitHub API ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-async function ghFetch(path, opts = {}) {
+// ─── GitHub API ───
+async function ghFetch(path, opts={}) {
   const res = await fetch(`${API_BASE}${path}`, {
     ...opts,
-    headers: {
-      'Authorization': `Bearer ${state.token}`,
-      'Accept': 'application/vnd.github+json',
-      'Content-Type': 'application/json',
-      ...(opts.headers || {}),
-    },
+    headers: { 'Authorization':`Bearer ${state.token}`, 'Accept':'application/vnd.github+json', 'Content-Type':'application/json', ...(opts.headers||{}) },
   });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.message || `GitHub API error ${res.status}`);
-  }
+  if (!res.ok) { const e = await res.json().catch(()=>({})); throw new Error(e.message||`GitHub ${res.status}`); }
   return res.json();
 }
-
 async function fetchPosts() {
-  try {
-    const data = await ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/posts.json`);
-    const json = atob(data.content.replace(/\n/g, ''));
-    return { posts: JSON.parse(json), sha: data.sha };
-  } catch (e) {
-    throw new Error('Could not load posts.json: ' + e.message);
-  }
+  const data = await ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/posts.json`);
+  const json = new TextDecoder().decode(Uint8Array.from(atob(data.content.replace(/\n/g,'')), c=>c.charCodeAt(0)));
+  return { posts: JSON.parse(json), sha: data.sha };
 }
-
-async function uploadFile(filename, base64content, sha = null) {
-  const body = {
-    message: `Upload image: ${filename}`,
-    content: base64content,
-    branch: BRANCH,
-  };
-  if (sha) body.sha = sha;
-
-  // Check if file exists first
-  try {
-    const existing = await ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/${filename}`);
-    body.sha = existing.sha;
-    body.message = `Update image: ${filename}`;
-  } catch (e) { /* file doesn't exist yet, that's fine */ }
-
-  return ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/${filename}`, {
-    method: 'PUT',
-    body: JSON.stringify(body),
-  });
+async function uploadFile(filename, b64) {
+  const body = { message:`Upload: ${filename}`, content:b64, branch:BRANCH };
+  try { const ex = await ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/${filename}`); body.sha=ex.sha; body.message=`Update: ${filename}`; } catch(e){}
+  return ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/${filename}`, { method:'PUT', body:JSON.stringify(body) });
 }
-
 async function savePostsJson(posts, sha) {
-  const content = btoa(unescape(encodeURIComponent(JSON.stringify(posts, null, 2))));
+  const enc = new TextEncoder().encode(JSON.stringify(posts, null, 2));
+  let b=''; for (let i=0;i<enc.length;i+=8192) b+=String.fromCharCode(...enc.slice(i,i+8192));
   return ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/posts.json`, {
-    method: 'PUT',
-    body: JSON.stringify({
-      message: 'Update posts.json via admin panel',
-      content,
-      sha,
-      branch: BRANCH,
-    }),
+    method:'PUT',
+    body:JSON.stringify({ message:'Update posts.json via admin', content:btoa(b), sha, branch:BRANCH }),
   });
 }
 
-// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Anthropic AI Expansion ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+// ─── AI Expand ───
 async function expandWithAI(excerpt, notes, title, category) {
-  if (!state.anthropicKey) {
-    toast('No Anthropic API key set. Go to Settings.', 'error');
-    return null;
-  }
-
-  const prompt = `Title: ${title}
-Category: ${category}
-Excerpt: ${excerpt}
-Notes/Draft: ${notes}
-
-Please expand these notes into a vivid, personal, first-person blog post body. Aim for 300-500 words.`;
-
+  if (!state.anthropicKey) { toast('No Anthropic key — go to Settings', 'error'); return null; }
   const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'x-api-key': state.anthropicKey,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-      'content-type': 'application/json',
-    },
+    method:'POST',
+    headers: { 'x-api-key':state.anthropicKey, 'anthropic-version':'2023-06-01', 'anthropic-dangerous-direct-browser-access':'true', 'content-type':'application/json' },
     body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 1024,
-      system: "You are helping Brian Hamilton write blog posts about ultrarunning and outdoor adventures. Expand the notes into a vivid, personal, first-person narrative. Keep Brian's voice ï¿½ï¿½ï¿½ direct, honest, self-deprecating.",
-      messages: [{ role: 'user', content: prompt }],
+      model:'claude-haiku-4-5-20251001', max_tokens:1024,
+      system:"You are helping Brian Hamilton write blog posts about ultrarunning and outdoor adventures. Expand the notes into a vivid, personal, first-person narrative. Keep Brian's voice — direct, honest, self-deprecating.",
+      messages:[{ role:'user', content:`Title: ${title}\nCategory: ${category}\nExcerpt: ${excerpt}\nNotes: ${notes}\n\nExpand into a vivid 300-500 word blog post body.` }],
     }),
   });
-
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.error?.message || `Anthropic API error ${res.status}`);
-  }
-
-  const data = await res.json();
-  return data.content?.[0]?.text || null;
+  if (!res.ok) { const e=await res.json().catch(()=>({})); throw new Error(e.error?.message||`Anthropic ${res.status}`); }
+  const d = await res.json();
+  return d.content?.[0]?.text || null;
 }
 
-// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Rendering ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+// ─── Render ───
 function render() {
   const app = document.getElementById('app');
-  switch (state.screen) {
-    case 'loading':  app.innerHTML = renderLoading(); break;
-    case 'pin':      app.innerHTML = renderPin(); break;
-    case 'setup':    app.innerHTML = renderSetup(); break;
-    case 'list':     app.innerHTML = renderList(); break;
-    case 'form':     app.innerHTML = renderForm(); break;
-    case 'settings': app.innerHTML = renderSettings(); break;
-    case 'success':  app.innerHTML = renderSuccess(); break;
-  }
+  const screens = { loading:renderLoading, pin:renderPin, setup:renderSetup, list:renderList, form:renderForm, settings:renderSettings, success:renderSuccess };
+  app.innerHTML = (screens[state.screen] || renderLoading)();
   attachEvents();
 }
 
-function renderPin() {
-  return `
-    <div id="pinScreen">
-      <div class="pin-logo"><ï¿½ï¿½ï¿½</div>
-      <div class="pin-title">RunBrian Admin</div>
-      <div class="pin-dots">
-        <div class="pin-dot" id="d0"></div><div class="pin-dot" id="d1"></div>
-        <div class="pin-dot" id="d2"></div><div class="pin-dot" id="d3"></div>
-      </div>
-      <div class="pin-error" id="pinError"></div>
-      <div class="pin-pad">
-        ${[1,2,3,4,5,6,7,8,9].map(n => `<button class="pin-key" data-digit="${n}">${n}</button>`).join('')}
-        <div></div>
-        <button class="pin-key" data-digit="0">0</button>
-        <button class="pin-key" id="pinDel">+</button>
-      </div>
-    </div>`;
+function renderLoading() {
+  return `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:16px;color:var(--muted);">
+    <div style="font-size:48px;">&#x1F3C3;</div>
+    <div style="display:flex;align-items:center;gap:8px;"><span class="spinner" style="border-top-color:var(--accent);"></span>Loading&hellip;</div>
+  </div>`;
 }
 
-function renderLoading() {
-  return `
-    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:16px;color:var(--muted);">
-      <div style="font-size:48px;">ï¿½ï¿½ï¿½ï¿½</div>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <span class="spinner" style="border-top-color:var(--accent);"></span>
-        Loadingï¿½ï¿½ï¿½
-      </div>
-    </div>`;
+function renderPin() {
+  return `<div id="pinScreen">
+    <div class="pin-logo">&#x1F3D4;&#xFE0F;</div>
+    <div class="pin-title">RunBrian Admin</div>
+    <div class="pin-dots">
+      <div class="pin-dot" id="d0"></div><div class="pin-dot" id="d1"></div>
+      <div class="pin-dot" id="d2"></div><div class="pin-dot" id="d3"></div>
+    </div>
+    <div class="pin-error" id="pinError"></div>
+    <div class="pin-pad">
+      ${[1,2,3,4,5,6,7,8,9].map(n=>`<button class="pin-key" data-digit="${n}">${n}</button>`).join('')}
+      <div></div>
+      <button class="pin-key" data-digit="0">0</button>
+      <button class="pin-key" id="pinDel">&#x232B;</button>
+    </div>
+  </div>`;
 }
 
 function renderSetup() {
-  return `
-    <div id="setupScreen">
-      <div class="setup-logo">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</div>
-      <div class="setup-title">RunBrian Admin</div>
-      <div class="setup-sub">Connect your GitHub account to manage your posts. Your token stays on this device only.</div>
-      <div class="field">
-        <label>GitHub Personal Access Token</label>
-        <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxx" value="${state.token}" autocomplete="off" spellcheck="false">
-      </div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;font-size:13px;color:var(--muted);">
-        <strong style="color:var(--text);display:block;margin-bottom:4px;">How to get a token:</strong>
-        GitHub ï¿½ï¿½ï¿½ Settings ï¿½ï¿½ï¿½ Developer Settings ï¿½ï¿½ï¿½ Personal access tokens ï¿½ï¿½ï¿½ Fine-grained tokens<br><br>
-        Required permissions: <strong style="color:var(--accent2);">Contents: Read &amp; Write</strong>
-      </div>
-      <div class="field">
-        <label>Anthropic API Key <span style="color:var(--muted);font-size:11px;">(optional, for AI expansion)</span></label>
-        <input type="password" id="anthropicInput" placeholder="sk-ant-xxxxxxxxxxxx" value="${state.anthropicKey}" autocomplete="off" spellcheck="false">
-      </div>
-      <button class="btn-primary" id="saveSetupBtn">Connect ï¿½ï¿½ï¿½</button>
-    </div>`;
+  return `<div id="setupScreen">
+    <div class="setup-logo">&#x1F3D4;&#xFE0F;</div>
+    <div class="setup-title">RunBrian Admin</div>
+    <div class="setup-sub">Connect your GitHub account to manage posts. Keys stay on this device only.</div>
+    <div class="field"><label>GitHub Personal Access Token</label>
+      <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxx" value="${escHtml(state.token)}" autocomplete="off"></div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;font-size:13px;color:var(--muted);">
+      <strong style="color:var(--text);display:block;margin-bottom:4px;">How to get a token:</strong>
+      GitHub &rarr; Settings &rarr; Developer Settings &rarr; Fine-grained tokens<br><br>
+      Permission: <strong style="color:var(--accent2);">Contents: Read &amp; Write</strong>
+    </div>
+    <div class="field"><label>Anthropic API Key <span style="color:var(--muted);font-size:11px;">(optional, for AI)</span></label>
+      <input type="password" id="anthropicInput" placeholder="sk-ant-xxxxxxxxxxxx" value="${escHtml(state.anthropicKey)}" autocomplete="off"></div>
+    <button class="btn-primary" id="saveSetupBtn">Connect &rarr;</button>
+  </div>`;
 }
 
 function renderList() {
   const posts = state.posts;
-  return `
-    <header>
-      <h1>Run<span>Brian</span></h1>
-      <div class="header-btns">
-        <button class="btn-icon" id="settingsBtn" title="Settings">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</button>
-        <button class="btn-secondary btn-sm" id="newPostBtn">+ New Post</button>
-      </div>
-    </header>
-    <div class="screen">
-      <div class="section-header">
-        <div class="section-title">Posts <span style="color:var(--muted);font-weight:400;font-size:14px;">(${posts.length})</span></div>
-        <button class="btn-secondary btn-sm" id="refreshBtn">ï¿½ï¿½ï¿½ Refresh</button>
-      </div>
-      ${posts.length === 0
-        ? `<div class="empty"><div class="empty-icon">ï¿½ï¿½ï¿½ï¿½</div>No posts yet. Create your first one!</div>`
-        : posts.map(p => renderPostCard(p)).join('')
-      }
-    </div>`;
+  return `<header>
+    <h1>Run<span>Brian</span></h1>
+    <div class="header-btns">
+      <button class="btn-icon" id="settingsBtn" title="Settings">&#x2699;&#xFE0F;</button>
+      <button class="btn-secondary btn-sm" id="newPostBtn">+ New Post</button>
+    </div>
+  </header>
+  <div class="screen">
+    <div class="section-header">
+      <div class="section-title">Posts <span style="color:var(--muted);font-weight:400;font-size:14px;">(${posts.length})</span></div>
+      <button class="btn-secondary btn-sm" id="refreshBtn">&#x21BB; Refresh</button>
+    </div>
+    ${posts.length===0
+      ? `<div class="empty"><div class="empty-icon">&#x1F4DD;</div>No posts yet. Create your first one!</div>`
+      : posts.map(p => renderPostCard(p)).join('')}
+  </div>`;
 }
 
 function renderPostCard(p) {
-  const imageUrl = p.image ? `${RAW_BASE}/${p.image}` : null;
-  const thumb = imageUrl
-    ? `<img class="post-thumb" src="${imageUrl}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-       <div class="post-thumb-placeholder" style="display:none;">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</div>`
-    : `<div class="post-thumb-placeholder">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</div>`;
-
-  return `
-    <div class="post-card" data-id="${p.id}">
-      ${thumb}
-      <div class="post-info">
-        <div class="post-cat">${p.category || 'Uncategorized'}${p.featured ? '<span class="badge-featured">ï¿½ï¿½ï¿½ Featured</span>' : ''}</div>
-        <div class="post-title">${p.title}</div>
-        <div class="post-meta">${p.date || ''} ï¿½ï¿½ ${p.readTime || '?'} min read</div>
-      </div>
-    </div>`;
+  const imgSrc = (p.images&&p.images[0]) ? p.images[0] : (p.image||'');
+  const imgUrl = imgSrc ? `${RAW_BASE}/${imgSrc}` : null;
+  const thumb = imgUrl
+    ? `<img class="post-thumb" src="${imgUrl}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">\n<div class="post-thumb-placeholder" style="display:none;">&#x1F3D4;</div>`
+    : `<div class="post-thumb-placeholder">&#x1F3D4;</div>`;
+  return `<div class="post-card" data-id="${p.id}">
+    ${thumb}
+    <div class="post-info">
+      <div class="post-cat">${escHtml(p.category||'Uncategorized')}${p.featured?'<span class="badge-featured">&#x2605; Featured</span>':''}</div>
+      <div class="post-title">${escHtml(p.title)}</div>
+      <div class="post-meta">${escHtml(p.date||'')} &middot; ${p.readTime||'?'} min read</div>
+    </div>
+  </div>`;
 }
 
 function renderForm() {
   const p = state.editingPost;
   const isEdit = !!p;
-  const title = p ? p.title : '';
-  const category = p ? p.category : '';
-  const date = p ? p.date : today();
-  const readTime = p ? (p.readTime || '') : '';
-  const excerpt = p ? (p.excerpt || '') : '';
-  const body = p ? (p.body || '') : '';
-  const featured = p ? !!p.featured : false;
-  const existingImage = p ? p.image : '';
-  const existingRelated = p ? (p.related || []) : [];
-
-  // Build related checkboxes from existing posts (exclude self)
-  const otherPosts = state.posts.filter(x => !p || x.id !== p.id);
-  const relatedCheckboxes = otherPosts.length === 0
+  const existingImgs = p ? (p.images|||(p.image?[p.image]:[]))||[] : [];
+  const existingRelated = p ? (p.related||[]) : [];
+  const otherPosts = state.posts.filter(x => !p || x.id!==p.id);
+  const relatedHTML = otherPosts.length===0
     ? `<div style="color:var(--muted);font-size:14px;padding:12px;">No other posts yet.</div>`
-    : `<div class="related-list">${otherPosts.map(x =>
-        `<div class="related-item">
-          <input type="checkbox" id="rel_${x.id}" value="${x.id}" ${existingRelated.includes(x.id) ? 'checked' : ''}>
-          <label for="rel_${x.id}">${x.title}</label>
-        </div>`).join('')}</div>`;
-
-  return `
-    <header>
-      <button class="back-btn" id="backBtn">ï¿½ï¿½ï¿½ Posts</button>
-      <div class="header-btns">
-        ${isEdit ? `<button class="btn-secondary btn-sm btn-danger" id="deleteBtn">Delete</button>` : ''}
+    : `<div class="related-list">${otherPosts.map(x=>`<div class="related-item">
+        <input type="checkbox" id="rel_${x.id}" value="${x.id}" ${existingRelated.includes(x.id)?'checked':''}>
+        <label for="rel_${x.id}">${escHtml(x.title)}</label></div>`).join('')}</div>`;
+  return `<header>
+    <button class="back-btn" id="backBtn">&larr; Posts</button>
+    <div class="header-btns">${isEdit?`<button class="btn-secondary btn-sm btn-danger" id="deleteBtn">Delete</button>`:''}</div>
+  </header>
+  <div class="screen" style="display:flex;flex-direction:column;gap:20px;">
+    <div style="font-size:18px;font-weight:700;">${isEdit?'&#x270F;&#xFE0F; Edit Post':'&#x270D;&#xFE0F; New Post'}</div>
+    <div class="field"><label>Title</label><input type="text" id="fTitle" value="${escHtml(p?.title||'')}" placeholder="Your post title&hellip;"></div>
+    <div class="row2">
+      <div class="field"><label>Category</label><input type="text" id="fCategory" value="${escHtml(p?.category||'')}" placeholder="Ultra Running"></div>
+      <div class="field"><label>Date</label><input type="text" id="fDate" value="${escHtml(p?.date||today())}" placeholder="2025-06-01"></div>
+    </div>
+    <div class="field">
+      <label>Photos <span style="color:var(--muted);font-size:11px;">(select multiple)</span></label>
+      <div class="photo-area" id="photoArea"><div class="photo-icon">&#x1F4F7;</div><p>Tap to choose photos&hellip;</p></div>
+      <input type="file" id="photoInput" accept="image/*" multiple>
+      <div class="photo-preview-grid" id="photoPreviewGrid">
+        ${existingImgs.map(f=>`<img src="${RAW_BASE}/${f}" alt="">`).join('')}
       </div>
-    </header>
-    <div class="screen" style="display:flex;flex-direction:column;gap:20px;">
-      <div style="font-size:18px;font-weight:700;">${isEdit ? 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Edit Post' : 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ New Post'}</div>
-
-      <div class="field">
-        <label>Title</label>
-        <input type="text" id="fTitle" value="${escHtml(title)}" placeholder="Your post titleï¿½ï¿½ï¿½">
-      </div>
-
-      <div class="row2">
-        <div class="field">
-          <label>Category</label>
-          <input type="text" id="fCategory" value="${escHtml(category)}" placeholder="Ultra Running ï¿½ï¿½ Race">
-        </div>
-        <div class="field">
-          <label>Date</label>
-          <input type="text" id="fDate" value="${escHtml(date)}" placeholder="2025-06-01">
-        </div>
-      </div>
-
-      <div class="field">
-        <label>Photo</label>
-        <div class="photo-area" id="photoArea">
-          <div class="photo-icon">ï¿½ï¿½ï¿½ï¿½</div>
-          <p>Tap to choose a photo</p>
-        </div>
-        <input type="file" id="photoInput" accept="image/*" multiple>
-        <div id="photoPreviewList" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;"></div>
-        <div id="photoFilename" class="photo-filename">${existingImage ? `Current: ${existingImage}` : ''}</div>
-      </div>
-
-      <div class="field">
-        <label>Excerpt <span style="color:var(--muted);">(~2 sentences)</span></label>
-        <textarea id="fExcerpt" rows="3" placeholder="A short teaser for the postï¿½ï¿½ï¿½">${escHtml(excerpt)}</textarea>
-      </div>
-
-      <div class="field">
-        <label>Full Body</label>
-        <textarea id="fBody" rows="10" placeholder="Write your full post hereï¿½ï¿½ï¿½">${escHtml(body)}</textarea>
-      </div>
-
-      <button class="btn-ai" id="aiExpandBtn">ï¿½ï¿½ï¿½ Expand with AI</button>
-
-      <div class="field">
-        <label>Read Time (min)</label>
-        <input type="number" id="fReadTime" value="${readTime}" placeholder="Auto" min="1" max="60">
-      </div>
-
-      <div class="field">
-        <label>Related Posts</label>
-        ${relatedCheckboxes}
-      </div>
-
-      <div class="toggle-row">
-        <span class="toggle-label">ï¿½ï¿½ï¿½ Featured Post</span>
-        <div class="toggle ${featured ? 'on' : ''}" id="featuredToggle"></div>
-      </div>
-
-      <div id="publishStatus" style="display:none;"></div>
-
-      <button class="btn-primary" id="publishBtn">
-        ï¿½ï¿½ï¿½ï¿½ ${isEdit ? 'Update Post' : 'Publish Post'}
-      </button>
-
-      <div style="height:20px;"></div>
-    </div>`;
+      <div id="photoFilename" class="photo-filename">${existingImgs.length?`Current: ${existingImgs.join(', ')}`:''}</div>
+    </div>
+    <div class="field"><label>Excerpt <span style="color:var(--muted);">(~2 sentences)</span></label>
+      <textarea id="fExcerpt" rows="3" placeholder="A short teaser&hellip;">${escHtml(p?.excerpt||'')}</textarea></div>
+    <div class="field"><label>Full Body</label>
+      <textarea id="fBody" rows="10" placeholder="Write your full post here&hellip;">${escHtml(p?.body||'')}</textarea></div>
+    <button class="btn-ai" id="aiExpandBtn">&#x2728; Expand with AI</button>
+    <div class="field"><label>Read Time (min)</label>
+      <input type="number" id="fReadTime" value="${p?.readTime||''}" placeholder="Auto" min="1" max="60"></div>
+    <div class="field"><label>Related Posts</label>${relatedHTML}</div>
+    <div class="toggle-row">
+      <span class="toggle-label">&#x2B50; Featured Post</span>
+      <div class="toggle ${p?.featured?'on':''}" id="featuredToggle"></div>
+    </div>
+    <div id="publishStatus" style="display:none;"></div>
+    <button class="btn-primary" id="publishBtn">&#x1F680; ${isEdit?'Update Post':'Publish Post'}</button>
+    <div style="height:20px;"></div>
+  </div>`;
 }
 
 function renderSettings() {
-  const hasToken = !!state.token;
-  const hasAI = !!state.anthropicKey;
-  return `
-    <header>
-      <button class="back-btn" id="backBtn">ï¿½ï¿½ï¿½ Posts</button>
-      <div></div>
-    </header>
-    <div class="screen" style="display:flex;flex-direction:column;gap:16px;">
-      <div style="font-size:18px;font-weight:700;">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Settings</div>
-
-      <div class="settings-row">
-        <strong>GitHub Token</strong>
-        <span>${hasToken ? 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (set)' : 'Not set'}</span>
-      </div>
-      <div class="settings-row">
-        <strong>Anthropic API Key</strong>
-        <span>${hasAI ? 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (set)' : 'Not set ï¿½ï¿½ï¿½ AI expansion disabled'}</span>
-      </div>
-
-      <div class="divider"></div>
-
-      <div class="field">
-        <label>Update GitHub Token</label>
-        <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off">
-      </div>
-      <div class="field">
-        <label>Update Anthropic API Key</label>
-        <input type="password" id="anthropicInput" placeholder="sk-ant-xxxxxxxxxxxx" autocomplete="off">
-      </div>
-      <button class="btn-primary" id="saveSettingsBtn">Save Changes</button>
-
-      <div class="divider"></div>
-
-      <div style="color:var(--muted);font-size:13px;text-align:center;">
-        Repo: <a href="https://github.com/${REPO_OWNER}/${REPO_NAME}" target="_blank" style="color:var(--accent2);">${REPO_OWNER}/${REPO_NAME}</a><br>
-        Live site: <a href="https://${REPO_OWNER}.github.io/${REPO_NAME}" target="_blank" style="color:var(--accent2);">View site ï¿½ï¿½ï¿½</a>
-      </div>
-
-      <button class="btn-secondary" id="clearCredsBtn" style="margin-top:8px;color:var(--red);">Clear All Credentials</button>
-    </div>`;
+  return `<header><button class="back-btn" id="backBtn">&larr; Posts</button><div></div></header>
+  <div class="screen" style="display:flex;flex-direction:column;gap:16px;">
+    <div style="font-size:18px;font-weight:700;">&#x2699;&#xFE0F; Settings</div>
+    <div class="settings-row"><strong>GitHub Token</strong><span>${state.token?'&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull; (set)':'Not set'}</span></div>
+    <div class="settings-row"><strong>Anthropic API Key</strong><span>${state.anthropicKey?'&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull; (set)':'Not set &mdash; AI disabled'}</span></div>
+    <div class="divider"></div>
+    <div class="field"><label>Update GitHub Token</label><input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off"></div>
+    <div class="field"><label>Update Anthropic Key</label><input type="password" id="anthropicInput" placeholder="sk-ant-xxxxxxxxxxxx" autocomplete="off"></div>
+    <button class="btn-primary" id="saveSettingsBtn">Save Changes</button>
+    <div class="divider"></div>
+    <div style="color:var(--muted);font-size:13px;text-align:center;">
+      Repo: <a href="https://github.com/${REPO_OWNER}/${REPO_NAME}" target="_blank" style="color:var(--accent2);">${REPO_OWNER}/${REPO_NAME}</a><br>
+      Site: <a href="https://${REPO_OWNER}.github.io/${REPO_NAME}" target="_blank" style="color:var(--accent2);">View live site &rarr;</a>
+    </div>
+    <button class="btn-secondary" id="clearCredsBtn" style="color:var(--red);">Clear All Credentials</button>
+  </div>`;
 }
 
 function renderSuccess() {
-  return `
-    <div class="success-screen">
-      <div class="success-icon">ï¿½ï¿½ï¿½ï¿½</div>
-      <div class="success-title">Published!</div>
-      <div style="color:var(--muted);font-size:14px;text-align:center;">Your post is live on GitHub Pages.<br>Changes may take 1ï¿½ï¿½ï¿½2 minutes to appear.</div>
-      <a href="https://${REPO_OWNER}.github.io/${REPO_NAME}" target="_blank"
-         style="display:block;background:var(--surface2);color:var(--accent2);padding:14px 24px;border-radius:var(--radius);text-decoration:none;font-size:14px;border:1px solid var(--border);">
-        View Live Site ï¿½ï¿½ï¿½
-      </a>
-      <button class="btn-primary" id="backToListBtn">ï¿½ï¿½ï¿½ Back to Posts</button>
-    </div>`;
+  return `<div class="success-screen">
+    <div class="success-icon">&#x1F389;</div>
+    <div class="success-title">Published!</div>
+    <div style="color:var(--muted);font-size:14px;text-align:center;">Live on GitHub Pages.<br>Changes appear in ~1 minute.</div>
+    <a href="https://${REPO_OWNER}.github.io/${REPO_NAME}" target="_blank"
+       style="display:block;background:var(--surface2);color:var(--accent2);padding:14px 24px;border-radius:var(--radius);text-decoration:none;font-size:14px;border:1px solid var(--border);">
+      View Live Site &rarr;
+    </a>
+    <button class="btn-primary" id="backToListBtn">&larr; Back to Posts</button>
+  </div>`;
 }
 
-function escHtml(str) {
-  if (!str) return '';
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/"/g, '&quot;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-}
-
-// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Event Attachment ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+// ─── Events ───
 function attachEvents() {
   const $ = id => document.getElementById(id);
 
-
-  // PIN screen
+  // PIN
   let pinEntry = '';
   document.querySelectorAll('.pin-key[data-digit]').forEach(btn => {
     btn.addEventListener('click', () => {
       if (pinEntry.length >= 4) return;
       pinEntry += btn.dataset.digit;
-      for (let i = 0; i < 4; i++) { const d = document.getElementById('d'+i); if(d) d.classList.toggle('filled', i < pinEntry.length); }
-      if (pinEntry.length === 4) {
-        if (pinEntry === '1690') {
+      for (let i=0;i<4;i++){const d=$('d'+i);if(d)d.classList.toggle('filled',i<pinEntry.length);}
+      if (pinEntry.length===4) {
+        if (pinEntry==='1690') {
           sessionStorage.setItem('unlocked','1');
-          if (!state.token) { state.screen = 'setup'; render(); } else { loadAndShowList(); }
+          if (!state.token){state.screen='setup';render();}else{loadAndShowList();}
         } else {
-          const err = document.getElementById('pinError');
-          if(err) err.textContent = 'Wrong PIN, try again';
-          setTimeout(() => { pinEntry=''; for(let i=0;i<4;i++){const d=document.getElementById('d'+i);if(d)d.classList.remove('filled');} if(err)err.textContent=''; }, 800);
+          const err=$('pinError');if(err)err.textContent='Wrong PIN, try again';
+          setTimeout(()=>{pinEntry='';for(let i=0;i<4;i++){const d=$('d'+i);if(d)d.classList.remove('filled');}if(err)err.textContent='';},800);
         }
       }
     });
   });
-  const pinDel = $('pinDel');
-  if (pinDel) { pinDel.addEventListener('click', () => { if(pinEntry.length>0){pinEntry=pinEntry.slice(0,-1); for(let i=0;i<4;i++){const d=document.getElementById('d'+i);if(d)d.classList.toggle('filled',i<pinEntry.length);}} }); }
+  const pinDel=$('pinDel');
+  if(pinDel)pinDel.addEventListener('click',()=>{if(pinEntry.length>0){pinEntry=pinEntry.slice(0,-1);for(let i=0;i<4;i++){const d=$('d'+i);if(d)d.classList.toggle('filled',i<pinEntry.length);}}});
 
-  // Setup screen
-  const saveSetupBtn = $('saveSetupBtn');
-  if (saveSetupBtn) {
-    saveSetupBtn.addEventListener('click', () => {
-      const token = $('tokenInput').value.trim();
-      const akey = $('anthropicInput').value.trim();
-      if (!token) { toast('Please enter your GitHub token', 'error'); return; }
-      state.token = token;
-      state.anthropicKey = akey;
-      localStorage.setItem('gh_token', token);
-      if (akey) localStorage.setItem('anthropic_key', akey);
-      loadAndShowList();
-    });
-  }
+  // Setup
+  const saveSetupBtn=$('saveSetupBtn');
+  if(saveSetupBtn)saveSetupBtn.addEventListener('click',()=>{
+    const t=$('tokenInput').value.trim(),a=$('anthropicInput').value.trim();
+    if(!t){toast('Please enter your GitHub token','error');return;}
+    state.token=t;state.anthropicKey=a;
+    localStorage.setItem('gh_token',t);if(a)localStorage.setItem('anthropic_key',a);
+    loadAndShowList();
+  });
 
-  // Settings screen
-  const saveSettingsBtn = $('saveSettingsBtn');
-  if (saveSettingsBtn) {
-    saveSettingsBtn.addEventListener('click', () => {
-      const token = $('tokenInput').value.trim();
-      const akey = $('anthropicInput').value.trim();
-      if (token) { state.token = token; localStorage.setItem('gh_token', token); }
-      if (akey) { state.anthropicKey = akey; localStorage.setItem('anthropic_key', akey); }
-      toast('Saved!', 'success');
-    });
-  }
+  // Settings
+  const saveSettingsBtn=$('saveSettingsBtn');
+  if(saveSettingsBtn)saveSettingsBtn.addEventListener('click',()=>{
+    const t=$('tokenInput').value.trim(),a=$('anthropicInput').value.trim();
+    if(t){state.token=t;localStorage.setItem('gh_token',t);}
+    if(a){state.anthropicKey=a;localStorage.setItem('anthropic_key',a);}
+    toast('Saved!','success');
+  });
+  const clearCredsBtn=$('clearCredsBtn');
+  if(clearCredsBtn)clearCredsBtn.addEventListener('click',()=>{
+    if(!confirm('Clear all credentials?'))return;
+    localStorage.clear();state.token='';state.anthropicKey='';state.screen='setup';render();
+  });
 
-  const clearCredsBtn = $('clearCredsBtn');
-  if (clearCredsBtn) {
-    clearCredsBtn.addEventListener('click', () => {
-      if (!confirm('Clear all credentials and start over?')) return;
-      localStorage.clear();
-      state.token = '';
-      state.anthropicKey = '';
-      state.screen = 'setup';
-      render();
-    });
-  }
-
-  // List screen
-  const settingsBtn = $('settingsBtn');
-  if (settingsBtn) {
-    settingsBtn.addEventListener('click', () => { state.screen = 'settings'; render(); });
-  }
-
-  const newPostBtn = $('newPostBtn');
-  if (newPostBtn) {
-    newPostBtn.addEventListener('click', () => {
-      state.editingPost = null;
-      photoFile = null;
-      photoBase64 = null;
-      photoFiles = [];
-      photoBases = [];
-      state.screen = 'form';
-      render();
-    });
-  }
-
-  const refreshBtn = $('refreshBtn');
-  if (refreshBtn) {
-    refreshBtn.addEventListener('click', () => loadAndShowList());
-  }
+  // List
+  const settingsBtn=$('settingsBtn');
+  if(settingsBtn)settingsBtn.addEventListener('click',()=>{state.screen='settings';render();});
+  const newPostBtn=$('newPostBtn');
+  if(newPostBtn)newPostBtn.addEventListener('click',()=>{state.editingPost=null;photoFiles=[];photoBases=[];state.screen='form';render();});
+  const refreshBtn=$('refreshBtn');
+  if(refreshBtn)refreshBtn.addEventListener('click',()=>loadAndShowList());
 
   // Post cards
-  document.querySelectorAll('.post-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const id = card.dataset.id;
-      const post = state.posts.find(p => p.id === id);
-      if (post) {
-        state.editingPost = post;
-        photoFile = null;
-        photoBase64 = null;
-        state.screen = 'form';
-        render();
-      }
+  document.querySelectorAll('.post-card').forEach(card=>{
+    card.addEventListener('click',()=>{
+      const post=state.posts.find(p=>p.id===card.dataset.id);
+      if(post){state.editingPost=post;photoFiles=[];photoBases=[];state.screen='form';render();}
     });
   });
 
-  // Form screen
-  const backBtn = $('backBtn');
-  if (backBtn) {
-    backBtn.addEventListener('click', () => {
-      state.screen = state.screen === 'settings' ? 'list' : 'list';
-      render();
-    });
-  }
-
-  const deleteBtn = $('deleteBtn');
-  if (deleteBtn) {
-    deleteBtn.addEventListener('click', handleDelete);
-  }
+  // Form back/delete
+  const backBtn=$('backBtn');
+  if(backBtn)backBtn.addEventListener('click',()=>{state.screen='list';render();});
+  const deleteBtn=$('deleteBtn');
+  if(deleteBtn)deleteBtn.addEventListener('click',handleDelete);
 
   // Photo upload
-  const photoArea = $('photoArea');
-  const photoInput = $('photoInput');
-  if (photoArea && photoInput) {
-    photoArea.addEventListener('click', () => photoInput.click());
-    photoInput.addEventListener('change', handlePhotoSelect);
+  const photoArea=$('photoArea'),photoInput=$('photoInput');
+  if(photoArea&&photoInput){
+    photoArea.addEventListener('click',()=>photoInput.click());
+    photoInput.addEventListener('change',handlePhotoSelect);
   }
 
   // Featured toggle
-  const featuredToggle = $('featuredToggle');
-  if (featuredToggle) {
-    featuredToggle.addEventListener('click', () => {
-      featuredToggle.classList.toggle('on');
-    });
+  const toggle=$('featuredToggle');
+  if(toggle)toggle.addEventListener('click',()=>toggle.classList.toggle('on'));
+
+  // AI
+  const aiBtn=$('aiExpandBtn');
+  if(aiBtn)aiBtn.addEventListener('click',handleAIExpand);
+
+  // Auto read time
+  const fBody=$('fBody');
+  if(fBody){
+    fBody.addEventListener('input',()=>{const rt=$('fReadTime');if(rt&&!rt.dataset.edited)rt.value=estimateReadTime(fBody.value);});
+    const rt=$('fReadTime');if(rt)rt.addEventListener('input',()=>{rt.dataset.edited='true';});
   }
 
-  // AI expand
-  const aiExpandBtn = $('aiExpandBtn');
-  if (aiExpandBtn) {
-    aiExpandBtn.addEventListener('click', handleAIExpand);
-  }
-
-  // Auto-update read time when body changes
-  const fBody = $('fBody');
-  if (fBody) {
-    fBody.addEventListener('input', () => {
-      const rt = $('fReadTime');
-      if (rt && !rt.dataset.edited) {
-        rt.value = estimateReadTime(fBody.value);
-      }
-    });
-    const rt = $('fReadTime');
-    if (rt) {
-      rt.addEventListener('input', () => { rt.dataset.edited = 'true'; });
-    }
-  }
-
-  // Publish
-  const publishBtn = $('publishBtn');
-  if (publishBtn) {
-    publishBtn.addEventListener('click', handlePublish);
-  }
-
-  // Success screen
-  const backToListBtn = $('backToListBtn');
-  if (backToListBtn) {
-    backToListBtn.addEventListener('click', () => loadAndShowList());
-  }
+  // Publish / back to list
+  const publishBtn=$('publishBtn');
+  if(publishBtn)publishBtn.addEventListener('click',handlePublish);
+  const backToListBtn=$('backToListBtn');
+  if(backToListBtn)backToListBtn.addEventListener('click',()=>loadAndShowList());
 }
 
-// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Handlers ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+// ─── Handlers ───
 function handlePhotoSelect(e) {
-  const file = e.target.files?.[0];
-  if (!file) return;
-  photoFile = file;
-
-  const reader = new FileReader();
-  reader.onload = ev => {
-    const result = ev.target.result; // data:image/jpeg;base64,...
-    photoBase64 = result.split(',')[1];
-
-    const preview = document.getElementById('photoPreview');
-    const filename = document.getElementById('photoFilename');
-    const area = document.getElementById('photoArea');
-    if (preview) { preview.src = result; preview.style.display = 'block'; }
-    if (area) area.style.display = 'none';
-    if (filename) filename.textContent = `ï¿½ï¿½ï¿½ï¿½ ${file.name} (${(file.size/1024).toFixed(0)} KB)`;
-  };
-  reader.readAsDataURL(file);
+  const files = Array.from(e.target.files||[]);
+  if(!files.length)return;
+  photoFiles=files;photoBases=[];
+  const grid=document.getElementById('photoPreviewGrid');
+  const area=document.getElementById('photoArea');
+  const fn=document.getElementById('photoFilename');
+  if(grid)grid.innerHTML='';
+  if(area)area.style.display='none';
+  let loaded=0;
+  files.forEach((file,i)=>{
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      photoBases[i]=ev.target.result.split(',')[1];
+      loaded++;
+      if(grid){const img=document.createElement('img');img.src=ev.target.result;img.style.cssText='width:72px;height:72px;object-fit:cover;border-radius:8px;';grid.appendChild(img);}
+      if(loaded===files.length&&fn)fn.textContent=files.length===1?`${files[0].name} (${(files[0].size/1024).toFixed(0)} KB)`:`${files.length} photos selected`;
+    };
+    reader.readAsDataURL(file);
+  });
 }
 
 async function handleAIExpand() {
-  const title = document.getElementById('fTitle')?.value || '';
-  const category = document.getElementById('fCategory')?.value || '';
-  const excerpt = document.getElementById('fExcerpt')?.value || '';
-  const body = document.getElementById('fBody')?.value || '';
-
-  if (!excerpt && !body) {
-    toast('Add an excerpt or some notes first', 'error');
-    return;
-  }
-
-  const btn = document.getElementById('aiExpandBtn');
-  btn.innerHTML = '<span class="spinner"></span>Expandingï¿½ï¿½ï¿½';
-  btn.disabled = true;
-
+  const title=document.getElementById('fTitle')?.value||'';
+  const category=document.getElementById('fCategory')?.value||'';
+  const excerpt=document.getElementById('fExcerpt')?.value||'';
+  const body=document.getElementById('fBody')?.value||'';
+  if(!excerpt&&!body){toast('Add an excerpt or notes first','error');return;}
+  const btn=document.getElementById('aiExpandBtn');
+  btn.innerHTML='<span class="spinner"></span>Expanding&hellip;';btn.disabled=true;
   try {
-    const expanded = await expandWithAI(excerpt, body, title, category);
-    if (expanded) {
-      document.getElementById('fBody').value = expanded;
-      document.getElementById('fReadTime').value = estimateReadTime(expanded);
-      toast('ï¿½ï¿½ï¿½ AI expansion complete!', 'success');
+    const expanded=await expandWithAI(excerpt,body,title,category);
+    if(expanded){
+      document.getElementById('fBody').value=expanded;
+      document.getElementById('fReadTime').value=estimateReadTime(expanded);
+      toast('AI expansion done!','success');
     }
-  } catch (e) {
-    toast('AI error: ' + e.message, 'error');
-  } finally {
-    btn.innerHTML = 'ï¿½ï¿½ï¿½ Expand with AI';
-    btn.disabled = false;
-  }
+  } catch(e){toast('AI error: '+e.message,'error');}
+  finally{btn.innerHTML='&#x2728; Expand with AI';btn.disabled=false;}
 }
 
 async function handlePublish() {
-  const title = document.getElementById('fTitle')?.value?.trim();
-  const category = document.getElementById('fCategory')?.value?.trim();
-  const date = document.getElementById('fDate')?.value?.trim();
-  const excerpt = document.getElementById('fExcerpt')?.value?.trim();
-  const body = document.getElementById('fBody')?.value?.trim();
-  const readTimeVal = document.getElementById('fReadTime')?.value;
-  const isFeatured = document.getElementById('featuredToggle')?.classList.contains('on');
+  const title=document.getElementById('fTitle')?.value?.trim();
+  const category=document.getElementById('fCategory')?.value?.trim();
+  const date=document.getElementById('fDate')?.value?.trim();
+  const excerpt=document.getElementById('fExcerpt')?.value?.trim();
+  const body=document.getElementById('fBody')?.value?.trim();
+  const readTimeVal=document.getElementById('fReadTime')?.value;
+  const isFeatured=document.getElementById('featuredToggle')?.classList.contains('on');
+  if(!title){toast('Title is required','error');return;}
 
-  if (!title) { toast('Title is required', 'error'); return; }
+  const relatedIds=[];
+  document.querySelectorAll('.related-item input[type=checkbox]:checked').forEach(cb=>relatedIds.push(cb.value));
 
-  // Gather related
-  const relatedIds = [];
-  document.querySelectorAll('.related-item input[type="checkbox"]:checked').forEach(cb => {
-    relatedIds.push(cb.value);
-  });
+  const statusBox=document.getElementById('publishStatus');
+  const publishBtn=document.getElementById('publishBtn');
+  statusBox.style.display='block';publishBtn.disabled=true;
+  publishBtn.innerHTML='<span class="spinner"></span>Publishing&hellip;';
 
-  // Status UI
-  const statusBox = document.getElementById('publishStatus');
-  const publishBtn = document.getElementById('publishBtn');
-  statusBox.style.display = 'block';
-  publishBtn.disabled = true;
-  publishBtn.innerHTML = '<span class="spinner"></span>Publishingï¿½ï¿½ï¿½';
-
-  function setStatus(steps) {
-    statusBox.innerHTML = `<div class="status-box">${steps.map(s =>
-      `<div class="status-step"><span class="step-icon">${s.icon}</span> ${s.text}</div>`
-    ).join('')}</div>`;
-  }
-
-  const steps = [
-    { icon: 'ï¿½ï¿½ï¿½', text: 'Uploading imageï¿½ï¿½ï¿½' },
-    { icon: 'ï¿½ï¿½ï¿½', text: 'Updating posts.jsonï¿½ï¿½ï¿½' },
-  ];
+  function setStatus(steps){statusBox.innerHTML=`<div class="status-box">${steps.map(s=>`<div class="status-step"><span>${s.icon}</span> ${s.text}</div>`).join('')}</div>`;}
 
   try {
-    let imageName = state.editingPost?.image || '';
+    // Upload images
+    let existingImgs = state.editingPost ? (state.editingPost.images||(state.editingPost.image?[state.editingPost.image]:[])) : [];
+    let imageNames = [...existingImgs];
 
-    // Step 1: Upload image if new file selected
-    if (photoFile && photoBase64) {
-      setStatus([{ icon: 'ï¿½ï¿½ï¿½ï¿½', text: 'Uploading imageï¿½ï¿½ï¿½' }, { icon: 'ï¿½ï¿½ï¿½', text: 'Updating posts.jsonï¿½ï¿½ï¿½' }]);
-      imageName = photoFile.name;
-      await uploadFile(imageName, photoBase64);
+    if(photoFiles.length>0&&photoBases.length>0){
+      setStatus([{icon:'&#x1F504;',text:`Uploading ${photoFiles.length} photo(s)&hellip;`},{icon:'&#x23F3;',text:'Updating posts.json&hellip;'}]);
+      imageNames=[];
+      for(let i=0;i<photoFiles.length;i++){
+        if(photoBases[i]){await uploadFile(photoFiles[i].name,photoBases[i]);imageNames.push(photoFiles[i].name);}
+      }
     }
 
-    // Step 2: Fetch current posts.json
-    setStatus([{ icon: 'ï¿½ï¿½ï¿½', text: 'Image uploaded' }, { icon: 'ï¿½ï¿½ï¿½ï¿½', text: 'Fetching posts.jsonï¿½ï¿½ï¿½' }]);
-    const { posts, sha } = await fetchPosts();
+    setStatus([{icon:'&#x2705;',text:'Photos uploaded'},{icon:'&#x1F504;',text:'Fetching posts.json&hellip;'}]);
+    const {posts,sha}=await fetchPosts();
 
-    // Step 3: Build post object
-    const readTime = readTimeVal ? parseInt(readTimeVal) : estimateReadTime(body);
-    const isEdit = !!state.editingPost;
-
-    const postObj = {
-      id: isEdit ? state.editingPost.id : genId(),
-      category: category || 'Uncategorized',
-      title,
-      excerpt: excerpt || '',
-      image: imageName || '',
-      images: imageNames.length > 0 ? imageNames : (imageName ? [imageName] : []),
-      date: date || today(),
-      readTime,
-      featured: isFeatured,
-      body: body || '',
+    const readTime=readTimeVal?parseInt(readTimeVal):estimateReadTime(body);
+    const isEdit=!!state.editingPost;
+    const postObj={
+      id:isEdit?state.editingPost.id:genId(),
+      category:category||'Uncategorized',title,
+      excerpt:excerpt||'',
+      image:imageNames[0]||'',
+      images:imageNames,
+      date:date||today(),readTime,featured:isFeatured,body:body||'',
     };
-
-    if (relatedIds.length > 0) postObj.related = relatedIds;
+    if(relatedIds.length>0)postObj.related=relatedIds;
 
     let updatedPosts;
-    if (isEdit) {
-      // Replace in place
-      const idx = posts.findIndex(p => p.id === postObj.id);
-      if (idx >= 0) {
-        updatedPosts = [...posts];
-        updatedPosts[idx] = postObj;
-      } else {
-        updatedPosts = [postObj, ...posts];
-      }
-    } else {
-      // Prepend new
-      updatedPosts = [postObj, ...posts];
-    }
+    if(isEdit){const idx=posts.findIndex(p=>p.id===postObj.id);updatedPosts=[...posts];if(idx>=0)updatedPosts[idx]=postObj;else updatedPosts.unshift(postObj);}
+    else updatedPosts=[postObj,...posts];
 
-    // Step 4: Save posts.json
-    setStatus([{ icon: 'ï¿½ï¿½ï¿½', text: 'Image uploaded' }, { icon: 'ï¿½ï¿½ï¿½ï¿½', text: 'Saving posts.jsonï¿½ï¿½ï¿½' }]);
-    await savePostsJson(updatedPosts, sha);
-
-    setStatus([{ icon: 'ï¿½ï¿½ï¿½', text: 'Image uploaded' }, { icon: 'ï¿½ï¿½ï¿½', text: 'posts.json updated' }]);
-
-    // Update local state
-    state.posts = updatedPosts;
-    state.screen = 'success';
-    render();
-
-  } catch (e) {
-    toast('Error: ' + e.message, 'error', 5000);
-    publishBtn.disabled = false;
-    publishBtn.innerHTML = `ï¿½ï¿½ï¿½ï¿½ ${state.editingPost ? 'Update Post' : 'Publish Post'}`;
-    setStatus([{ icon: 'ï¿½ï¿½ï¿½', text: e.message }]);
+    setStatus([{icon:'&#x2705;',text:'Photos uploaded'},{icon:'&#x1F504;',text:'Saving posts.json&hellip;'}]);
+    await savePostsJson(updatedPosts,sha);
+    state.posts=updatedPosts;state.screen='success';render();
+  } catch(e){
+    toast('Error: '+e.message,'error',5000);
+    publishBtn.disabled=false;publishBtn.innerHTML=`&#x1F680; ${state.editingPost?'Update Post':'Publish Post'}`;
+    setStatus([{icon:'&#x274C;',text:e.message}]);
   }
 }
 
 async function handleDelete() {
-  const post = state.editingPost;
-  if (!post) return;
-  if (!confirm(`Delete "${post.title}"? This cannot be undone.`)) return;
-
+  const post=state.editingPost;if(!post)return;
+  if(!confirm(`Delete "${post.title}"?`))return;
   try {
-    const { posts, sha } = await fetchPosts();
-    const updated = posts.filter(p => p.id !== post.id);
-    await savePostsJson(updated, sha);
-    state.posts = updated;
-    state.editingPost = null;
-    state.screen = 'list';
-    render();
-    toast('Post deleted', 'success');
-  } catch (e) {
-    toast('Delete failed: ' + e.message, 'error');
-  }
+    const {posts,sha}=await fetchPosts();
+    await savePostsJson(posts.filter(p=>p.id!==post.id),sha);
+    state.posts=state.posts.filter(p=>p.id!==post.id);
+    state.editingPost=null;state.screen='list';render();toast('Post deleted','success');
+  } catch(e){toast('Delete failed: '+e.message,'error');}
 }
 
-// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Init ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+// ─── Init ───
 async function loadAndShowList() {
-  state.screen = 'loading';
-  render();
-  try {
-    const { posts } = await fetchPosts();
-    state.posts = posts;
-    state.screen = 'list';
-  } catch (e) {
-    toast('Failed to load posts: ' + e.message, 'error', 5000);
-    state.screen = 'list';
-    state.posts = [];
-  }
+  state.screen='loading';render();
+  try {const {posts}=await fetchPosts();state.posts=posts;state.screen='list';}
+  catch(e){toast('Failed to load posts: '+e.message,'error',5000);state.screen='list';state.posts=[];}
   render();
 }
 
 async function init() {
-  // Read keys from URL hash if present (e.g. #t=TOKEN&a=ANTHROPIC_KEY)
-  // This lets you bookmark a URL with keys pre-loaded without embedding them in source
-  if (location.hash) {
-    const params = new URLSearchParams(location.hash.slice(1));
-    if (params.get('t')) { state.token = params.get('t'); localStorage.setItem('gh_token', state.token); }
-    if (params.get('a')) { state.anthropicKey = params.get('a'); localStorage.setItem('anthropic_key', state.anthropicKey); }
-    // Clear hash from URL so keys aren't visible in address bar after load
-    history.replaceState(null, '', location.pathname);
+  if(location.hash){
+    const params=new URLSearchParams(location.hash.slice(1));
+    if(params.get('t')){state.token=params.get('t');localStorage.setItem('gh_token',state.token);}
+    if(params.get('a')){state.anthropicKey=params.get('a');localStorage.setItem('anthropic_key',state.anthropicKey);}
+    history.replaceState(null,'',location.pathname+location.search);
   }
-
-  if (!sessionStorage.getItem('unlocked')) {
-    state.screen = 'pin';
-    render();
-    return;
-  }
-  if (!state.token) {
-    state.screen = 'setup';
-    render();
-  } else {
-    await loadAndShowList();
-  }
+  if(!sessionStorage.getItem('unlocked')){state.screen='pin';render();return;}
+  if(!state.token){state.screen='setup';render();}
+  else await loadAndShowList();
 }
 
 init();
