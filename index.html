@@ -1239,8 +1239,22 @@ async function loadStrava() {
       Array.from(tmp.children).reverse().forEach(el => items.prepend(el));
       widget.style.display = 'block';
     }
+    // Update lifetime km in hero stats
+    const lifetimeEl = document.getElementById('lifetime-km');
+    if (lifetimeEl && allKm > 0) lifetimeEl.textContent = allKm.toLocaleString();
   } catch(e) { console.log('Strava error', e); }
 }
+
+// ===== COUNTDOWN TO MOAB 240 =====
+function updateMoabCountdown() {
+  const race = new Date('2026-10-09T06:00:00');
+  const now = new Date();
+  const days = Math.ceil((race - now) / (1000 * 60 * 60 * 24));
+  const el = document.getElementById('moab-days');
+  if (el) el.textContent = days > 0 ? days : 'RACE DAY';
+}
+updateMoabCountdown();
+setInterval(updateMoabCountdown, 60000);
 
 // ===== INIT =====
 loadPosts();
