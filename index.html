@@ -870,14 +870,9 @@ footer {
       <div class="hero-tags" id="hero-tags">
         <!-- populated by JS from posts.json categories -->
       </div>
-      <div class="currently-widget">
+      <div class="currently-widget" id="currently-widget" style="display:none;">
         <div class="currently-label">Currently</div>
-        <div class="currently-items">
-          <div class="currently-item"><span class="currently-key">Training</span><span class="currently-val">Base miles &amp; strength work</span></div>
-          <div class="currently-item"><span class="currently-key">Flying</span><span class="currently-val">Building hours toward PPL</span></div>
-          <div class="currently-item"><span class="currently-key">Hives</span><span class="currently-val">2 active hives, spring flow on</span></div>
-          <div class="currently-item"><span class="currently-key">Reading</span><span class="currently-val">Endure — Alex Hutchinson</span></div>
-        </div>
+        <div class="currently-items" id="currently-items"></div>
       </div></div>
   </section>
 
@@ -1152,8 +1147,79 @@ window.addEventListener('scroll', () => {
     window.scrollY > 40 ? '0 2px 20px rgba(26,20,16,0.12)' : 'none';
 });
 
+// ===== LOAD CURRENTLY =====
+async function loadCurrently() {
+  try {
+    const res = await fetch('currently.json?v=' + Date.now());
+    const c = await res.json();
+    const widget = document.getElementById('currently-widget');
+    const items = document.getElementById('currently-items');
+    if (!widget || !items) return;
+    const fields = [
+      { key: 'training', label: 'Training' },
+      { key: 'flying', label: 'Flying' },
+      { key: 'hives', label: 'Hives' },
+      { key: 'reading', label: 'Reading' },
+      { key: 'nextRace', label: 'Next Race' },
+    ];
+    const html = fields
+      .filter(f => c[f.key])
+      .map(f => `<div class="currently-item"><span class="currently-key">${f.label}</span><span class="currently-val">${c[f.key]}</span></div>`)
+      .join('');
+    if (html) { items.innerHTML = html; widget.style.display = 'block'; }
+    // Custom fields
+    if (c.custom && c.custom.length) {
+      c.custom.forEach(item => {
+        const el = document.createElement('div');
+        el.className = 'currently-item';
+        el.innerHTML = `<span class="currently-key">${item.label}</span><span class="currently-val">${item.value}</span>`;
+        items.appendChild(el);
+      });
+      widget.style.display = 'block';
+    }
+  } catch(e) { console.log('No currently.json', e); }
+}
+
+// ===== STRAVA =====
+async function loadStrava() {
+  const refreshToken = localStorage.getItem('strava_refresh');
+  const clientId = localStorage.getItem('strava_client_id');
+  const clientSecret = localStorage.getItem('strava_client_secret');
+  if (!refreshToken || !clientId || !clientSecret) return;
+  try {
+    const tr = await fetch('https://www.strava.com/oauth/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ client_id: clientId, client_secret: clientSecret, refresh_token: refreshToken, grant_type: 'refresh_token' })
+    });
+    const td = await tr.json();
+    if (!td.access_token) return;
+    const sr = await fetch('https://www.strava.com/api/v3/athlete/stats', {
+      headers: { 'Authorization': 'Bearer ' + td.access_token }
+    });
+    const stats = await sr.json();
+    const ytdKm = Math.round((stats.ytd_run_totals?.distance || 0) / 1000);
+    const allKm = Math.round((stats.all_run_totals?.distance || 0) / 1000);
+    if (ytdKm > 0) {
+      const widget = document.getElementById('currently-widget');
+      const items = document.getElementById('currently-items');
+      if (items && widget) {
+        const el = document.createElement('div');
+        el.className = 'currently-item';
+        el.innerHTML = `<span class="currently-key">YTD Runs</span><span class="currently-val">${ytdKm} km (${allKm.toLocaleString()} km all time)</span>`;
+        items.prepend(el);
+        widget.style.display = 'block';
+      }
+    }
+    // Save new access token to avoid rate limits
+    localStorage.setItem('strava_access', td.access_token);
+  } catch(e) { console.log('Strava error', e); }
+}
+
 // ===== INIT =====
 loadPosts();
+loadCurrently();
+loadStrava();
 </script>
 </body>
 </html>
