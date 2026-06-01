@@ -383,6 +383,11 @@ footer { background: var(--ink); padding: 3rem 2.5rem; display: flex; flex-direc
       <span class="share-label">Share</span>
       <div class="share-btns" id="share-btns"></div>
     </div>
+
+    <!-- Comments -->
+    <div style="margin-top:3rem;padding-top:2rem;border-top:1px solid rgba(26,20,16,0.1);">
+      <div id="disqus_thread"></div>
+    </div>
   </div>
   <footer>
     <div class="footer-logo">Run <span>Brian</span></div>
@@ -562,6 +567,9 @@ function openPost(id) {
   // Share bar
   buildShareBar(post, postUrl);
 
+  // Disqus comments
+  loadDisqus(post.id, postUrl);
+
   document.getElementById('home-page').style.display = 'none';
   document.getElementById('post-page').style.display = 'block';
   window.scrollTo(0, 0);
@@ -601,6 +609,30 @@ function showHome() {
   document.title = 'Run Brian | Mountain Adventures';
   history.replaceState(null, '', location.pathname);
   window.scrollTo(0, 0);
+}
+
+// ===== DISQUS =====
+function loadDisqus(postId, postUrl) {
+  if (typeof DISQUS !== 'undefined') {
+    // Disqus already loaded — just reset for the new post
+    DISQUS.reset({
+      reload: true,
+      config: function() {
+        this.page.identifier = postId;
+        this.page.url = postUrl;
+      }
+    });
+  } else {
+    // First load — set config and inject the script
+    window.disqus_config = function() {
+      this.page.identifier = postId;
+      this.page.url = postUrl;
+    };
+    const s = document.createElement('script');
+    s.src = 'https://run-brian.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    document.body.appendChild(s);
+  }
 }
 
 // ===== CURRENTLY =====
