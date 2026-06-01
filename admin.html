@@ -902,11 +902,13 @@ async function loadAndShowList() {
   state.screen='loading';render();
   try {
     const {posts}=await fetchPosts();
-    // Sort newest first by date
-    state.posts=posts.slice().sort((a,b)=>{
-      const da=new Date(a.date||0), db=new Date(b.date||0);
-      return db-da;
-    });
+    // Sort newest first by date — handle invalid/missing dates gracefully
+    const parseDate = d => {
+      if (!d) return 0;
+      const t = new Date(d).getTime();
+      return isNaN(t) ? 0 : t;  // unparseable dates (e.g. "Summer") sort to bottom
+    };
+    state.posts=posts.slice().sort((a,b) => parseDate(b.date) - parseDate(a.date));
     state.screen='list';
   }
   catch(e){toast('Failed to load posts: '+e.message,'error',5000);state.screen='list';state.posts=[];}
