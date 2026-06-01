@@ -499,8 +499,10 @@ function openPost(id) {
   document.getElementById('post-meta').textContent = (post.date || '') + ' · ' + (post.readTime || '?') + ' min read';
 
   const content = document.getElementById('post-content');
-  const videoEmbed = post.video ? getYouTubeEmbed(post.video) : '';
-  content.innerHTML = videoEmbed + (post.body || '').split(/\n\n+/).map(p => `<p>${p.trim()}</p>`).join('');
+  // Support videos array (new) and single video string (old)
+  const videoList = post.videos?.length ? post.videos : (post.video ? [post.video] : []);
+  const videoEmbeds = videoList.map(url => getYouTubeEmbed(url)).join('');
+  content.innerHTML = videoEmbeds + (post.body || '').split(/\n\n+/).map(p => `<p>${p.trim()}</p>`).join('');
 
   // SEO
   const postUrl = `https://sirbrian88.github.io/runbrian/?post=${post.id}`;
