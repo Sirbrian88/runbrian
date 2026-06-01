@@ -384,10 +384,18 @@ function updateMoabCountdown() {
 updateMoabCountdown();
 
 // ===== LOAD POSTS =====
+function parsePostDate(d) {
+  if (!d) return 0;
+  const t = new Date(d).getTime();
+  return isNaN(t) ? 0 : t;
+}
+
 async function loadPosts() {
   try {
     const res = await fetch('posts.json?v=' + Date.now());
-    allPosts = await res.json();
+    const raw = await res.json();
+    // Sort newest first by date on the website too
+    allPosts = raw.slice().sort((a, b) => parsePostDate(b.date) - parsePostDate(a.date));
     renderCategoryTags();
     renderPosts(allPosts);
   } catch(e) { console.error('Could not load posts.json', e); }
@@ -424,10 +432,9 @@ function renderPosts(posts) {
     grid.innerHTML = '<div style="grid-column:1/-1;padding:3rem;text-align:center;font-family:\'DM Mono\',monospace;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--mist);">No stories in this category yet.</div>';
     return;
   }
-  const featured = posts.find(p => p.featured);
-  const others = posts.filter(p => !p.featured);
-  if (featured) grid.appendChild(makeCard(featured, true));
-  others.forEach(p => grid.appendChild(makeCard(p, false)));
+  // First post (newest) always gets the large featured card slot
+  grid.appendChild(makeCard(posts[0], true));
+  posts.slice(1).forEach(p => grid.appendChild(makeCard(p, false)));
 }
 
 function makeCard(post, isFeatured) {
