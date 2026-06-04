@@ -7,7 +7,7 @@
 <meta name="description" content="Brian Hamilton — ultra endurance athlete with 16 finishes at 200+ mile races. Pilot, beekeeper, dad. Racing Moab 240 in 2026." />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Run Brian" />
-<meta property="og:url" content="https://sirbrian88.github.io/runbrian/" />
+<meta property="og:url" content="https://runbrian.com/" />
 <meta property="og:title" content="Run Brian | Ultra Running, Aviation & Adventure" />
 <meta property="og:description" content="Brian Hamilton — 16 x 200+ mile finisher. Ultra Gobi, Iditarod 350, Winter Spine, Moab 240 x4. Pilot, beekeeper, dad." />
 <meta property="og:image" content="https://raw.githubusercontent.com/Sirbrian88/runbrian/main/gobi-desert.jpg" />
@@ -16,8 +16,8 @@
 <meta name="twitter:description" content="Brian Hamilton — 16 x 200+ mile finisher. Racing Moab 240 in 2026." />
 <meta name="twitter:image" content="https://raw.githubusercontent.com/Sirbrian88/runbrian/main/gobi-desert.jpg" />
 <meta name="robots" content="index, follow" />
-<link rel="canonical" href="https://sirbrian88.github.io/runbrian/" />
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Brian Hamilton","url":"https://sirbrian88.github.io/runbrian/","description":"Ultra endurance athlete with 16 finishes at 200+ mile races.","knowsAbout":["Ultra Running","Aviation","Beekeeping","Adventure Racing"]}</script>
+<link rel="canonical" href="https://runbrian.com/" />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Brian Hamilton","url":"https://runbrian.com/","description":"Ultra endurance athlete with 16 finishes at 200+ mile races.","knowsAbout":["Ultra Running","Aviation","Beekeeping","Adventure Racing"]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -550,14 +550,14 @@ function openPost(id) {
   content.innerHTML = videoEmbeds + (post.body || '').split(/\n\n+/).map(p => `<p>${p.trim()}</p>`).join('');
 
   // SEO
-  const postUrl = `https://sirbrian88.github.io/runbrian/?post=${post.id}`;
+  const postUrl = `${window.location.origin}/?post=${post.id}`;
   document.title = `${post.title} | Run Brian`;
   document.querySelector('meta[name="description"]')?.setAttribute('content', post.excerpt || post.title);
   document.querySelector('meta[property="og:title"]')?.setAttribute('content', post.title);
   document.querySelector('meta[property="og:description"]')?.setAttribute('content', post.excerpt || '');
   document.querySelector('meta[property="og:url"]')?.setAttribute('content', postUrl);
   document.querySelector('link[rel="canonical"]')?.setAttribute('href', postUrl);
-  history.replaceState(null, '', `?post=${post.id}`);
+  history.replaceState(null, '', postUrl);
 
   // JSON-LD
   let ldEl = document.getElementById('post-jsonld');
