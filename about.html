@@ -7,7 +7,7 @@
 <meta name="description" content="Brian Hamilton — ultra endurance athlete with 16 finishes at 200+ mile races including Ultra Gobi 400K, Iditarod 350, Winter Spine, Moab 240 and more. Pilot, beekeeper, dad." />
 <meta property="og:type" content="profile" />
 <meta property="og:title" content="About Brian Hamilton | Run Brian" />
-<meta property="og:description" content="16 x 200+ mile finisher. Ultra Gobi, Iditarod 350, Winter Spine, Moab 240 ×4, Tahoe 200 ×3. Pilot, beekeeper, dad." />
+<meta property="og:description" content="16 x 200+ mile finisher. Ultra Gobi, Iditarod 350, Winter Spine, Moab 240 x4, Tahoe 200 x3. Pilot, beekeeper, dad." />
 <meta property="og:image" content="https://raw.githubusercontent.com/Sirbrian88/runbrian/main/gobi-desert.jpg" />
 <meta property="og:url" content="https://runbrian.com/about.html" />
 <meta name="twitter:card" content="summary_large_image" />
@@ -16,38 +16,213 @@
 <meta name="robots" content="index, follow" />
 <link rel="canonical" href="https://runbrian.com/about.html" />
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "Brian Hamilton",
-  "url": "https://runbrian.com/",
-  "description": "Ultra endurance athlete with 16 finishes at 200+ mile races including the Ultra Gobi 400K, Iditarod Trail Invitational 350, Montane Winter Spine, and four Moab 240 finishes.",
-  "knowsAbout": ["Ultra Running", "Ultra Endurance Racing", "Aviation", "Beekeeping", "Adventure Racing", "Trail Running"]
-}
+{"@context":"https://schema.org","@type":"Person","name":"Brian Hamilton","url":"https://runbrian.com/","description":"Ultra endurance athlete with 16 finishes at 200+ mile races including the Ultra Gobi 400K, Iditarod Trail Invitational 350, Montane Winter Spine, and four Moab 240 finishes.","knowsAbout":["Ultra Running","Ultra Endurance Racing","Aviation","Beekeeping","Adventure Racing","Trail Running"]}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="image" href="gobi-desert.jpg" fetchpriority="high">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --ink: #1d1d1f;
-  --cream: #ffffff;
-  --warm: #ffffff;
-  --rust: #b84c1e;
-  --gold: #c9922a;
-  --sage: #4a5c42;
-  --mist: #6e6e73;
-  --paper: #ffffff;
-  --light-gray: #f5f5f7;
-  --dark-ui: #1c1c1e;
-}
-html { scroll-behavior: smooth; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
-  background: var(--cream);
-  color: var(--ink);
-  font-size: 17px;
-  line-height: 1.6;
-}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--ink:#1d1d1f;--cream:#ffffff;--rust:#b84c1e;--gold:#c9922a;--sage:#4a5c42;--mist:#6e6e73;--light-gray:#f5f5f7;--dark-ui:#1c1c1e;}
+html{scroll-behavior:smooth;}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;background:var(--cream);color:var(--ink);font-size:17px;line-height:1.6;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1rem 2.5rem;background:rgba(255,255,255,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,0.08);}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:0.12em;color:var(--rust);text-decoration:none;}
+.nav-links{display:flex;gap:2rem;list-style:none;}
+.nav-links a{font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink);text-decoration:none;opacity:0.7;transition:opacity 0.2s,color 0.2s;}
+.nav-links a:hover,.nav-links a.active{opacity:1;color:var(--rust);}
+.about-hero{padding-top:80px;min-height:60vh;display:grid;grid-template-columns:1fr 1fr;background:var(--dark-ui);}
+.hero-img{position:relative;overflow:hidden;}
+.hero-img::before{content:'';position:absolute;inset:0;background:url('gobi-desert.jpg') center/cover no-repeat;opacity:0.65;}
+.hero-content{padding:5rem 4rem;display:flex;flex-direction:column;justify-content:center;}
+.hero-eyebrow{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;}
+.hero-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,6vw,6rem);line-height:0.92;color:#ffffff;}
+.hero-name em{color:var(--rust);font-style:normal;}
+.hero-tagline{font-size:1.05rem;line-height:1.7;color:rgba(255,255,255,0.75);margin-top:1.5rem;max-width:400px;}
+.key-numbers{background:var(--light-gray);display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid rgba(0,0,0,0.06);}
+.num-item{padding:2.5rem 2rem;border-right:1px solid rgba(0,0,0,0.06);text-align:center;}
+.num-item:last-child{border-right:none;}
+.num-big{font-family:'Bebas Neue',sans-serif;font-size:3.5rem;color:var(--rust);line-height:1;}
+.num-label{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--mist);margin-top:0.5rem;}
+.section{padding:5rem 2.5rem;max-width:1200px;margin:0 auto;}
+.section-eyebrow{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--rust);margin-bottom:0.75rem;}
+.section-heading{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;letter-spacing:0.03em;margin-bottom:2rem;color:var(--ink);}
+.bio-text{font-size:1.1rem;line-height:1.85;color:rgba(29,29,31,0.8);max-width:720px;}
+.bio-text p{margin-bottom:1.25rem;}
+.races-section{background:var(--dark-ui);padding:5rem 2.5rem;}
+.races-inner{max-width:1200px;margin:0 auto;}
+.races-eyebrow{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);margin-bottom:0.75rem;}
+.races-heading{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;color:#ffffff;margin-bottom:0.5rem;}
+.races-sub{font-size:1rem;color:rgba(255,255,255,0.45);margin-bottom:3rem;font-style:italic;}
+.race-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+.race-card{background:rgba(255,255,255,0.05);padding:1.5rem 2rem;border-radius:10px;border-left:3px solid transparent;transition:border-color 0.2s,background 0.2s;}
+.race-card:hover{border-left-color:var(--rust);background:rgba(255,255,255,0.08);}
+.race-card.flagship{border-left-color:var(--gold);}
+.race-dist{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:0.4rem;}
+.race-name{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:#ffffff;line-height:1.1;margin-bottom:0.3rem;}
+.race-meta{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);}
+.race-result{font-size:0.85rem;color:rgba(255,255,255,0.5);margin-top:0.3rem;}
+.race-result.notable{color:var(--gold);font-weight:600;}
+.timeline-section{background:var(--light-gray);padding:5rem 2.5rem;}
+.timeline-inner{max-width:1000px;margin:0 auto;}
+.timeline-table{width:100%;border-collapse:collapse;font-size:0.95rem;}
+.timeline-table th{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--mist);padding:0.75rem 1rem;border-bottom:2px solid rgba(0,0,0,0.1);text-align:left;}
+.timeline-table td{padding:0.65rem 1rem;border-bottom:1px solid rgba(0,0,0,0.05);vertical-align:top;}
+.timeline-table tr:hover td{background:rgba(0,0,0,0.02);}
+.race-200 td{background:rgba(184,76,30,0.04);}
+.race-200 td:first-child{border-left:2px solid var(--rust);}
+.place-notable{color:var(--rust);font-weight:600;}
+.dnf{color:var(--mist);font-style:italic;}
+.dist-badge{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;white-space:nowrap;}
+.dist-badge.big{background:rgba(184,76,30,0.1);color:var(--rust);}
+.beyond{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:4rem;}
+.beyond-card{background:var(--cream);padding:2.5rem;border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,0.06);}
+.beyond-icon{font-size:2.5rem;margin-bottom:1rem;}
+.beyond-title{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;margin-bottom:0.75rem;color:var(--ink);}
+.beyond-text{font-size:1rem;line-height:1.7;color:var(--mist);}
+footer{background:var(--dark-ui);padding:3rem 2.5rem;display:flex;flex-direction:column;align-items:center;gap:1.5rem;border-top:1px solid rgba(255,255,255,0.06);}
+.footer-top{display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:wrap;gap:1rem;}
+.footer-socials{display:flex;gap:1.25rem;align-items:center;flex-wrap:wrap;justify-content:center;}
+.social-link{display:flex;align-items:center;gap:0.4rem;color:rgba(255,255,255,0.4);text-decoration:none;font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;transition:color 0.2s;border-radius:20px;padding:0.25rem 0;}
+.social-link:hover{color:var(--rust);}
+.social-link svg{width:16px;height:16px;fill:currentColor;flex-shrink:0;}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:#ffffff;letter-spacing:0.1em;}
+.footer-logo span{color:var(--rust);}
+.footer-links{display:flex;gap:1.5rem;list-style:none;}
+.footer-links a{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.35);text-decoration:none;transition:color 0.2s;}
+.footer-links a:hover{color:var(--rust);}
+.footer-copy{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;color:rgba(255,255,255,0.25);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.fade-in{opacity:0;animation:fadeUp 0.8s forwards;}
+@media(max-width:900px){.about-hero{grid-template-columns:1fr;}.hero-img{min-height:300px;}.hero-content{padding:3rem 2rem;}.key-numbers{grid-template-columns:1fr 1fr;}.race-grid{grid-template-columns:1fr;}.beyond{grid-template-columns:1fr;}footer{flex-direction:column;text-align:center;}.nav-links{display:none;}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">Run Brian</a>
+  <ul class="nav-links" role="list">
+    <li><a href="index.html">Stories</a></li>
+    <li><a href="about.html" class="active">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+<div class="about-hero" aria-label="About Brian Hamilton hero">
+  <div class="hero-img" role="img" aria-label="Gobi Desert running photo"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow fade-in" style="animation-delay:0.2s">Ultra Endurance Athlete · Pilot · Beekeeper</div>
+    <h1 class="hero-name fade-in" style="animation-delay:0.4s">Brian<br/><em>Hamilton</em></h1>
+    <p class="hero-tagline fade-in" style="animation-delay:0.6s">Sixteen finishes at races of 200 miles or more. Deserts, arctic tundra, mountain spines, and canyon country. Not racing to win — racing to find out what's possible.</p>
+  </div>
+</div>
+<div class="key-numbers" role="list" aria-label="Key statistics">
+  <div class="num-item" role="listitem"><div class="num-big">16</div><div class="num-label">200+ Mile Finishes</div></div>
+  <div class="num-item" role="listitem"><div class="num-big">80+</div><div class="num-label">Races Completed</div></div>
+  <div class="num-item" role="listitem"><div class="num-big">10+</div><div class="num-label">Countries Raced In</div></div>
+  <div class="num-item" role="listitem"><div class="num-big">36K+</div><div class="num-label">km on Foot</div></div>
+</div>
+<div class="section">
+  <div class="section-eyebrow">The Story</div>
+  <h2 class="section-heading">How We Got Here</h2>
+  <div class="bio-text">
+    <p>Brian Hamilton started running ultras the way most people do — convinced a 50K was a reasonable thing to sign up for. That was 2013. A decade later he had crossed the Gobi Desert non-stop, survived a British winter on the Pennine Way, and finished the Iditarod Trail Invitational through 350 miles of Alaskan wilderness in February.</p>
+    <p>The thread connecting all of it isn't speed — it's persistence. Brian has never been the fastest person in any race he's entered. What he's been is someone who keeps moving when most people don't. Sixteen times he's crossed a finish line at 200 miles or beyond. Four times at Moab 240. Three times at Tahoe 200. Twice on the Bigfoot 200 course in Washington. Once across the Gobi.</p>
+    <p>Between races there's a life that's equally full: student pilot working toward his PPL, first-year beekeeper managing a hive through its first spring flow, and father to one teenager who has somehow survived the whole adventure. He lives in the Pacific Northwest, trains in the mountains, and writes about all of it here.</p>
+  </div>
+</div>
+<div class="races-section" aria-label="200 plus mile race finishes">
+  <div class="races-inner">
+    <div class="races-eyebrow">The Crown Jewels</div>
+    <h2 class="races-heading">200+ Mile Race Finishes</h2>
+    <p class="races-sub">Every finish at a race of 200 miles or more. In order of distance.</p>
+    <div class="race-grid">
+      <div class="race-card flagship"><div class="race-dist">400 km · Gobi Desert, China</div><div class="race-name">Ultra Gobi</div><div class="race-meta">2024</div><div class="race-result notable">Finisher — Non-stop across the Gobi Desert</div></div>
+      <div class="race-card flagship"><div class="race-dist">350 Miles · Anchorage to McGrath, Alaska</div><div class="race-name">Iditarod Trail Invitational</div><div class="race-meta">February 2024</div><div class="race-result notable">Finisher — 350 miles in Arctic February</div></div>
+      <div class="race-card flagship"><div class="race-dist">286 Miles · Pennine Way, UK</div><div class="race-name">Montane Winter Spine Race</div><div class="race-meta">January 2024</div><div class="race-result notable">Finisher — Britain's most brutal race, in winter</div></div>
+      <div class="race-card"><div class="race-dist">286 Miles · Pennine Way, UK</div><div class="race-name">Montane Summer Spine Race</div><div class="race-meta">2024</div><div class="race-result">Finisher</div></div>
+      <div class="race-card"><div class="race-dist">330K · Courmayeur, Italy</div><div class="race-name">Tor des Géants</div><div class="race-meta">September 2023 · 148:39:51 · 609th / 1,357</div><div class="race-result">Finisher</div></div>
+      <div class="race-card"><div class="race-dist">180 Miles · Courmayeur, Italy</div><div class="race-name">Tor des Géants</div><div class="race-meta">September 2022</div><div class="race-result">Weather Safety Finish · 137:13:17</div></div>
+      <div class="race-card"><div class="race-dist">250 Miles · Black Canyon City, Arizona</div><div class="race-name">Cocodona 250</div><div class="race-meta">May 2022 · 101:29:32 · 48th place</div><div class="race-result">Finisher</div></div>
+      <div class="race-card"><div class="race-dist">240 Miles · Moab, Utah</div><div class="race-name">Moab 240 Endurance Run x 4</div><div class="race-meta">2020 · 2021 · 2022 · 2023</div><div class="race-result notable">Four finishes — 27th place best (2021)</div></div>
+      <div class="race-card"><div class="race-dist">200 Miles · Mount St. Helens, Washington</div><div class="race-name">Bigfoot 200 Mile x 2</div><div class="race-meta">August 2021 · August 2023</div><div class="race-result">50th (2021) · 83rd (2023)</div></div>
+      <div class="race-card"><div class="race-dist">200 Miles · Lake Tahoe, California</div><div class="race-name">Tahoe 200 Endurance Run x 3</div><div class="race-meta">2019 · 2021 · 2023</div><div class="race-result notable">11th place finish in 2021 — 95:23:00</div></div>
+    </div>
+  </div>
+</div>
+<div class="timeline-section">
+  <div class="timeline-inner">
+    <div class="section-eyebrow">Complete Record</div>
+    <h2 class="section-heading">Race History</h2>
+    <p style="color:var(--mist);margin-bottom:2rem;font-style:italic;">Races highlighted in rust are 200+ mile events.</p>
+    <table class="timeline-table" aria-label="Complete race history">
+      <thead><tr><th scope="col">Race</th><th scope="col">Distance</th><th scope="col">Location</th><th scope="col">Year</th><th scope="col">Result</th></tr></thead>
+      <tbody>
+        <tr class="race-200"><td><strong>Ultra Gobi</strong></td><td><span class="dist-badge big">400 km</span></td><td>Gobi Desert, China</td><td>2024</td><td class="place-notable">Finisher</td></tr>
+        <tr class="race-200"><td><strong>Iditarod Trail Invitational</strong></td><td><span class="dist-badge big">350 mi</span></td><td>Anchorage–McGrath, AK</td><td>Feb 2024</td><td class="place-notable">Finisher</td></tr>
+        <tr class="race-200"><td><strong>Montane Winter Spine Race</strong></td><td><span class="dist-badge big">286 mi</span></td><td>Pennine Way, UK</td><td>Jan 2024</td><td class="place-notable">Finisher</td></tr>
+        <tr class="race-200"><td><strong>Montane Summer Spine Race</strong></td><td><span class="dist-badge big">286 mi</span></td><td>Pennine Way, UK</td><td>2024</td><td class="place-notable">Finisher</td></tr>
+        <tr><td>The Daytona 100</td><td><span class="dist-badge">100 mi</span></td><td>Atlantic Beach, FL</td><td>Dec 2024</td><td>59th · 27:21:58</td></tr>
+        <tr><td>Route 66 UltraRun</td><td><span class="dist-badge">Journey</span></td><td>Historic Route 66, AZ</td><td>Nov 2024</td><td class="place-notable">1st</td></tr>
+        <tr><td>Oregon Cascades 100</td><td><span class="dist-badge">100 mi</span></td><td>Sisters, OR</td><td>Aug 2024</td><td>136th · 29:00:16</td></tr>
+        <tr class="race-200"><td><strong>Moab 240 Endurance Run</strong></td><td><span class="dist-badge big">240 mi</span></td><td>Moab, UT</td><td>Oct 2023</td><td>67th · 105:05:41</td></tr>
+        <tr class="race-200"><td><strong>Tor des Géants</strong></td><td><span class="dist-badge big">330K</span></td><td>Courmayeur, Italy</td><td>Sep 2023</td><td>609th · 148:39:51</td></tr>
+        <tr class="race-200"><td><strong>Bigfoot 200 Mile</strong></td><td><span class="dist-badge big">200 mi</span></td><td>Mt. St. Helens, WA</td><td>Aug 2023</td><td>83rd · 98:09:27</td></tr>
+        <tr class="race-200"><td><strong>Tahoe 200 Endurance Run</strong></td><td><span class="dist-badge big">200 mi</span></td><td>Lake Tahoe, CA</td><td>Jul 2023</td><td>95th · 99:25:59</td></tr>
+        <tr><td>Ultra Trail Mount Fuji</td><td><span class="dist-badge">100 mi</span></td><td>Shizuoka, Japan</td><td>Apr 2023</td><td>1,582nd · 43:28:51</td></tr>
+        <tr><td>Arrowhead 135</td><td><span class="dist-badge">135 mi</span></td><td>International Falls, MN</td><td>Jan 2023</td><td class="place-notable">17th · 52:49:00</td></tr>
+        <tr class="race-200"><td><strong>Moab 240 Endurance Run</strong></td><td><span class="dist-badge big">240 mi</span></td><td>Moab, UT</td><td>Oct 2022</td><td>51st · 94:45:36</td></tr>
+        <tr class="race-200"><td><strong>Tor des Géants</strong></td><td><span class="dist-badge big">180 mi</span></td><td>Courmayeur, Italy</td><td>Sep 2022</td><td>Weather Safety Finish · 137:13:17</td></tr>
+        <tr class="race-200"><td><strong>Cocodona 250</strong></td><td><span class="dist-badge big">250 mi</span></td><td>Black Canyon City, AZ</td><td>May 2022</td><td>48th · 101:29:32</td></tr>
+        <tr><td>The Drift 100</td><td><span class="dist-badge">100 mi</span></td><td>Pinedale, WY</td><td>Mar 2022</td><td>48th · 42:03:00</td></tr>
+        <tr class="race-200"><td><strong>Moab 240 Endurance Run</strong></td><td><span class="dist-badge big">240 mi</span></td><td>Moab, UT</td><td>Oct 2021</td><td class="place-notable">27th · 82:38:19</td></tr>
+        <tr class="race-200"><td><strong>Tahoe 200 Endurance Run</strong></td><td><span class="dist-badge big">200 mi</span></td><td>Lake Tahoe, CA</td><td>Sep 2021</td><td class="place-notable">11th · 95:23:00</td></tr>
+        <tr class="race-200"><td><strong>Bigfoot 200 Mile</strong></td><td><span class="dist-badge big">200 mi</span></td><td>Mt. St. Helens, WA</td><td>Aug 2021</td><td>50th · 96:29:46</td></tr>
+        <tr><td>Badwater 135</td><td><span class="dist-badge">135 mi</span></td><td>Death Valley, CA</td><td>Jul 2021</td><td>36th · 38:35:05</td></tr>
+        <tr><td>Keys Ultras</td><td><span class="dist-badge">100 mi</span></td><td>Key Largo, FL</td><td>May 2021</td><td>31st · 24:38:47</td></tr>
+        <tr><td>Rocky Raccoon</td><td><span class="dist-badge">100 mi</span></td><td>Huntsville, TX</td><td>Feb 2021</td><td>104th · 23:24:51</td></tr>
+        <tr class="race-200"><td><strong>Moab 240 Endurance Run</strong></td><td><span class="dist-badge big">240 mi</span></td><td>Moab, UT</td><td>Oct 2020</td><td>46th · 96:01:20</td></tr>
+        <tr><td>Brazil 135</td><td><span class="dist-badge">135 mi</span></td><td>Resende, Brazil</td><td>Jan 2020</td><td>36th · 50:45:18</td></tr>
+        <tr class="race-200"><td><strong>Tahoe 200 Endurance Run</strong></td><td><span class="dist-badge big">200 mi</span></td><td>Lake Tahoe, CA</td><td>Sep 2019</td><td>57th · 83:51:09</td></tr>
+        <tr><td>Tahoe Rim Trail 100</td><td><span class="dist-badge">100 mi</span></td><td>Carson City, NV</td><td>Jul 2019</td><td>86th · 31:42:58</td></tr>
+        <tr><td>Antelope Island Buffalo Run</td><td><span class="dist-badge">100 mi</span></td><td>Syracuse, UT</td><td>Mar 2019</td><td class="place-notable">20th · 24:19:01</td></tr>
+        <tr><td>Patagonia Run</td><td><span class="dist-badge">100 mi</span></td><td>San Martin de los Andes, Argentina</td><td>Apr 2018</td><td>79th · 35:19:56</td></tr>
+        <tr><td>Javelina Jundred</td><td><span class="dist-badge">100 mi</span></td><td>McDowell, AZ</td><td>Oct 2017</td><td>230th · 27:23:52</td></tr>
+        <tr><td>Mountain Lakes 100</td><td><span class="dist-badge">100 mi</span></td><td>Olallie Lake, OR</td><td>Sep 2017</td><td class="place-notable">40th · 26:37:05</td></tr>
+        <tr><td>San Diego 100</td><td><span class="dist-badge">100 mi</span></td><td>Lake Cuyamaca, CA</td><td>Jun 2017</td><td>104th · 29:19:12</td></tr>
+        <tr><td>Marathon des Sables</td><td><span class="dist-badge">250K</span></td><td>Ouarzazate, Morocco</td><td>Apr 2017</td><td>318th · 38:54:39</td></tr>
+        <tr><td>Javelina Jundred</td><td><span class="dist-badge">100 mi</span></td><td>McDowell, AZ</td><td>Oct 2016</td><td>134th · 26:22:57</td></tr>
+        <tr><td>Leadville Trail 100</td><td><span class="dist-badge">100 mi</span></td><td>Leadville, CO</td><td>Aug 2016</td><td>245th · 29:12:04</td></tr>
+        <tr><td>Tahoe Rim Trail 100</td><td><span class="dist-badge">100 mi</span></td><td>Carson City, NV</td><td>Jul 2015</td><td>69th · 29:21:49</td></tr>
+        <tr><td>Bryce Canyon Ultras</td><td><span class="dist-badge">100 mi</span></td><td>Bryce Canyon, UT</td><td>Jun 2014</td><td>33rd · 29:38:47</td></tr>
+        <tr><td class="dnf">Moab 240 Endurance Run</td><td><span class="dist-badge">240 mi</span></td><td>Moab, UT</td><td>Oct 2025</td><td class="dnf">DNF</td></tr>
+        <tr><td class="dnf">Western States 100</td><td><span class="dist-badge">100 mi</span></td><td>Olympic Valley, CA</td><td>Jun 2023</td><td class="dnf">DNF</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="section">
+  <div class="section-eyebrow">Beyond the Miles</div>
+  <h2 class="section-heading">The Rest of the Story</h2>
+  <div class="beyond">
+    <div class="beyond-card"><div class="beyond-icon" aria-hidden="true">&#x2708;&#xFE0F;</div><h3 class="beyond-title">Student Pilot</h3><p class="beyond-text">Working toward his Private Pilot Licence. Flying requires a different kind of focus than ultra running — one that doesn't allow the luxury of suffering through it. Currently building hours and preparing for the check ride.</p></div>
+    <div class="beyond-card"><div class="beyond-icon" aria-hidden="true">&#x1F41D;</div><h3 class="beyond-title">Beekeeper</h3><p class="beyond-text">First-year beekeeper managing one active hive through its first spring flow. Turns out keeping bees shares something with ultra running: you can read everything about it beforehand and still be completely surprised by what actually happens.</p></div>
+    <div class="beyond-card"><div class="beyond-icon" aria-hidden="true">&#x1F436;</div><h3 class="beyond-title">Weimaraner Dad</h3><p class="beyond-text">Owner of two Weimaraners who have strong opinions about training schedules, meal times, and where on the bed they're allowed to sleep (everywhere). They are not good running partners — they're too fast and too easily distracted.</p></div>
+  </div>
+</div>
+<footer>
+  <div class="footer-top">
+    <div class="footer-logo">Run <span>Brian</span></div>
+    <ul class="footer-links" role="list"><li><a href="index.html">Stories</a></li><li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li></ul>
+  </div>
+  <div class="footer-socials">
+    <a href="https://instagram.com/Sirbrian88" target="_blank" rel="noopener" class="social-link" aria-label="Instagram: @Sirbrian88"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>@Sirbrian88</a>
+    <a href="https://facebook.com/i.am.sirbrian" target="_blank" rel="noopener" class="social-link" aria-label="Facebook: i.am.sirbrian"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>i.am.sirbrian</a>
+    <a href="https://tiktok.com/@brianhamilton64" target="_blank" rel="noopener" class="social-link" aria-label="TikTok: @brianhamilton64"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>@brianhamilton64</a>
+    <a href="https://youtube.com/@brianhamilton7073" target="_blank" rel="noopener" class="social-link" aria-label="YouTube: @brianhamilton7073"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>@brianhamilton7073</a>
+  </div>
+  <div class="footer-copy">&#169; 2025 Brian Hamilton &middot; Built with GitHub Pages</div>
+</footer>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TFEW19X1ZL"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-TFEW19X1ZL');</script>
+</body>
+</html>
