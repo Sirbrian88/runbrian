@@ -4,741 +4,182 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Run Brian | Mountain Adventures</title>
-<meta name="description" content="Brian Hamilton — ultra endurance athlete, pilot, beekeeper, Weimaraner wrangler, and dad. Living every day to the fullest." />
+<meta name="description" content="Brian Hamilton — ultra endurance athlete with 16 finishes at 200+ mile races. Pilot, beekeeper, dad. Racing Moab 240 in 2026." />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Run Brian" />
+<meta property="og:url" content="https://runbrian.com/" />
+<meta property="og:title" content="Run Brian | Ultra Running, Aviation & Adventure" />
+<meta property="og:description" content="Brian Hamilton — 16 x 200+ mile finisher. Ultra Gobi, Iditarod 350, Winter Spine, Moab 240 x4. Pilot, beekeeper, dad." />
+<meta property="og:image" content="https://raw.githubusercontent.com/Sirbrian88/runbrian/main/gobi-desert.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Run Brian | Ultra Running, Aviation & Adventure" />
+<meta name="twitter:description" content="Brian Hamilton — 16 x 200+ mile finisher. Racing Moab 240 in 2026." />
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Sirbrian88/runbrian/main/gobi-desert.jpg" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://runbrian.com/" />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Brian Hamilton","url":"https://runbrian.com/","description":"Ultra endurance athlete with 16 finishes at 200+ mile races.","knowsAbout":["Ultra Running","Aviation","Beekeeping","Adventure Racing"]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&display=swap">
-<link rel="preload" as="font" href="https://fonts.gstatic.com/s/bebasneuepro/v3/Block_l.woff2" type="font/woff2" crossorigin>
-<link rel="preload" as="image" href="gobi-desert.jpg" fetchpriority="high">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-  --ink: #1d1d1f;
-  --cream: #ffffff;
-  --warm: #ffffff;
-  --rust: #b84c1e;
-  --gold: #c9922a;
-  --sage: #4a5c42;
-  --mist: #6e6e73;
-  --paper: #ffffff;
-  --light-gray: #f5f5f7;
-  --dark-ui: #1c1c1e;
+  --ink: #1d1d1f; --cream: #ffffff; --warm: #f5f5f7;
+  --rust: #b84c1e; --gold: #c9922a; --sage: #4a5c42;
+  --mist: #6e6e73; --paper: #f5f5f7;
 }
-
 html { scroll-behavior: smooth; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif; background: var(--cream); color: var(--ink); overflow-x: hidden; }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
-  background: var(--cream);
-  color: var(--ink);
-  overflow-x: hidden;
-  font-size: 17px;
-  line-height: 1.6;
-}
-
-/* ===== NAV ===== */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 100;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2.5rem;
-  background: rgba(255,255,255,0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(0,0,0,0.08);
-  transition: all 0.3s;
-}
-
-.nav-logo {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.6rem;
-  letter-spacing: 0.12em;
-  color: var(--rust);
-  text-decoration: none;
-}
-
-.nav-links {
-  display: flex;
-  gap: 2rem;
-  list-style: none;
-}
-
-.nav-links a {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--ink);
-  text-decoration: none;
-  opacity: 0.7;
-  transition: opacity 0.2s, color 0.2s;
-}
-
+/* NAV */
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1rem 2.5rem; background: rgba(255,255,255,0.88); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(26,20,16,0.1); transition: all 0.3s; }
+.nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.12em; color: var(--rust); text-decoration: none; }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink); text-decoration: none; opacity: 0.7; transition: opacity 0.2s, color 0.2s; }
 .nav-links a:hover { opacity: 1; color: var(--rust); }
 
-/* ===== HERO ===== */
-.hero {
-  min-height: 100vh;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  position: relative;
-  overflow: hidden;
-}
+/* HERO */
+.hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; position: relative; overflow: hidden; }
+.hero-left { background: #1c1c1e; display: flex; flex-direction: column; justify-content: flex-end; padding: 6rem 3rem 4rem; position: relative; overflow: hidden; }
+.hero-left::before { content: ''; position: absolute; inset: 0; background: url('gobi-desert.jpg') center/cover no-repeat; opacity: 0.65; }
+.hero-eyebrow { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; position: relative; z-index: 1; opacity: 0; animation: fadeUp 0.8s 0.2s forwards; }
+.hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(4rem, 8vw, 7rem); line-height: 0.92; color: var(--cream); position: relative; z-index: 1; opacity: 0; animation: fadeUp 0.8s 0.4s forwards; }
+.hero-title em { color: var(--rust); font-style: normal; }
+.hero-sub { font-size: 1.1rem; line-height: 1.6; color: rgba(245,240,232,0.7); margin-top: 1.5rem; max-width: 380px; position: relative; z-index: 1; opacity: 0; animation: fadeUp 0.8s 0.6s forwards; }
+.hero-cta { display: inline-flex; align-items: center; gap: 0.6rem; margin-top: 2rem; font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cream); text-decoration: none; border: 1px solid rgba(245,240,232,0.3); padding: 0.75rem 1.5rem; transition: all 0.3s; position: relative; z-index: 1; opacity: 0; animation: fadeUp 0.8s 0.8s forwards; }
+.hero-cta:hover { background: var(--rust); border-color: var(--rust); gap: 1rem; }
+.hero-right { background: var(--warm); display: flex; flex-direction: column; justify-content: center; padding: 6rem 3rem 4rem; position: relative; }
+.hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem; opacity: 0; animation: fadeUp 0.8s 0.5s forwards; }
+.stat-item { padding: 1.5rem; background: #ffffff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem; color: var(--rust); line-height: 1; }
+.stat-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--mist); margin-top: 0.3rem; }
+.hero-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; opacity: 0; animation: fadeUp 0.8s 0.7s forwards; }
+.tag { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.4rem 0.8rem; border: 1px solid rgba(26,20,16,0.2); color: var(--ink); opacity: 0.65; cursor: pointer; transition: all 0.2s; }
+.tag:hover, .tag.active { background: var(--sage); border-color: var(--sage); color: var(--cream); opacity: 1; }
 
-.hero-left {
-  background: var(--dark-ui);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 6rem 3rem 4rem;
-  position: relative;
-  overflow: hidden;
-}
+/* Currently widget */
+.currently-widget { margin-top: 2rem; opacity: 0; animation: fadeUp 0.8s 0.9s forwards; }
+.currently-label { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--mist); margin-bottom: 0.75rem; }
+.currently-items { display: flex; flex-direction: column; gap: 0.5rem; }
+.currently-item { display: flex; align-items: baseline; gap: 0.6rem; font-size: 0.9rem; }
+.currently-key { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--rust); white-space: nowrap; min-width: 90px; }
+.currently-val { color: rgba(26,20,16,0.75); line-height: 1.4; }
 
-.hero-left::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: url('gobi-desert.jpg') center/cover no-repeat;
-  opacity: 0.65;
-}
+/* Filter bar */
+.filter-bar { display: flex; align-items: center; gap: 1rem; margin-bottom: 2.5rem; }
+.filter-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mist); white-space: nowrap; }
+.filter-select { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); background: var(--cream); border: 1px solid rgba(26,20,16,0.25); padding: 0.5rem 2rem 0.5rem 0.8rem; appearance: none; -webkit-appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%231a1410'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.6rem center; }
+.filter-select:focus { outline: none; border-color: var(--rust); }
 
-.hero-eyebrow {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.68rem;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 1rem;
-  position: relative;
-  z-index: 1;
-  opacity: 0;
-  animation: fadeUp 0.8s 0.2s forwards;
-}
+/* MARQUEE */
+.marquee-wrap { background: var(--rust); padding: 0.75rem 0; overflow: hidden; white-space: nowrap; }
+.marquee-track { display: inline-flex; animation: marquee 22s linear infinite; }
+.marquee-item { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 0.15em; color: var(--cream); padding: 0 3rem; }
+.marquee-item span { color: rgba(245,240,232,0.4); margin-right: 3rem; }
 
-.hero-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(4rem, 8vw, 7rem);
-  line-height: 0.92;
-  color: #ffffff;
-  position: relative;
-  z-index: 1;
-  opacity: 0;
-  animation: fadeUp 0.8s 0.4s forwards;
-}
-
-.hero-title em {
-  color: var(--rust);
-  font-style: normal;
-}
-
-.hero-sub {
-  font-size: 1.05rem;
-  line-height: 1.65;
-  color: rgba(255,255,255,0.75);
-  margin-top: 1.5rem;
-  max-width: 380px;
-  position: relative;
-  z-index: 1;
-  opacity: 0;
-  animation: fadeUp 0.8s 0.6s forwards;
-}
-
-.hero-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  margin-top: 2rem;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.75rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: #ffffff;
-  text-decoration: none;
-  border: 1px solid rgba(255,255,255,0.3);
-  padding: 0.75rem 1.5rem;
-  border-radius: 4px;
-  transition: all 0.3s;
-  position: relative;
-  z-index: 1;
-  opacity: 0;
-  animation: fadeUp 0.8s 0.8s forwards;
-}
-
-.hero-cta:hover {
-  background: var(--rust);
-  border-color: var(--rust);
-  gap: 1rem;
-}
-
-.hero-right {
-  background: var(--cream);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 6rem 3rem 4rem;
-  position: relative;
-}
-
-.hero-stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.25rem;
-  margin-bottom: 3rem;
-  opacity: 0;
-  animation: fadeUp 0.8s 0.5s forwards;
-}
-
-.stat-item {
-  padding: 1.5rem;
-  background: var(--cream);
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-}
-
-.stat-num {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 2.8rem;
-  color: var(--rust);
-  line-height: 1;
-}
-
-.stat-label {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--mist);
-  margin-top: 0.3rem;
-}
-
-.hero-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  opacity: 0;
-  animation: fadeUp 0.8s 0.7s forwards;
-}
-
-.tag {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 0.4rem 0.8rem;
-  border: 1px solid rgba(0,0,0,0.12);
-  color: var(--ink);
-  opacity: 0.6;
-  border-radius: 4px;
-}
-
-.tag.active {
-  background: var(--sage);
-  border-color: var(--sage);
-  color: #ffffff;
-  opacity: 1;
-}
-
-/* ===== MARQUEE ===== */
-.marquee-wrap {
-  background: var(--dark-ui);
-  padding: 0.75rem 0;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.marquee-track {
-  display: inline-flex;
-  animation: marquee 22s linear infinite;
-}
-
-.marquee-item {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1rem;
-  letter-spacing: 0.15em;
-  color: rgba(255,255,255,0.85);
-  padding: 0 3rem;
-}
-
-.marquee-item span {
-  color: var(--rust);
-  margin-right: 3rem;
-}
-
-/* ===== POSTS ===== */
-.section {
-  padding: 6rem 2.5rem;
-}
-
-.section-header {
-  display: flex;
-  align-items: baseline;
-  gap: 1.5rem;
-  margin-bottom: 3rem;
-}
-
-.section-label {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--mist);
-}
-
-.section-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 2.8rem;
-  letter-spacing: 0.05em;
-  color: var(--ink);
-}
-
-.featured-grid {
-  display: grid;
-  grid-template-columns: 1.6fr 1fr 1fr;
-  gap: 16px;
-  background: transparent;
-}
-
-.post-card {
-  background: var(--cream);
-  overflow: hidden;
-  cursor: pointer;
-  position: relative;
-  text-decoration: none;
-  color: inherit;
-  display: block;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-  transition: box-shadow 0.3s, transform 0.3s;
-}
-
-.post-card:hover {
-  box-shadow: 0 8px 28px rgba(0,0,0,0.14);
-  transform: translateY(-2px);
-}
-
-.post-card:hover .post-img { transform: scale(1.04); }
+/* POSTS */
+.section { padding: 6rem 2.5rem; }
+.section-header { display: flex; align-items: baseline; gap: 1.5rem; margin-bottom: 3rem; }
+.section-label { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--mist); }
+.section-title { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; letter-spacing: 0.05em; }
+.featured-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 16px; background: transparent; }
+.post-card { background: var(--cream); overflow: hidden; cursor: pointer; position: relative; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); transition: box-shadow 0.3s, transform 0.3s; }
+.post-card:hover .post-img { transform: scale(1.04); } .post-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.12); transform: translateY(-2px); }
 .post-card:hover .post-title { color: var(--rust); }
-
-.post-img-wrap {
-  overflow: hidden;
-  aspect-ratio: 4/3;
-}
-
+.post-img-wrap { overflow: hidden; aspect-ratio: 4/3; position: relative; }
 .post-card.featured .post-img-wrap { aspect-ratio: 3/2; }
+.post-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94); display: block; }
+.post-img-placeholder { width: 100%; height: 100%; background: linear-gradient(135deg, var(--sage) 0%, var(--ink) 100%); display: flex; align-items: center; justify-content: center; }
+.post-body { padding: 1.5rem; }
+.post-category { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--rust); margin-bottom: 0.5rem; }
+.post-title { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif; font-size: 1.3rem; font-weight: 600; line-height: 1.3; transition: color 0.2s; }
+.post-card.featured .post-title { font-size: 1.55rem; }
+.post-excerpt { font-size: 0.95rem; line-height: 1.65; color: rgba(26,20,16,0.65); margin-top: 0.6rem; }
+.post-meta { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; color: var(--mist); margin-top: 1rem; text-transform: uppercase; }
+.video-badge { position: absolute; top: 10px; left: 10px; background: rgba(26,20,16,0.75); color: #fff; font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.1em; padding: 3px 8px; }
 
-.post-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  display: block;
-}
-
-.post-img-placeholder {
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, var(--sage) 0%, var(--dark-ui) 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.post-body {
-  padding: 1.5rem;
-}
-
-.post-category {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.62rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--rust);
-  margin-bottom: 0.5rem;
-}
-
-.post-title {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
-  font-size: 1.15rem;
-  font-weight: 600;
-  line-height: 1.3;
-  color: var(--ink);
-  transition: color 0.2s;
-}
-
-.post-card.featured .post-title { font-size: 1.5rem; }
-
-.post-excerpt {
-  font-size: 0.95rem;
-  line-height: 1.65;
-  color: var(--mist);
-  margin-top: 0.6rem;
-}
-
-.post-meta {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.6rem;
-  letter-spacing: 0.1em;
-  color: var(--mist);
-  margin-top: 1rem;
-  text-transform: uppercase;
-}
-
-/* ===== POST PAGE ===== */
-#post-page {
-  display: none;
-  padding-top: 80px;
-  min-height: 100vh;
-  background: var(--cream);
-}
-
-.post-page-hero {
-  width: 100%;
-  max-height: 520px;
-  overflow: hidden;
-}
-
-.post-page-hero img {
-  width: 100%;
-  height: 520px;
-  object-fit: cover;
-  display: block;
-}
-
-.post-page-body {
-  max-width: 740px;
-  margin: 0 auto;
-  padding: 4rem 2rem;
-}
-
-.post-page-category {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.68rem;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--rust);
-  margin-bottom: 1rem;
-}
-
-.post-page-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(3rem, 6vw, 5rem);
-  line-height: 1;
-  margin-bottom: 1rem;
-  color: var(--ink);
-}
-
-.post-page-meta {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--mist);
-  margin-bottom: 3rem;
-  padding-bottom: 2rem;
-  border-bottom: 1px solid rgba(0,0,0,0.08);
-}
-
-.post-page-content {
-  font-size: 1.15rem;
-  line-height: 1.85;
-  color: rgba(29,29,31,0.85);
-}
-
+/* POST PAGE */
+#post-page { display: none; padding-top: 80px; min-height: 100vh; }
+.post-page-hero { max-width: 760px; margin: 0 auto; padding: 2rem 2rem 0; }
+.post-page-hero img { width: 100%; height: auto; display: block; border-radius: 6px; }
+.post-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 0.75rem; margin-bottom: 2rem; }
+.post-gallery img { width: 100%; height: auto; display: block; cursor: zoom-in; transition: opacity 0.2s; border-radius: 4px; }
+.post-gallery img:hover { opacity: 0.85; }
+.post-page-body { max-width: 760px; margin: 0 auto; padding: 3rem 2rem; }
+.post-page-category { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--rust); margin-bottom: 1rem; }
+.post-page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem,5vw,4rem); line-height: 1; margin-bottom: 1rem; }
+.post-page-meta { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mist); margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(26,20,16,0.1); }
+.post-page-content { font-size: 1.15rem; line-height: 1.85; color: #1d1d1f; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif; }
 .post-page-content p { margin-bottom: 1.5rem; }
-
-.back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--rust);
-  text-decoration: none;
-  margin-bottom: 2rem;
-  cursor: pointer;
-  background: none;
-  border: none;
-  border-radius: 20px;
-  padding: 0.5rem 0;
-}
-
+.back-link { display: inline-flex; align-items: center; gap: 0.5rem; font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--rust); text-decoration: none; margin-bottom: 2rem; cursor: pointer; background: none; border: none; }
 .back-link:hover { opacity: 0.7; }
+/* Lightbox */
+.lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9999; display: flex; align-items: center; justify-content: center; cursor: zoom-out; animation: fadeIn 0.15s ease; }
+.lightbox img { max-width: 95vw; max-height: 95vh; object-fit: contain; }
+.lightbox-close { position: absolute; top: 1rem; right: 1.5rem; color: #fff; font-size: 2rem; cursor: pointer; background: none; border: none; opacity: 0.7; line-height: 1; }
+.lightbox-close:hover { opacity: 1; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-/* ===== ABOUT STRIP ===== */
-.about-strip {
-  background: var(--dark-ui);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  min-height: 480px;
-}
+/* SHARE BAR */
+.share-bar { display: flex; align-items: center; gap: 1rem; margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid rgba(26,20,16,0.1); flex-wrap: wrap; }
+.share-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mist); white-space: nowrap; }
+.share-btns { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+.share-btn { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.5rem 1rem; border: 1px solid rgba(26,20,16,0.2); color: var(--ink); text-decoration: none; background: var(--cream); transition: all 0.2s; cursor: pointer; white-space: nowrap; }
+.share-btn:hover { background: var(--rust); border-color: var(--rust); color: #fff; }
+.share-btn.native { background: var(--rust); border-color: var(--rust); color: #fff; }
+.share-btn.native:hover { background: #1c1c1e; border-color: var(--ink); }
 
-.about-img {
-  position: relative;
-  overflow: hidden;
-}
+/* ABOUT STRIP */
+.about-strip { background: #1c1c1e; display: grid; grid-template-columns: 1fr 1fr; min-height: 480px; }
+.about-img { position: relative; overflow: hidden; }
+.about-img-placeholder { width: 100%; height: 100%; min-height: 480px; background: linear-gradient(160deg, var(--rust) 0%, var(--ink) 60%); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 8rem; color: rgba(245,240,232,0.08); letter-spacing: -0.02em; }
+.about-text { padding: 5rem 4rem; display: flex; flex-direction: column; justify-content: center; }
+.about-eyebrow { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; }
+.about-heading { font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; line-height: 0.95; color: var(--cream); margin-bottom: 1.5rem; }
+.about-heading em { color: var(--rust); font-style: normal; }
+.about-para { font-size: 1.1rem; line-height: 1.75; color: rgba(245,240,232,0.65); max-width: 460px; }
+.about-list { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 2rem; }
+.about-list-item { display: flex; align-items: center; gap: 0.75rem; font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245,240,232,0.5); }
+.about-list-item::before { content: ''; width: 20px; height: 1px; background: var(--rust); flex-shrink: 0; }
 
-.about-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.7;
-  display: block;
-}
-
-.about-img-placeholder {
-  width: 100%;
-  height: 100%;
-  min-height: 480px;
-  background: linear-gradient(160deg, var(--rust) 0%, var(--dark-ui) 60%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 8rem;
-  color: rgba(255,255,255,0.06);
-  letter-spacing: -0.02em;
-}
-
-.about-text {
-  padding: 5rem 4rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.about-eyebrow {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.68rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 1.5rem;
-}
-
-.about-heading {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 3.5rem;
-  line-height: 0.95;
-  color: #ffffff;
-  margin-bottom: 1.5rem;
-}
-
-.about-heading em {
-  color: var(--rust);
-  font-style: normal;
-}
-
-.about-para {
-  font-size: 1rem;
-  line-height: 1.75;
-  color: rgba(255,255,255,0.8);
-  max-width: 460px;
-}
-
-.about-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-top: 2rem;
-}
-
-.about-list-item {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.5);
-}
-
-.about-list-item::before {
-  content: '';
-  width: 20px;
-  height: 1px;
-  background: var(--rust);
-  flex-shrink: 0;
-}
-
-/* ===== CATEGORIES ===== */
-.categories {
-  background: var(--light-gray);
-  padding: 5rem 2.5rem;
-}
-
-.cat-grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 1rem;
-  margin-top: 3rem;
-}
-
-.cat-card {
-  padding: 2rem 1rem;
-  text-align: center;
-  background: var(--cream);
-  border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  cursor: pointer;
-  transition: all 0.3s;
-  text-decoration: none;
-  display: block;
-}
-
-.cat-card:hover {
-  background: var(--rust);
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(184,76,30,0.25);
-}
-
-.cat-card:hover .cat-icon,
-.cat-card:hover .cat-name { color: #ffffff; }
-
+/* CATEGORIES */
+.categories { background: var(--paper); padding: 5rem 2.5rem; }
+.cat-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 1rem; margin-top: 3rem; }
+.cat-card { padding: 2rem 1rem; text-align: center; background: #ffffff; border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); cursor: pointer; transition: all 0.3s; text-decoration: none; display: block; border: none; }
+.cat-card:hover { background: var(--rust); transform: translateY(-5px); box-shadow: 0 8px 24px rgba(184,76,30,0.25); }
+.cat-card:hover .cat-icon, .cat-card:hover .cat-name { color: var(--cream); }
 .cat-icon { font-size: 2rem; margin-bottom: 0.75rem; display: block; }
+.cat-name { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink); transition: color 0.3s; }
 
-.cat-name {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--ink);
-  transition: color 0.3s;
-}
+/* NEWSLETTER */
+.newsletter { background: #1c1c1e; padding: 5rem 2.5rem; text-align: center; }
+.newsletter-title { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--cream); margin-bottom: 0.75rem; }
+.newsletter-sub { font-size: 1.1rem; color: rgba(245,240,232,0.7); margin-bottom: 2rem; }
+.newsletter-form { display: flex; gap: 0; max-width: 460px; margin: 0 auto; }
+.newsletter-form input { flex: 1; padding: 0.9rem 1.2rem; border: none; background: rgba(245,240,232,0.15); color: var(--cream); font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.1em; outline: none; }
+.newsletter-form input::placeholder { color: rgba(245,240,232,0.4); }
+.newsletter-form button { padding: 0.9rem 1.5rem; background: var(--rust); color: var(--cream); font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; border: none; cursor: pointer; transition: background 0.2s; }
+.newsletter-form button:hover { background: var(--gold); }
 
-/* ===== NEWSLETTER ===== */
-.newsletter {
-  background: var(--dark-ui);
-  padding: 5rem 2.5rem;
-  text-align: center;
-}
-
-.newsletter-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 3rem;
-  color: #ffffff;
-  margin-bottom: 0.75rem;
-}
-
-.newsletter-sub {
-  font-size: 1.05rem;
-  color: rgba(255,255,255,0.6);
-  margin-bottom: 2rem;
-}
-
-.newsletter-form {
-  display: flex;
-  gap: 8px;
-  max-width: 460px;
-  margin: 0 auto;
-}
-
-.newsletter-form input {
-  flex: 1;
-  padding: 0.9rem 1.2rem;
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 8px;
-  background: rgba(255,255,255,0.08);
-  color: #ffffff;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
-  outline: none;
-}
-
-.newsletter-form input:focus {
-  border-color: rgba(255,255,255,0.3);
-  background: rgba(255,255,255,0.12);
-}
-
-.newsletter-form input::placeholder { color: rgba(255,255,255,0.35); }
-
-.newsletter-form button {
-  padding: 0.9rem 1.5rem;
-  background: var(--rust);
-  color: #ffffff;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.2s;
-  white-space: nowrap;
-}
-
-.newsletter-form button:hover {
-  background: #a03c10;
-  transform: translateY(-1px);
-}
-
-/* ===== FOOTER ===== */
-footer {
-  background: var(--dark-ui);
-  padding: 3rem 2.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-  border-top: 1px solid rgba(255,255,255,0.06);
-}
-
-.footer-logo {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.8rem;
-  color: #ffffff;
-  letter-spacing: 0.1em;
-}
-
+/* FOOTER */
+footer { background: #1c1c1e; padding: 3rem 2.5rem; display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+.footer-top { display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 1rem; }
+.footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--cream); letter-spacing: 0.1em; }
 .footer-logo span { color: var(--rust); }
-
-.footer-copy {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.62rem;
-  letter-spacing: 0.1em;
-  color: rgba(255,255,255,0.25);
-}
-
-.footer-links {
-  display: flex;
-  gap: 1.5rem;
-  list-style: none;
-}
-
-.footer-links a {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.35);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-
+.footer-copy { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em; color: rgba(245,240,232,0.3); }
+.footer-links { display: flex; gap: 1.5rem; list-style: none; }
+.footer-links a { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(245,240,232,0.4); text-decoration: none; transition: color 0.2s; }
 .footer-links a:hover { color: var(--rust); }
+.footer-socials { display: flex; gap: 1.25rem; align-items: center; }
+.social-link { display: flex; align-items: center; gap: 0.4rem; color: rgba(245,240,232,0.45); text-decoration: none; font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em; transition: color 0.2s; }
+.social-link:hover { color: var(--rust); }
+.social-link svg { width: 16px; height: 16px; fill: currentColor; flex-shrink: 0; }
 
-/* ===== ANIMATIONS ===== */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+/* ANIMATIONS */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
-/* ===== RESPONSIVE ===== */
+/* RESPONSIVE */
 @media (max-width: 900px) {
   .hero { grid-template-columns: 1fr; }
   .hero-right { padding: 3rem 2rem; }
@@ -747,300 +188,549 @@ footer {
   .about-strip { grid-template-columns: 1fr; }
   .about-img-placeholder { min-height: 240px; font-size: 5rem; }
   .about-text { padding: 3rem 2rem; }
-  .cat-grid { grid-template-columns: repeat(3, 1fr); }
+  .cat-grid { grid-template-columns: repeat(3,1fr); }
   .nav-links { display: none; }
   footer { flex-direction: column; text-align: center; }
 }
+@media (max-width: 540px) { .cat-grid { grid-template-columns: repeat(2,1fr); } .hero-title { font-size: 3.5rem; } }
 
-@media (max-width: 540px) {
-  .cat-grid { grid-template-columns: repeat(2, 1fr); }
-  .hero-title { font-size: 3.5rem; }
-  .newsletter-form { flex-direction: column; }
-}
-
-/* ===== SCROLL REVEAL ===== */
-.reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.7s, transform 0.7s;
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+/* SCROLL REVEAL */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s, transform 0.7s; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
 </style>
-</head>
-<body>
-
-<!-- NAV -->
-<nav>
-  <a href="#" class="nav-logo" onclick="showHome(); return false;">Run Brian</a>
-  <ul class="nav-links" role="list">
-    <li><a href="#stories" onclick="showHome()">Stories</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#adventures">Adventures</a></li>
-    <li><a href="mailto:sirbrian@gmail.com">Contact</a></li>
-  </ul>
-</nav>
-
-<!-- ===== HOME PAGE ===== -->
-<div id="home-page">
-
-  <!-- HERO -->
-  <section class="hero" aria-label="Hero section">
-    <div class="hero-left">
-      <div class="hero-eyebrow">Ultra Running · Aviation · Adventure</div>
-      <h1 class="hero-title">The<br/><em>Life</em><br/>of<br/>Brian</h1>
-      <p class="hero-sub">Always learning. Always moving. Exploring deserts, mountains, cockpits, hives, and the wilderness of raising a teenager.</p>
-      <a href="#stories" class="hero-cta">Read the Stories →</a>
-    </div>
-    <div class="hero-right">
-      <div class="hero-stats">
-        <div class="stat-item">
-          <div class="stat-num">400</div>
-          <div class="stat-label">km — Gobi Desert</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">∞</div>
-          <div class="stat-label">Adventures Ahead</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">2</div>
-          <div class="stat-label">Crazy Weimaraners</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">1↑</div>
-          <div class="stat-label">Teenager Surviving</div>
-        </div>
-      </div>
-      <div class="hero-tags" aria-label="Topics">
-        <span class="tag active">Ultra Running</span>
-        <span class="tag">Aviation</span>
-        <span class="tag">Beekeeping</span>
-        <span class="tag">Weimaraners</span>
-        <span class="tag">Food & Wine</span>
-        <span class="tag">Travel</span>
-        <span class="tag">Parenting</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- MARQUEE -->
-  <div class="marquee-wrap" aria-hidden="true">
-    <div class="marquee-track">
-      <span class="marquee-item">Gobi 400 <span>✦</span></span>
-      <span class="marquee-item">Bigfoot Double <span>✦</span></span>
-      <span class="marquee-item">Arctic Ultra <span>✦</span></span>
-      <span class="marquee-item">Learning to Fly <span>✦</span></span>
-      <span class="marquee-item">First Beehive <span>✦</span></span>
-      <span class="marquee-item">Mountain Adventures <span>✦</span></span>
-      <span class="marquee-item">No Regrets <span>✦</span></span>
-      <span class="marquee-item">Gobi 400 <span>✦</span></span>
-      <span class="marquee-item">Bigfoot Double <span>✦</span></span>
-      <span class="marquee-item">Arctic Ultra <span>✦</span></span>
-      <span class="marquee-item">Learning to Fly <span>✦</span></span>
-      <span class="marquee-item">First Beehive <span>✦</span></span>
-      <span class="marquee-item">Mountain Adventures <span>✦</span></span>
-      <span class="marquee-item">No Regrets <span>✦</span></span>
-    </div>
-  </div>
-
-  <!-- BLOG POSTS (loaded from posts.json) -->
-  <section class="section" id="stories" aria-label="Latest stories">
-    <div class="section-header reveal">
-      <span class="section-label">Latest</span>
-      <h2 class="section-title">Stories from the Trail</h2>
-    </div>
-    <div class="featured-grid reveal" id="posts-grid" role="list">
-      <!-- Posts injected by JS -->
-    </div>
-  </section>
-
-  <!-- ABOUT -->
-  <section class="about-strip" id="about" aria-label="About Brian Hamilton">
-    <div class="about-img">
-      <div class="about-img-placeholder" aria-hidden="true">BRIAN</div>
-    </div>
-    <div class="about-text">
-      <div class="about-eyebrow">About the Author</div>
-      <h2 class="about-heading">Brian<br/><em>Hamilton</em></h2>
-      <p class="about-para">Ultra endurance athlete. Blazing hot deserts or sub-zero arctic — adventure is always on the agenda. Beyond the running, there are small aircraft to fly, Weimaraners to wrangle, a teenager to raise, and now, a beehive to tend.</p>
-      <div class="about-list" role="list">
-        <div class="about-list-item" role="listitem">Ultra endurance athlete — deserts to arctic</div>
-        <div class="about-list-item" role="listitem">Student pilot — small aircraft</div>
-        <div class="about-list-item" role="listitem">Beekeeper, class of 2025</div>
-        <div class="about-list-item" role="listitem">Proud Weimaraner owner (×2)</div>
-        <div class="about-list-item" role="listitem">Dad, food lover, traveller</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CATEGORIES -->
-  <section class="categories" id="adventures" aria-label="Adventure categories">
-    <div class="section-header reveal">
-      <span class="section-label">Explore</span>
-      <h2 class="section-title">Adventures by Category</h2>
-    </div>
-    <div class="cat-grid reveal">
-      <a href="#" class="cat-card" aria-label="Ultra Running stories"><span class="cat-icon" aria-hidden="true">🏔️</span><div class="cat-name">Ultra Running</div></a>
-      <a href="#" class="cat-card" aria-label="Aviation stories"><span class="cat-icon" aria-hidden="true">✈️</span><div class="cat-name">Aviation</div></a>
-      <a href="#" class="cat-card" aria-label="Beekeeping stories"><span class="cat-icon" aria-hidden="true">🐝</span><div class="cat-name">Beekeeping</div></a>
-      <a href="#" class="cat-card" aria-label="Weimaraner stories"><span class="cat-icon" aria-hidden="true">🐕</span><div class="cat-name">Weimaraners</div></a>
-      <a href="#" class="cat-card" aria-label="Food and Wine stories"><span class="cat-icon" aria-hidden="true">🍷</span><div class="cat-name">Food & Wine</div></a>
-      <a href="#" class="cat-card" aria-label="Travel stories"><span class="cat-icon" aria-hidden="true">🌍</span><div class="cat-name">Travel</div></a>
-    </div>
-  </section>
-
-  <!-- NEWSLETTER -->
-  <section class="newsletter" id="contact" aria-label="Newsletter signup">
-    <h2 class="newsletter-title reveal">Stay on the Trail</h2>
-    <p class="newsletter-sub reveal">New adventures, race reports, and dispatches from wherever I've landed next.</p>
-    <div class="newsletter-form reveal" role="form" aria-label="Email subscription">
-      <input type="email" placeholder="your@email.com" aria-label="Email address" />
-      <button type="button" aria-label="Subscribe to newsletter">Subscribe</button>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-logo">Run <span>Brian</span></div>
-    <ul class="footer-links" role="list">
-      <li><a href="#stories">Stories</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#adventures">Adventures</a></li>
-      <li><a href="mailto:sirbrian@gmail.com">Contact</a></li>
-    </ul>
-    <div class="footer-copy">© 2025 Brian Hamilton · Built with GitHub Pages</div>
-  </footer>
-
-</div><!-- end #home-page -->
-
-<!-- ===== POST PAGE ===== -->
-<div id="post-page">
-  <div class="post-page-hero">
-    <img id="post-hero-img" src="" alt="" width="1200" height="520" />
-  </div>
-  <div class="post-page-body">
-    <button class="back-link" onclick="showHome()" aria-label="Back to all stories">← All Stories</button>
-    <div class="post-page-category" id="post-category"></div>
-    <h1 class="post-page-title" id="post-title"></h1>
-    <div class="post-page-meta" id="post-meta"></div>
-    <div class="post-page-content" id="post-content"></div>
-  </div>
-  <footer>
-    <div class="footer-logo">Run <span>Brian</span></div>
-    <ul class="footer-links" role="list">
-      <li><a href="#" onclick="showHome()">Stories</a></li>
-      <li><a href="#about" onclick="showHome()">About</a></li>
-      <li><a href="mailto:sirbrian@gmail.com">Contact</a></li>
-    </ul>
-    <div class="footer-copy">© 2025 Brian Hamilton · Built with GitHub Pages</div>
-  </footer>
-</div>
-
-<script>
-// ===== LOAD POSTS FROM posts.json =====
-let allPosts = [];
-
-async function loadPosts() {
-  try {
-    const res = await fetch('posts.json?v=' + Date.now());
-    allPosts = await res.json();
-    renderPosts(allPosts);
-  } catch(e) {
-    console.error('Could not load posts.json', e);
-  }
-}
-
-function renderPosts(posts) {
-  const grid = document.getElementById('posts-grid');
-  grid.innerHTML = '';
-  const featured = posts.find(p => p.featured);
-  const others = posts.filter(p => !p.featured);
-
-  if (featured) grid.appendChild(makeCard(featured, true));
-  others.forEach(p => grid.appendChild(makeCard(p, false)));
-}
-
-function makeCard(post, isFeatured) {
-  const card = document.createElement('div');
-  card.className = 'post-card' + (isFeatured ? ' featured' : '');
-  card.setAttribute('role', 'listitem');
-  card.onclick = () => openPost(post.id);
-  card.innerHTML = `
-    <div class="post-img-wrap">
-      <img class="post-img" src="${post.image}" alt="${post.title}" width="400" height="300" loading="lazy"
-           onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
-      <div class="post-img-placeholder" style="display:none;" aria-hidden="true"></div>
-    </div>
-    <div class="post-body">
-      <div class="post-category">${post.category}</div>
-      <h3 class="post-title">${post.title}</h3>
-      <p class="post-excerpt">${post.excerpt}</p>
-      <div class="post-meta">${post.date} &nbsp;·&nbsp; ${post.readTime}</div>
-    </div>
-  `;
-  return card;
-}
-
-// ===== OPEN / CLOSE POST =====
-function openPost(id) {
-  const post = allPosts.find(p => p.id === id);
-  if (!post) return;
-
-  document.getElementById('post-hero-img').src = post.image;
-  document.getElementById('post-hero-img').alt = post.title;
-  document.getElementById('post-category').textContent = post.category;
-  document.getElementById('post-title').textContent = post.title;
-  document.getElementById('post-meta').textContent = post.date + ' · ' + post.readTime;
-
-  // Render body — double newlines become paragraphs
-  const content = document.getElementById('post-content');
-  content.innerHTML = (post.body || '')
-    .split(/\n\n+/)
-    .map(p => `<p>${p.trim()}</p>`)
-    .join('');
-
-  document.getElementById('home-page').style.display = 'none';
-  document.getElementById('post-page').style.display = 'block';
-  window.scrollTo(0, 0);
-}
-
-function showHome() {
-  document.getElementById('post-page').style.display = 'none';
-  document.getElementById('home-page').style.display = 'block';
-  window.scrollTo(0, 0);
-}
-
-// ===== SCROLL REVEAL =====
-const reveals = document.querySelectorAll('.reveal');
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('visible');
-      observer.unobserve(e.target);
-    }
-  });
-}, { threshold: 0.12 });
-reveals.forEach(el => observer.observe(el));
-
-// ===== NAV SCROLL =====
-window.addEventListener('scroll', () => {
-  document.querySelector('nav').style.boxShadow =
-    window.scrollY > 40 ? '0 2px 20px rgba(0,0,0,0.10)' : 'none';
-});
-
-// ===== INIT =====
-loadPosts();
-</script>
-
-<!-- Google Analytics — deferred to avoid render-blocking -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-TFEW19X1ZL"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-TFEW19X1ZL');
 </script>
+<link rel="preload" as="image" href="gobi-desert.jpg" fetchpriority="high">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&display=swap">
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo" onclick="showHome(); return false;">Run Brian</a>
+  <ul class="nav-links">
+    <li><a href="index.html" onclick="showHome()">Stories</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<div id="home-page">
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Ultra Running · Aviation · Adventure</div>
+      <h1 class="hero-title">The<br/><em>Life</em><br/>of<br/>Brian</h1>
+      <p class="hero-sub">Always learning. Always moving. Exploring deserts, mountains, cockpits, hives, and the wilderness of raising a teenager.</p>
+      <a href="#stories" class="hero-cta">Read the Stories &#x2192;</a>
+    </div>
+    <div class="hero-right">
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num" id="moab-days">&#x2014;</div>
+          <div class="stat-label">Days to Moab 240</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">16</div>
+          <div class="stat-label">200+ Mile Races Finished</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">2</div>
+          <div class="stat-label">Crazy Weimaraners</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num" id="lifetime-km">36,683</div>
+          <div class="stat-label">km Run — Lifetime</div>
+        </div>
+      </div>
+      <div class="hero-tags" id="hero-tags">
+        <!-- populated from posts.json -->
+      </div>
+      <div class="currently-widget" id="currently-widget" style="display:none;">
+        <div class="currently-label">Currently</div>
+        <div class="currently-items" id="currently-items"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span class="marquee-item">Gobi 400 <span>&#x2726;</span></span>
+      <span class="marquee-item">Iditarod 350 <span>&#x2726;</span></span>
+      <span class="marquee-item">Winter Spine <span>&#x2726;</span></span>
+      <span class="marquee-item">Moab 240 <span>&#x2726;</span></span>
+      <span class="marquee-item">Learning to Fly <span>&#x2726;</span></span>
+      <span class="marquee-item">First Beehive <span>&#x2726;</span></span>
+      <span class="marquee-item">No Regrets <span>&#x2726;</span></span>
+      <span class="marquee-item">Gobi 400 <span>&#x2726;</span></span>
+      <span class="marquee-item">Iditarod 350 <span>&#x2726;</span></span>
+      <span class="marquee-item">Winter Spine <span>&#x2726;</span></span>
+      <span class="marquee-item">Moab 240 <span>&#x2726;</span></span>
+      <span class="marquee-item">Learning to Fly <span>&#x2726;</span></span>
+      <span class="marquee-item">First Beehive <span>&#x2726;</span></span>
+      <span class="marquee-item">No Regrets <span>&#x2726;</span></span>
+    </div>
+  </div>
+
+  <section class="section" id="stories">
+    <div class="section-header reveal">
+      <span class="section-label">Latest</span>
+      <h2 class="section-title">Stories from the Trail</h2>
+    </div>
+    <div class="filter-bar reveal">
+      <span class="filter-label">Filter by:</span>
+      <select class="filter-select" id="posts-cat-select" onchange="filterCategory(this.value)">
+        <option value="all">All Adventures</option>
+        <option value="Ultra Running">Ultra Running</option>
+        <option value="Aviation">Aviation</option>
+        <option value="Beekeeping">Beekeeping</option>
+        <option value="Home Automation">Home Automation</option>
+        <option value="Weimaraners">Weimaraners</option>
+        <option value="Travel">Travel</option>
+      </select>
+    </div>
+    <div class="featured-grid reveal" id="posts-grid"></div>
+  </section>
+
+  <section class="about-strip" id="about">
+    <div class="about-img">
+      <div class="about-img-placeholder">BRIAN</div>
+    </div>
+    <div class="about-text">
+      <div class="about-eyebrow">About the Author</div>
+      <h2 class="about-heading">Brian<br/><em>Hamilton</em></h2>
+      <p class="about-para">16-time finisher at races of 200 miles or more. Ultra Gobi, Iditarod 350, Winter Spine, Moab 240 &#x00D7;4. Student pilot, beekeeper, Weimaraner dad.</p>
+      <div class="about-list">
+        <div class="about-list-item">Ultra endurance athlete — deserts to arctic</div>
+        <div class="about-list-item">Student pilot — working toward PPL</div>
+        <div class="about-list-item">Beekeeper, class of 2025</div>
+        <div class="about-list-item">Proud Weimaraner owner (&#x00D7;2)</div>
+        <div class="about-list-item">Dad, food lover, traveller</div>
+      </div>
+      <a href="about.html" style="display:inline-block;margin-top:2rem;font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(201,146,42,0.4);padding-bottom:2px;">Full Story &#x2192;</a>
+    </div>
+  </section>
+
+  <section class="categories" id="adventures">
+    <div class="section-header reveal">
+      <span class="section-label">Explore</span>
+      <h2 class="section-title">Adventures by Category</h2>
+    </div>
+    <div class="cat-grid reveal">
+      <a href="#stories" class="cat-card" onclick="filterCategory('Ultra Running')"><span class="cat-icon">&#x1F3D4;&#xFE0F;</span><div class="cat-name">Ultra Running</div></a>
+      <a href="#stories" class="cat-card" onclick="filterCategory('Aviation')"><span class="cat-icon">&#x2708;&#xFE0F;</span><div class="cat-name">Aviation</div></a>
+      <a href="#stories" class="cat-card" onclick="filterCategory('Beekeeping')"><span class="cat-icon">&#x1F41D;</span><div class="cat-name">Beekeeping</div></a>
+      <a href="#stories" class="cat-card" onclick="filterCategory('Home Automation')"><span class="cat-icon">&#x1F3E0;</span><div class="cat-name">Home Automation</div></a>
+      <a href="#stories" class="cat-card" onclick="filterCategory('Weimaraners')"><span class="cat-icon">&#x1F415;</span><div class="cat-name">Weimaraners</div></a>
+      <a href="#stories" class="cat-card" onclick="filterCategory('Travel')"><span class="cat-icon">&#x1F30D;</span><div class="cat-name">Travel</div></a>
+    </div>
+  </section>
+
+  <section class="newsletter" id="contact">
+    <h2 class="newsletter-title reveal">Stay on the Trail</h2>
+    <p class="newsletter-sub reveal">New adventures, race reports, and dispatches from wherever I've landed next.</p>
+    <div class="newsletter-form reveal">
+      <input type="email" placeholder="your@email.com" />
+      <button type="button">Subscribe</button>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-top">
+      <div class="footer-logo">Run <span>Brian</span></div>
+      <ul class="footer-links">
+        <li><a href="index.html">Stories</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-socials">
+      <a href="https://instagram.com/Sirbrian88" target="_blank" rel="noopener" class="social-link">
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        @Sirbrian88
+      </a>
+      <a href="https://facebook.com/i.am.sirbrian" target="_blank" rel="noopener" class="social-link">
+        <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        i.am.sirbrian
+      </a>
+      <a href="https://tiktok.com/@brianhamilton64" target="_blank" rel="noopener" class="social-link">
+        <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+        @brianhamilton64
+      </a>
+      <a href="https://youtube.com/@brianhamilton7073" target="_blank" rel="noopener" class="social-link">
+        <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        @brianhamilton7073
+      </a>
+    </div>
+    <div class="footer-copy">&#169; 2025 Brian Hamilton &middot; Built with GitHub Pages</div>
+  </footer>
+</div>
+
+<div id="post-page">
+  <!-- Sticky back bar always visible on desktop and mobile -->
+  <div style="position:sticky;top:80px;z-index:50;background:rgba(245,240,232,0.95);backdrop-filter:blur(8px);border-bottom:1px solid rgba(26,20,16,0.08);padding:0.6rem 2rem;">
+    <button class="back-link" onclick="showHome()" style="margin-bottom:0;">&#x2190; All Stories</button>
+  </div>
+  <div class="post-page-hero"></div>
+  <div class="post-page-body">
+    <div class="post-page-category" id="post-category"></div>
+    <h1 class="post-page-title" id="post-title"></h1>
+    <div class="post-page-meta" id="post-meta"></div>
+    <div class="post-page-content" id="post-content"></div>
+    <div class="share-bar" id="share-bar">
+      <span class="share-label">Share</span>
+      <div class="share-btns" id="share-btns"></div>
+    </div>
+
+    <!-- Comments -->
+    <div style="margin-top:3rem;padding-top:2rem;border-top:1px solid rgba(26,20,16,0.1);">
+      <div id="disqus_thread"></div>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-logo">Run <span>Brian</span></div>
+    <ul class="footer-links">
+      <li><a href="index.html" onclick="showHome()">Stories</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="footer-copy">&#169; 2025 Brian Hamilton &middot; Built with GitHub Pages</div>
+  </footer>
+</div>
+
+<script>
+let allPosts = [];
+let activeCategory = 'all';
+
+// ===== MOAB COUNTDOWN =====
+function updateMoabCountdown() {
+  const race = new Date('2026-10-09T06:00:00');
+  const days = Math.ceil((race - new Date()) / (1000*60*60*24));
+  const el = document.getElementById('moab-days');
+  if (el) el.textContent = days > 0 ? days : 'RACE DAY';
+}
+updateMoabCountdown();
+
+// ===== LOAD POSTS =====
+function parsePostDate(d) {
+  if (!d) return 0;
+  const t = new Date(d).getTime();
+  return isNaN(t) ? 0 : t;
+}
+
+async function loadPosts() {
+  try {
+    const res = await fetch('posts.json?v=' + Date.now());
+    const raw = await res.json();
+    // Sort newest first by date on the website too
+    allPosts = raw.slice().sort((a, b) => parsePostDate(b.date) - parsePostDate(a.date));
+    renderCategoryTags();
+    renderPosts(allPosts);
+  } catch(e) { console.error('Could not load posts.json', e); }
+}
+
+function renderCategoryTags() {
+  const cats = ['All', ...new Set(allPosts.map(p => (p.category||'').split('·')[0].trim()).filter(Boolean))];
+  const container = document.getElementById('hero-tags');
+  if (!container) return;
+  container.innerHTML = cats.map(c =>
+    `<span class="tag" data-cat="${c}" onclick="filterCategory('${c}')">${c}</span>`
+  ).join('');
+}
+
+function filterCategory(cat) {
+  activeCategory = cat;
+  const sel = document.getElementById('posts-cat-select');
+  if (sel) sel.value = cat;
+  document.querySelectorAll('.tag[data-cat]').forEach(t =>
+    t.classList.toggle('active', t.dataset.cat === cat)
+  );
+  const isAll = (cat === 'all' || cat === 'All');
+  const filtered = isAll ? allPosts : allPosts.filter(p =>
+    p.category && p.category.toLowerCase().includes(cat.toLowerCase())
+  );
+  renderPosts(filtered);
+  document.getElementById('stories').scrollIntoView({ behavior: 'smooth' });
+}
+
+function renderPosts(posts) {
+  const grid = document.getElementById('posts-grid');
+  grid.innerHTML = '';
+  if (posts.length === 0) {
+    grid.innerHTML = '<div style="grid-column:1/-1;padding:3rem;text-align:center;font-family:\'DM Mono\',monospace;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--mist);">No stories in this category yet.</div>';
+    return;
+  }
+  // First post (newest) always gets the large featured card slot
+  grid.appendChild(makeCard(posts[0], true));
+  posts.slice(1).forEach(p => grid.appendChild(makeCard(p, false)));
+}
+
+function makeCard(post, isFeatured) {
+  const card = document.createElement('div');
+  card.className = 'post-card' + (isFeatured ? ' featured' : '');
+  card.onclick = () => openPost(post.id);
+  const imgSrc = (post.images && post.images[0]) ? post.images[0] : (post.image || '');
+  const imgCount = post.images ? post.images.length : (post.image ? 1 : 0);
+  const hasVideo = !!post.video;
+  card.innerHTML = `
+    <div class="post-img-wrap">
+      ${imgSrc
+        ? `<img class="post-img" src="${imgSrc}" alt="${post.title}" style="object-position:${(post.focalPoints||{})[imgSrc]||'center'}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+           <div class="post-img-placeholder" style="display:none;"></div>`
+        : `<div class="post-img-placeholder"></div>`}
+      ${imgCount > 1 ? `<div style="position:absolute;top:10px;right:10px;background:rgba(26,20,16,0.6);color:#fff;font-family:'DM Mono',monospace;font-size:0.6rem;padding:3px 8px;">${imgCount} PHOTOS</div>` : ''}
+      ${hasVideo ? `<div class="video-badge">&#x25BA; VIDEO</div>` : ''}
+    </div>
+    <div class="post-body">
+      <div class="post-category">${post.category || ''}</div>
+      <h3 class="post-title">${post.title}</h3>
+      <p class="post-excerpt">${post.excerpt || ''}</p>
+      <div class="post-meta">${post.date || ''} &middot; ${post.readTime || '?'} min read</div>
+    </div>`;
+  return card;
+}
+
+// ===== LIGHTBOX =====
+function openLightbox(src) {
+  const lb = document.createElement('div');
+  lb.className = 'lightbox';
+  lb.innerHTML = `<button class="lightbox-close" onclick="this.parentElement.remove()">&#x00D7;</button><img src="${src}" alt="">`;
+  lb.onclick = e => { if (e.target === lb) lb.remove(); };
+  document.body.appendChild(lb);
+  // Close on Escape
+  const esc = e => { if (e.key === 'Escape') { lb.remove(); document.removeEventListener('keydown', esc); } };
+  document.addEventListener('keydown', esc);
+}
+
+// ===== VIDEO =====
+function getYouTubeEmbed(url) {
+  if (!url) return '';
+  const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([^&?/]+)/);
+  if (!m) return '';
+  const id = m[1];
+  const isShort = url.includes('/shorts/');
+  // Shorts are vertical (9:16), regular videos are landscape (16:9)
+  const style = isShort
+    ? 'max-width:360px;margin:0 auto 2rem;border-radius:8px;overflow:hidden;aspect-ratio:9/16;display:block;'
+    : 'margin-bottom:2rem;border-radius:8px;overflow:hidden;aspect-ratio:16/9;';
+  return `<div style="${style}"><iframe width="100%" height="100%" src="https://www.youtube.com/embed/${id}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
+}
+
+// ===== OPEN POST =====
+function openPost(id) {
+  const post = allPosts.find(p => p.id === id);
+  if (!post) return;
+
+  const images = post.images && post.images.length ? post.images : (post.image ? [post.image] : []);
+  const heroEl = document.querySelector('.post-page-hero');
+  if (images.length === 1) {
+    heroEl.className = 'post-page-hero';
+    heroEl.innerHTML = `<img src="${images[0]}" alt="${post.title}" style="width:100%;height:520px;object-fit:cover;display:block;">`;
+  } else if (images.length > 1) {
+    heroEl.className = 'post-page-hero';
+    heroEl.innerHTML = `<div class="post-gallery">${images.map(src => {
+      const fp = (post.focalPoints||{})[src]||'center';
+      return `<img src="${src}" alt="${post.title}" style="object-position:${fp}" onclick="openLightbox('${src}')">`;
+    }).join('')}</div>`;
+  } else {
+    heroEl.className = 'post-page-hero';
+    heroEl.innerHTML = '';
+  }
+
+  document.getElementById('post-category').textContent = post.category || '';
+  document.getElementById('post-title').textContent = post.title;
+  document.getElementById('post-meta').textContent = (post.date || '') + ' · ' + (post.readTime || '?') + ' min read';
+
+  const content = document.getElementById('post-content');
+  // Support videos array (new) and single video string (old)
+  const videoList = post.videos?.length ? post.videos : (post.video ? [post.video] : []);
+  const videoEmbeds = videoList.map(url => getYouTubeEmbed(url)).join('');
+  content.innerHTML = videoEmbeds + (post.body || '').split(/\n\n+/).map(p => `<p>${p.trim()}</p>`).join('');
+
+  // SEO
+  const postUrl = `${window.location.origin}/?post=${post.id}`;
+  document.title = `${post.title} | Run Brian`;
+  document.querySelector('meta[name="description"]')?.setAttribute('content', post.excerpt || post.title);
+  document.querySelector('meta[property="og:title"]')?.setAttribute('content', post.title);
+  document.querySelector('meta[property="og:description"]')?.setAttribute('content', post.excerpt || '');
+  document.querySelector('meta[property="og:url"]')?.setAttribute('content', postUrl);
+  document.querySelector('link[rel="canonical"]')?.setAttribute('href', postUrl);
+  history.replaceState(null, '', postUrl);
+
+  // JSON-LD
+  let ldEl = document.getElementById('post-jsonld');
+  if (!ldEl) { ldEl = document.createElement('script'); ldEl.type = 'application/ld+json'; ldEl.id = 'post-jsonld'; document.head.appendChild(ldEl); }
+  ldEl.textContent = JSON.stringify({"@context":"https://schema.org","@type":"BlogPosting","headline":post.title,"description":post.excerpt||"","author":{"@type":"Person","name":"Brian Hamilton"},"datePublished":post.date,"url":postUrl});
+
+  // Share bar
+  buildShareBar(post, postUrl);
+
+  // Disqus comments
+  loadDisqus(post.id, postUrl);
+
+  document.getElementById('home-page').style.display = 'none';
+  document.getElementById('post-page').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+function buildShareBar(post, url) {
+  const btns = document.getElementById('share-btns');
+  if (!btns) return;
+  btns.innerHTML = '';
+  const text = post.title + ' — Run Brian';
+  if (navigator.share) {
+    const nb = document.createElement('button');
+    nb.className = 'share-btn native';
+    nb.innerHTML = '&#x2197; Share';
+    nb.onclick = () => navigator.share({ title: post.title, text: post.excerpt || post.title, url });
+    btns.appendChild(nb);
+  }
+  const links = [
+    ['X / Twitter', `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`],
+    ['Facebook', `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`],
+    ['WhatsApp', `https://api.whatsapp.com/send?text=${encodeURIComponent(text + ' ' + url)}`],
+  ];
+  links.forEach(([label, href]) => {
+    const a = document.createElement('a');
+    a.className = 'share-btn'; a.href = href; a.target = '_blank'; a.rel = 'noopener'; a.textContent = label;
+    btns.appendChild(a);
+  });
+  const cb = document.createElement('button');
+  cb.className = 'share-btn'; cb.textContent = 'Copy Link';
+  cb.onclick = () => navigator.clipboard.writeText(url).then(() => { cb.textContent = 'Copied!'; setTimeout(() => cb.textContent = 'Copy Link', 2000); });
+  btns.appendChild(cb);
+}
+
+function showHome() {
+  document.getElementById('post-page').style.display = 'none';
+  document.getElementById('home-page').style.display = 'block';
+  document.title = 'Run Brian | Mountain Adventures';
+  history.replaceState(null, '', location.pathname);
+  window.scrollTo(0, 0);
+}
+
+// ===== DISQUS =====
+function loadDisqus(postId, postUrl) {
+  if (typeof DISQUS !== 'undefined') {
+    // Disqus already loaded — just reset for the new post
+    DISQUS.reset({
+      reload: true,
+      config: function() {
+        this.page.identifier = postId;
+        this.page.url = postUrl;
+      }
+    });
+  } else {
+    // First load — set config and inject the script
+    window.disqus_config = function() {
+      this.page.identifier = postId;
+      this.page.url = postUrl;
+    };
+    const s = document.createElement('script');
+    s.src = 'https://run-brian.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    document.body.appendChild(s);
+  }
+}
+
+// ===== CURRENTLY =====
+async function loadCurrently() {
+  try {
+    const res = await fetch('currently.json?v=' + Date.now());
+    const c = await res.json();
+    const widget = document.getElementById('currently-widget');
+    const items = document.getElementById('currently-items');
+    if (!widget || !items) return;
+    const fields = [
+      { key: 'training', label: 'Training' }, { key: 'flying', label: 'Flying' },
+      { key: 'hives', label: 'Hives' }, { key: 'reading', label: 'Reading' },
+      { key: 'nextRace', label: 'Next Race' },
+    ];
+    const rows = fields.filter(f => c[f.key]).map(f =>
+      `<div class="currently-item"><span class="currently-key">${f.label}</span><span class="currently-val">${c[f.key]}</span></div>`
+    ).join('');
+    if (rows) { items.innerHTML = rows; widget.style.display = 'block'; }
+  } catch(e) {}
+}
+
+// ===== STRAVA =====
+async function loadStrava() {
+  const refreshToken = localStorage.getItem('strava_refresh');
+  if (!refreshToken) return;
+  const clientId = '252608';
+  const clientSecret = '1807ba66a14418a1255ec114bcfaebda8a4440b6';
+  try {
+    const tr = await fetch('https://www.strava.com/oauth/token', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ client_id: clientId, client_secret: clientSecret, refresh_token: refreshToken, grant_type: 'refresh_token' })
+    });
+    const td = await tr.json();
+    if (!td.access_token) return;
+    const accessToken = td.access_token;
+    let athleteId = localStorage.getItem('strava_athlete_id');
+    if (!athleteId) {
+      const ar = await fetch('https://www.strava.com/api/v3/athlete', { headers: { 'Authorization': 'Bearer ' + accessToken } });
+      const ath = await ar.json();
+      athleteId = ath.id;
+      if (athleteId) localStorage.setItem('strava_athlete_id', athleteId);
+    }
+    const [sr, lr] = await Promise.all([
+      fetch(`https://www.strava.com/api/v3/athletes/${athleteId}/stats`, { headers: { 'Authorization': 'Bearer ' + accessToken } }),
+      fetch('https://www.strava.com/api/v3/athlete/activities?per_page=1&page=1', { headers: { 'Authorization': 'Bearer ' + accessToken } })
+    ]);
+    const stats = await sr.json();
+    const activities = await lr.json();
+    const widget = document.getElementById('currently-widget');
+    const items = document.getElementById('currently-items');
+    if (!items || !widget) return;
+    const monthKm = Math.round((stats.recent_run_totals?.distance||0)/1000);
+    const monthRuns = stats.recent_run_totals?.count||0;
+    const ytdKm = Math.round((stats.ytd_run_totals?.distance||0)/1000);
+    const ytdRuns = stats.ytd_run_totals?.count||0;
+    const ytdElev = Math.round(stats.ytd_run_totals?.elevation_gain||0);
+    const allKm = Math.round((stats.all_run_totals?.distance||0)/1000);
+    const allElev = Math.round(stats.all_run_totals?.elevation_gain||0);
+    const last = Array.isArray(activities) ? activities[0] : null;
+    const lastKm = last ? Math.round(last.distance/100)/10 : 0;
+    const lastDate = last ? new Date(last.start_date_local).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
+    const rows = [];
+    if (last && lastKm>0) rows.push(`<div class="currently-item"><span class="currently-key">Last Run</span><span class="currently-val">${lastKm} km on ${lastDate}</span></div>`);
+    if (monthKm>0) rows.push(`<div class="currently-item"><span class="currently-key">This Month</span><span class="currently-val">${monthKm} km &middot; ${monthRuns} runs</span></div>`);
+    if (ytdKm>0) rows.push(`<div class="currently-item"><span class="currently-key">YTD Running</span><span class="currently-val">${ytdKm} km &middot; ${ytdRuns} runs</span></div>`);
+    if (ytdElev>0) rows.push(`<div class="currently-item"><span class="currently-key">YTD Climb</span><span class="currently-val">${ytdElev.toLocaleString()} m gain</span></div>`);
+    if (allKm>0) rows.push(`<div class="currently-item"><span class="currently-key">Lifetime</span><span class="currently-val">${allKm.toLocaleString()} km</span></div>`);
+    if (allElev>0) rows.push(`<div class="currently-item"><span class="currently-key">Lifetime Climb</span><span class="currently-val">${allElev.toLocaleString()} m gain</span></div>`);
+    if (rows.length) {
+      const tmp = document.createElement('div');
+      tmp.innerHTML = rows.join('');
+      Array.from(tmp.children).reverse().forEach(el => items.prepend(el));
+      widget.style.display = 'block';
+    }
+    const lifetimeEl = document.getElementById('lifetime-km');
+    if (lifetimeEl && allKm>0) lifetimeEl.textContent = allKm.toLocaleString();
+  } catch(e) { console.log('Strava error', e); }
+}
+
+// ===== SCROLL REVEAL =====
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.12 });
+reveals.forEach(el => observer.observe(el));
+
+// ===== NAV SCROLL =====
+window.addEventListener('scroll', () => {
+  document.querySelector('nav').style.boxShadow = window.scrollY > 40 ? '0 2px 20px rgba(26,20,16,0.12)' : 'none';
+});
+
+// ===== INIT =====
+loadPosts();
+loadCurrently();
+loadStrava();
+</script>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TFEW19X1ZL"></script>
 </body>
 </html>
