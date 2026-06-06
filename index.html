@@ -79,6 +79,113 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; j
 .hero-post-date { font-family: 'DM Mono', monospace; font-size: 0.55rem; color: var(--mist); margin-top: 2px; }
 .hero-post-arrow { color: var(--mist); font-size: 0.8rem; flex-shrink: 0; }
 
+
+/* ═══ RADICAL HERO STORIES ═══ */
+
+/* Desktop: Featured story cards IN the right panel */
+.hero-stories-deck { margin-top: 1.5rem; }
+.hero-story-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  border-left: 3px solid transparent;
+}
+.hero-story-card:hover {
+  border-left-color: var(--rust);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  transform: translateX(2px);
+}
+.hero-story-meta { display:flex; align-items:center; gap:0.5rem; margin-bottom:0.4rem; }
+.hero-story-cat { font-family:'DM Mono',monospace; font-size:0.55rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--rust); }
+.hero-story-date { font-family:'DM Mono',monospace; font-size:0.52rem; color:var(--mist); }
+.hero-story-title { font-size:0.95rem; font-weight:700; color:var(--ink); line-height:1.3; letter-spacing:-0.01em; }
+.hero-story-hook { font-size:0.78rem; color:#5a5a60; margin-top:0.25rem; line-height:1.4; }
+.hero-story-cta { font-family:'DM Mono',monospace; font-size:0.58rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--rust); margin-top:0.4rem; }
+.hero-stories-more { font-family:'DM Mono',monospace; font-size:0.62rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--mist); text-decoration:none; display:block; text-align:center; padding:0.5rem; border-top:1px solid rgba(0,0,0,0.06); margin-top:0.25rem; transition:color 0.2s; }
+.hero-stories-more:hover { color:var(--rust); }
+
+/* Mobile: Story cards overlapping the hero bottom */
+@media (max-width: 900px) {
+  .hero { min-height: 60vh !important; }
+  .hero-left { min-height: 60vh; justify-content: flex-end; }
+  
+  /* Mobile story stack below hero */
+  .mobile-story-stack {
+    background: var(--warm);
+    padding: 0;
+    margin-top: -2px;
+  }
+  .mobile-story-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: #fff;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .mobile-story-item:active { background: var(--warm); }
+  .mobile-story-img {
+    width: 56px; height: 56px;
+    border-radius: 10px;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: var(--paper);
+  }
+  .mobile-story-text { flex: 1; min-width: 0; }
+  .mobile-story-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 3px;
+  }
+  .mobile-story-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+  .mobile-story-arrow {
+    font-size: 1.1rem;
+    color: var(--rust);
+    flex-shrink: 0;
+  }
+  .mobile-all-stories {
+    display: block;
+    text-align: center;
+    padding: 0.9rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--rust);
+    text-decoration: none;
+    background: #fff;
+    border-top: 1px solid rgba(0,0,0,0.06);
+  }
+}
+
+/* Desktop: hide mobile stack */
+@media (min-width: 901px) {
+  .mobile-story-stack { display: none !important; }
+  .hero-latest { display: none !important; }
+}
+/* Mobile: hide desktop story deck */
+@media (max-width: 900px) {
+  .hero-stories-deck { display: none !important; }
+  .hero-stats { gap: 1rem; margin-bottom: 1.5rem; }
+  .stat-item { padding: 1rem; }
+  .stat-num { font-size: 2.2rem; }
+}
+
 /* Filter bar */
 .filter-bar { display: flex; align-items: center; gap: 1rem; margin-bottom: 2.5rem; }
 .filter-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mist); white-space: nowrap; }
@@ -286,6 +393,14 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
     </div>
   </section>
 
+  <!-- Mobile: story stack visible on load -->
+  <div class="mobile-story-stack" id="mobile-story-stack" style="display:none;">
+    <div id="mobile-story-items"></div>
+    <a href="#stories" class="mobile-all-stories" onclick="document.getElementById('stories').scrollIntoView({behavior:'smooth'});return false;">
+      All Stories →
+    </a>
+  </div>
+
   <div class="marquee-wrap">
     <div class="marquee-track">
       <span class="marquee-item">Gobi 400 <span>&#x2726;</span></span>
@@ -463,24 +578,50 @@ async function loadPosts() {
 }
 
 function renderHeroLatest(posts) {
-  const container = document.getElementById('hero-latest-posts');
-  const widget = document.getElementById('hero-latest');
-  if (!container || !posts.length) return;
-  container.innerHTML = posts.map(p => {
-    const imgSrc = (p.images && p.images[0]) ? p.images[0] : (p.image || '');
-    const RAW = 'https://raw.githubusercontent.com/Sirbrian88/runbrian/main/';
-    return `<div class="hero-post-item" onclick="openPost('${p.id}')">
-      ${imgSrc ? `<img class="hero-post-thumb" src="${RAW}${imgSrc}" alt="${p.title}" loading="lazy">` 
-               : `<div class="hero-post-thumb"></div>`}
-      <div class="hero-post-info">
-        <div class="hero-post-cat">${p.category || ''}</div>
-        <div class="hero-post-title">${p.title}</div>
-        <div class="hero-post-date">${p.date || ''}</div>
-      </div>
-      <span class="hero-post-arrow">›</span>
-    </div>`;
-  }).join('');
-  widget.style.display = 'block';
+  const RAW = 'https://raw.githubusercontent.com/Sirbrian88/runbrian/main/';
+  const top = posts.slice(0, 3);
+
+  // Desktop story deck
+  const deck = document.getElementById('hero-stories-deck');
+  if (deck) {
+    deck.innerHTML = `
+      <div style="font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--mist);margin-bottom:0.75rem;">Latest Stories</div>
+      ${top.map(p => {
+        const imgSrc = (p.images&&p.images[0])||(p.image||'');
+        return `<div class="hero-story-card" onclick="openPost('${p.id}')">
+          <div class="hero-story-meta">
+            <span class="hero-story-cat">${p.category||'Story'}</span>
+            <span style="color:var(--mist);font-size:0.5rem">·</span>
+            <span class="hero-story-date">${p.date||''}</span>
+          </div>
+          <div class="hero-story-title">${p.title}</div>
+          ${p.excerpt ? `<div class="hero-story-hook">${p.excerpt.slice(0,80)}${p.excerpt.length>80?'…':''}</div>` : ''}
+          <div class="hero-story-cta">Read → </div>
+        </div>`;
+      }).join('')}
+      <a href="#stories" class="hero-stories-more" onclick="document.getElementById('stories').scrollIntoView({behavior:'smooth'});return false;">All stories →</a>
+    `;
+  }
+
+  // Mobile story stack
+  const mobileItems = document.getElementById('mobile-story-items');
+  const mobileStack = document.getElementById('mobile-story-stack');
+  if (mobileItems && mobileStack) {
+    mobileItems.innerHTML = top.map(p => {
+      const imgSrc = (p.images&&p.images[0])||(p.image||'');
+      return `<div class="mobile-story-item" onclick="openPost('${p.id}')">
+        ${imgSrc
+          ? `<img class="mobile-story-img" src="${RAW}${imgSrc}" alt="${p.title}" loading="lazy">`
+          : `<div class="mobile-story-img"></div>`}
+        <div class="mobile-story-text">
+          <div class="mobile-story-label">${p.category||'Story'} · ${p.date||''}</div>
+          <div class="mobile-story-title">${p.title}</div>
+        </div>
+        <span class="mobile-story-arrow">›</span>
+      </div>`;
+    }).join('');
+    mobileStack.style.display = 'block';
+  }
 }
 
 function renderCategoryTags() {
