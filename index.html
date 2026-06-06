@@ -39,7 +39,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; j
 .nav-links a:hover { opacity: 1; color: var(--rust); }
 
 /* HERO */
-.hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; position: relative; overflow: hidden; }
+.hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; position: relative; overflow: hidden; overflow-y: auto; }
 .hero-left { background: #1c1c1e; display: flex; flex-direction: column; justify-content: flex-end; padding: 6rem 3rem 4rem; position: relative; overflow: hidden; }
 .hero-left::before { content: ''; position: absolute; inset: 0; background: url('gobi-desert.jpg') center/cover no-repeat; opacity: 0.65; }
 .hero-eyebrow { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; position: relative; z-index: 1; opacity: 0; animation: fadeUp 0.8s 0.2s forwards; }
@@ -48,10 +48,10 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; j
 .hero-sub { font-size: 1.1rem; line-height: 1.6; color: rgba(245,240,232,0.82); margin-top: 1.5rem; max-width: 380px; position: relative; z-index: 1; opacity: 0; animation: fadeUp 0.8s 0.6s forwards; }
 .hero-cta { display: inline-flex; align-items: center; gap: 0.6rem; margin-top: 2rem; font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cream); text-decoration: none; border: 1px solid rgba(245,240,232,0.3); padding: 0.75rem 1.5rem; transition: all 0.3s; position: relative; z-index: 1; opacity: 0; animation: fadeUp 0.8s 0.8s forwards; }
 .hero-cta:hover { background: var(--rust); border-color: var(--rust); gap: 1rem; }
-.hero-right { background: var(--warm); display: flex; flex-direction: column; justify-content: center; padding: 6rem 3rem 4rem; position: relative; }
-.hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem; opacity: 0; animation: fadeUp 0.8s 0.5s forwards; }
-.stat-item { padding: 1.5rem; background: #ffffff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-.stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem; color: var(--rust); line-height: 1; }
+.hero-right { background: var(--warm); display: flex; flex-direction: column; justify-content: flex-start; padding: 5rem 3rem 2rem; position: relative; overflow-y: auto; }
+.hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.8s 0.5s forwards; }
+.stat-item { padding: 1rem 1.2rem; background: #ffffff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; color: var(--rust); line-height: 1; }
 .stat-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--mist); margin-top: 0.3rem; }
 .hero-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; opacity: 0; animation: fadeUp 0.8s 0.7s forwards; }
 .tag { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.4rem 0.8rem; border: 1px solid rgba(0,0,0,0.25); color: #4a4a52; cursor: pointer; transition: all 0.2s; }
@@ -376,20 +376,17 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
           <div class="stat-label">km Run — Lifetime</div>
         </div>
       </div>
-      <div class="hero-tags" id="hero-tags">
-        <!-- populated from posts.json -->
-      </div>
-      <div class="currently-widget" id="currently-widget" style="display:none;">
+      <!-- Desktop: story deck (populated by JS) -->
+      <div id="hero-stories-deck" class="hero-stories-deck"></div>
+
+      <!-- Currently (below stories on desktop) -->
+      <div class="currently-widget" id="currently-widget" style="display:none;margin-top:1rem;">
         <div class="currently-label">Currently</div>
         <div class="currently-items" id="currently-items"></div>
-            <div class="hero-latest" id="hero-latest" style="display:none;">
-        <div class="hero-latest-label">Latest Stories</div>
-        <div id="hero-latest-posts"></div>
-        <a href="#stories" onclick="document.getElementById('stories').scrollIntoView({behavior:'smooth'})" 
-           style="display:block;margin-top:0.75rem;font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--rust);text-decoration:none;">
-          All stories →
-        </a>
       </div>
+
+      <!-- Tags (used for filter, hidden visually on desktop) -->
+      <div class="hero-tags" id="hero-tags" style="display:none;"></div>
     </div>
   </section>
 
