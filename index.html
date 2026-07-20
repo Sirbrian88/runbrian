@@ -230,6 +230,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; j
 .post-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 0.75rem; margin-bottom: 2rem; }
 .post-gallery img { width: 100%; height: auto; display: block; cursor: zoom-in; transition: opacity 0.2s; border-radius: 4px; }
 .post-gallery img:hover { opacity: 0.85; }
+.post-inline-img { width: 100%; height: auto; max-height: 520px; object-fit: cover; display: block; border-radius: 6px; margin: 0.25rem 0 1.75rem; cursor: zoom-in; }
 .post-page-body { max-width: 760px; margin: 0 auto; padding: 3rem 2rem; }
 .post-page-category { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--rust); margin-bottom: 1rem; }
 .post-page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem,5vw,4rem); line-height: 1; margin-bottom: 1rem; }
@@ -745,20 +746,16 @@ function openPost(id) {
   if (!post) return;
 
   const images = post.images && post.images.length ? post.images : (post.image ? [post.image] : []);
+  const focal = post.focalPoints || {};
+  const coverImg = images[0] || '';
+  const extraImages = images.slice(1);
+
+  // Headline photo only — everything past the cover shot lives inline in the text
   const heroEl = document.querySelector('.post-page-hero');
-  if (images.length === 1) {
-    heroEl.className = 'post-page-hero';
-    heroEl.innerHTML = `<img src="${images[0]}" alt="${post.title}" style="width:100%;height:520px;object-fit:cover;display:block;">`;
-  } else if (images.length > 1) {
-    heroEl.className = 'post-page-hero';
-    heroEl.innerHTML = `<div class="post-gallery">${images.map(src => {
-      const fp = (post.focalPoints||{})[src]||'center';
-      return `<img src="${src}" alt="${post.title}" style="object-position:${fp}" onclick="openLightbox('${src}')">`;
-    }).join('')}</div>`;
-  } else {
-    heroEl.className = 'post-page-hero';
-    heroEl.innerHTML = '';
-  }
+  heroEl.className = 'post-page-hero';
+  heroEl.innerHTML = coverImg
+    ? `<img src="${coverImg}" alt="${post.title}" style="width:100%;height:520px;object-fit:cover;display:block;object-position:${focal[coverImg]||'center'}" onclick="openLightbox('${coverImg}')">`
+    : '';
 
   document.getElementById('post-category').textContent = post.category || '';
   document.getElementById('post-title').textContent = post.title;
@@ -768,7 +765,31 @@ function openPost(id) {
   // Support videos array (new) and single video string (old)
   const videoList = post.videos?.length ? post.videos : (post.video ? [post.video] : []);
   const videoEmbeds = videoList.map(url => getYouTubeEmbed(url)).join('');
-  content.innerHTML = videoEmbeds + (post.body || '').split(/\n\n+/).map(p => `<p>${p.trim()}</p>`).join('');
+
+  const paragraphs = (post.body || '').split(/\n\n+/).map(p => p.trim()).filter(Boolean);
+  const placements = post.imagePlacement || {};
+  const imgTag = src => `<img class="post-inline-img" src="${src}" alt="${post.title}" style="object-position:${focal[src]||'center'}" onclick="openLightbox('${src}')">`;
+
+  // Group extra photos by which paragraph they should follow; anything unplaced (or
+  // pointing past the end of the text) falls into a gallery strip at the end.
+  const byParagraph = {};
+  const unplaced = [];
+  extraImages.forEach(src => {
+    const idx = placements[src];
+    if (idx !== undefined && idx !== null && idx !== '' && Number(idx) >= 0 && Number(idx) < paragraphs.length) {
+      (byParagraph[idx] = byParagraph[idx] || []).push(src);
+    } else {
+      unplaced.push(src);
+    }
+  });
+
+  let bodyHtml = paragraphs.map((p, i) => {
+    const inline = byParagraph[i] ? byParagraph[i].map(imgTag).join('') : '';
+    return `<p>${p}</p>${inline}`;
+  }).join('');
+  if (unplaced.length) bodyHtml += `<div class="post-gallery">${unplaced.map(imgTag).join('')}</div>`;
+
+  content.innerHTML = videoEmbeds + bodyHtml;
 
   // SEO
   const postUrl = `${window.location.origin}/?post=${post.id}`;
