@@ -800,32 +800,43 @@ function handlePhotoSelect(e) {
   const files = Array.from(e.target.files||[]);
   if(!files.length) return;
   const startIdx = photoFiles.length;
+  const existingThumbsBefore = document.querySelectorAll('#photoGrid .photo-thumb-wrap').length;
   photoFiles = [...photoFiles, ...files];
   const grid = document.getElementById('photoGrid');
   const addBtn = document.getElementById('photoAddBtn');
+
+  // Create a thumbnail slot for every selected file up front, in the order they
+  // were picked, so which one becomes "Cover" doesn't depend on which file's
+  // FileReader happens to finish reading first.
+  const wraps = files.map((file,i) => {
+    const fname = file.name;
+    const idx = startIdx+i;
+    const isCover = existingThumbsBefore===0 && i===0;
+    focalPoints[fname] = 'center';
+    const wrap = document.createElement('div');
+    wrap.className = 'photo-thumb-wrap';
+    wrap.dataset.newIdx = idx;
+    wrap.dataset.newname = fname;
+    wrap.innerHTML = `<img alt="" style="object-position:center;background:var(--surface2);">
+      <button class="photo-del" onclick="removeNewPhoto(this,${idx},'${fname}')">&#x00D7;</button>
+      ${isCover?'<div class="photo-label">Cover</div>':`<select class="photo-placement" onchange="setPlacement('${fname}',this.value)" style="position:absolute;top:0;left:0;right:0;font-size:9px;padding:2px;background:rgba(0,0,0,0.7);color:#fff;border:none;border-radius:8px 8px 0 0;text-align:center;">${buildPlacementOptions(undefined)}</select>`}
+      <select class="photo-focal" onchange="setFocalPoint('${fname}',this.value)" style="position:absolute;bottom:0;left:0;right:0;font-size:10px;padding:2px;background:rgba(0,0,0,0.7);color:#fff;border:none;border-radius:0 0 8px 8px;text-align:center;">
+        <option value="center">Center</option>
+        <option value="top">Top</option>
+        <option value="bottom">Bottom</option>
+        <option value="left">Left</option>
+        <option value="right">Right</option>
+      </select>`;
+    if(addBtn&&grid) grid.insertBefore(wrap,addBtn); else if(grid) grid.appendChild(wrap);
+    return wrap;
+  });
+
   files.forEach((file,i) => {
     const reader = new FileReader();
     reader.onload = ev => {
       photoBases[startIdx+i] = ev.target.result.split(',')[1];
-      const existingThumbs = grid ? grid.querySelectorAll('.photo-thumb-wrap').length : 0;
-      const fname = file.name;
-      focalPoints[fname] = 'center';
-      const wrap = document.createElement('div');
-      wrap.className = 'photo-thumb-wrap';
-      wrap.dataset.newIdx = startIdx+i;
-      wrap.dataset.newname = fname;
-      const isCover = existingThumbs===0 && i===0;
-      wrap.innerHTML = `<img src="${ev.target.result}" alt="" style="object-position:center">
-        <button class="photo-del" onclick="removeNewPhoto(this,${startIdx+i},'${fname}')">&#x00D7;</button>
-        ${isCover?'<div class="photo-label">Cover</div>':`<select class="photo-placement" onchange="setPlacement('${fname}',this.value)" style="position:absolute;top:0;left:0;right:0;font-size:9px;padding:2px;background:rgba(0,0,0,0.7);color:#fff;border:none;border-radius:8px 8px 0 0;text-align:center;">${buildPlacementOptions(undefined)}</select>`}
-        <select class="photo-focal" onchange="setFocalPoint('${fname}',this.value)" style="position:absolute;bottom:0;left:0;right:0;font-size:10px;padding:2px;background:rgba(0,0,0,0.7);color:#fff;border:none;border-radius:0 0 8px 8px;text-align:center;">
-          <option value="center">Center</option>
-          <option value="top">Top</option>
-          <option value="bottom">Bottom</option>
-          <option value="left">Left</option>
-          <option value="right">Right</option>
-        </select>`;
-      if(addBtn&&grid) grid.insertBefore(wrap,addBtn); else if(grid) grid.appendChild(wrap);
+      const img = wraps[i].querySelector('img');
+      if (img) img.src = ev.target.result;
     };
     reader.readAsDataURL(file);
   });
