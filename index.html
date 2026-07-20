@@ -689,11 +689,24 @@ function renderPosts(posts) {
   posts.slice(1).forEach(p => grid.appendChild(makeCard(p, false)));
 }
 
+// ===== COVER PHOTOS =====
+// A post can have one or more photos tagged imagePlacement[filename] === 'cover'.
+// Older posts (or posts where nothing was explicitly tagged) fall back to treating
+// the first attached photo as the cover, matching the original behavior.
+function getCoverImages(post) {
+  const images = post.images && post.images.length ? post.images : (post.image ? [post.image] : []);
+  const placements = post.imagePlacement || {};
+  const tagged = images.filter(src => placements[src] === 'cover');
+  if (tagged.length) return tagged;
+  return images.length ? [images[0]] : [];
+}
+
 function makeCard(post, isFeatured) {
   const card = document.createElement('div');
   card.className = 'post-card' + (isFeatured ? ' featured' : '');
   card.onclick = () => openPost(post.id);
-  const imgSrc = (post.images && post.images[0]) ? post.images[0] : (post.image || '');
+  const coverImgs = getCoverImages(post);
+  const imgSrc = coverImgs[0] || '';
   const imgCount = post.images ? post.images.length : (post.image ? 1 : 0);
   const hasVideo = !!post.video;
   card.innerHTML = `
@@ -747,15 +760,22 @@ function openPost(id) {
 
   const images = post.images && post.images.length ? post.images : (post.image ? [post.image] : []);
   const focal = post.focalPoints || {};
-  const coverImg = images[0] || '';
-  const extraImages = images.slice(1);
+  const coverImgs = getCoverImages(post);
+  const extraImages = images.filter(src => !coverImgs.includes(src));
 
-  // Headline photo only — everything past the cover shot lives inline in the text
+  // Headline photo(s) — everything else lives inline in the text
   const heroEl = document.querySelector('.post-page-hero');
   heroEl.className = 'post-page-hero';
-  heroEl.innerHTML = coverImg
-    ? `<img src="${coverImg}" alt="${post.title}" style="width:100%;height:520px;object-fit:cover;display:block;object-position:${focal[coverImg]||'center'}" onclick="openLightbox('${coverImg}')">`
-    : '';
+  if (coverImgs.length === 1) {
+    heroEl.innerHTML = `<img src="${coverImgs[0]}" alt="${post.title}" style="width:100%;height:520px;object-fit:cover;display:block;object-position:${focal[coverImgs[0]]||'center'}" onclick="openLightbox('${coverImgs[0]}')">`;
+  } else if (coverImgs.length > 1) {
+    heroEl.innerHTML = `<div class="post-gallery">${coverImgs.map(src => {
+      const fp = focal[src]||'center';
+      return `<img src="${src}" alt="${post.title}" style="object-position:${fp}" onclick="openLightbox('${src}')">`;
+    }).join('')}</div>`;
+  } else {
+    heroEl.innerHTML = '';
+  }
 
   document.getElementById('post-category').textContent = post.category || '';
   document.getElementById('post-title').textContent = post.title;

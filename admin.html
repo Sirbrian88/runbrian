@@ -84,6 +84,7 @@ input[type=file] { display:none; }
 .photo-thumb-wrap .photo-label { position:absolute; top:0; left:0; right:0; background:rgba(0,0,0,0.65); color:#fff; font-size:10px; font-weight:600; text-align:center; padding:3px; font-family:sans-serif; border-radius:8px 8px 0 0; }
 .photo-add-btn { background:var(--surface2); border:1px dashed var(--border); border-radius:8px; aspect-ratio:1; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; color:var(--muted); font-size:24px; transition:border-color .2s; }
 .photo-add-btn:active { border-color:var(--accent); }
+.photo-thumb-wrap.is-cover { outline:2px solid var(--accent); outline-offset:-2px; }
 .focal-row { display:flex; align-items:center; gap:10px; margin-top:8px; }
 .focal-label { font-size:12px; color:var(--muted); white-space:nowrap; }
 .focal-select { background:var(--surface2); border:1px solid var(--border); color:var(--text); font-size:13px; padding:6px 10px; border-radius:8px; flex:1; }
@@ -454,23 +455,28 @@ function renderForm() {
       <input type="text" id="newCatInput" placeholder="e.g. Home Automation">
     </div>
     <div class="field">
-      <label>Photos <span style="color:var(--muted);font-size:11px;">(1st = headline photo · pick where the rest appear in the text)</span></label>
+      <label>Photos <span style="color:var(--muted);font-size:11px;">(pick Cover — you can choose more than one — or which paragraph each photo follows)</span></label>
       <div class="photo-grid" id="photoGrid">
-        ${existingImgs.map((f,i)=>{
-          const fp = (p?.focalPoints||{})[f]||'center';
-          return `<div class="photo-thumb-wrap" data-existing="${f}">
-            <img src="${RAW_BASE}/${f}" alt="" style="object-position:${fp}">
-            <button class="photo-del" onclick="removeExistingPhoto(this,'${f}')">&#x00D7;</button>
-            ${i===0?'<div class="photo-label">Cover</div>':`<select class="photo-placement" onchange="setPlacement('${f}',this.value)" style="position:absolute;top:0;left:0;right:0;font-size:9px;padding:2px;background:rgba(0,0,0,0.7);color:#fff;border:none;border-radius:8px 8px 0 0;text-align:center;">${buildPlacementOptions((p?.imagePlacement||{})[f], p?.body||'')}</select>`}
-            <select class="photo-focal" onchange="setFocalPoint('${f}',this.value)" style="position:absolute;bottom:0;left:0;right:0;font-size:10px;padding:2px;background:rgba(0,0,0,0.7);color:#fff;border:none;border-radius:0 0 8px 8px;text-align:center;">
-              <option value="center" ${fp==='center'?'selected':''}>Center</option>
-              <option value="top" ${fp==='top'?'selected':''}>Top</option>
-              <option value="bottom" ${fp==='bottom'?'selected':''}>Bottom</option>
-              <option value="left" ${fp==='left'?'selected':''}>Left</option>
-              <option value="right" ${fp==='right'?'selected':''}>Right</option>
-            </select>
-          </div>`;
-        }).join('')}
+        ${(()=>{
+          const hasExplicitCover = existingImgs.some(f => (p?.imagePlacement||{})[f] === 'cover');
+          return existingImgs.map((f,i)=>{
+            const fp = (p?.focalPoints||{})[f]||'center';
+            const raw = (p?.imagePlacement||{})[f];
+            const placementVal = (raw===undefined && !hasExplicitCover && i===0) ? 'cover' : raw;
+            return `<div class="photo-thumb-wrap${placementVal==='cover'?' is-cover':''}" data-existing="${f}">
+              <img src="${RAW_BASE}/${f}" alt="" style="object-position:${fp}">
+              <button class="photo-del" onclick="removeExistingPhoto(this,'${f}')">&#x00D7;</button>
+              <select class="photo-placement" onchange="setPlacement('${f}',this.value)" style="position:absolute;top:0;left:0;right:0;font-size:9px;padding:2px;background:rgba(0,0,0,0.7);color:#fff;border:none;border-radius:8px 8px 0 0;text-align:center;">${buildPlacementOptions(placementVal, p?.body||'')}</select>
+              <select class="photo-focal" onchange="setFocalPoint('${f}',this.value)" style="position:absolute;bottom:0;left:0;right:0;font-size:10px;padding:2px;background:rgba(0,0,0,0.7);color:#fff;border:none;border-radius:0 0 8px 8px;text-align:center;">
+                <option value="center" ${fp==='center'?'selected':''}>Center</option>
+                <option value="top" ${fp==='top'?'selected':''}>Top</option>
+                <option value="bottom" ${fp==='bottom'?'selected':''}>Bottom</option>
+                <option value="left" ${fp==='left'?'selected':''}>Left</option>
+                <option value="right" ${fp==='right'?'selected':''}>Right</option>
+              </select>
+            </div>`;
+          }).join('');
+        })()}
         <div class="photo-add-btn" id="photoAddBtn" onclick="document.getElementById('photoInput').click()">
           <span>+</span>
           <span style="font-size:10px;margin-top:4px;">Add</span>
@@ -729,16 +735,20 @@ function countParagraphs(bodyText) {
 function buildPlacementOptions(selected, bodyText) {
   const n = countParagraphs(bodyText);
   const sel = (selected===undefined||selected===null) ? '' : String(selected);
-  let opts = `<option value="" ${sel===''?'selected':''}>End of post</option>`;
+  let opts = `<option value="cover" ${sel==='cover'?'selected':''}>Cover</option>`;
   for (let i=0;i<n;i++) {
     opts += `<option value="${i}" ${sel===String(i)?'selected':''}>After paragraph ${i+1}</option>`;
   }
+  opts += `<option value="" ${sel===''?'selected':''}>End of post</option>`;
   return opts;
 }
 
 function setPlacement(filename, value) {
   if (value === '') delete imagePlacements[filename];
+  else if (value === 'cover') imagePlacements[filename] = 'cover';
   else imagePlacements[filename] = Number(value);
+  const wrap = document.querySelector(`[data-existing="${filename}"], [data-newname="${filename}"]`);
+  if (wrap) wrap.classList.toggle('is-cover', value === 'cover');
 }
 
 function refreshPlacementOptions() {
@@ -763,15 +773,6 @@ function removeExistingPhoto(btn, filename) {
   delete focalPoints[filename];
   delete imagePlacements[filename];
   btn.closest('.photo-thumb-wrap').remove();
-  const first = document.querySelector('#photoGrid .photo-thumb-wrap');
-  if (first && !first.querySelector('.photo-label')) {
-    // First remaining photo becomes the new cover — it doesn't get a placement dropdown
-    const placementSel = first.querySelector('.photo-placement');
-    if (placementSel) { delete imagePlacements[first.dataset.existing||first.dataset.newname]; placementSel.remove(); }
-    const lbl = document.createElement('div');
-    lbl.className = 'photo-label'; lbl.textContent = 'Cover';
-    first.appendChild(lbl);
-  }
 }
 
 // ─── Category change ───
@@ -800,26 +801,27 @@ function handlePhotoSelect(e) {
   const files = Array.from(e.target.files||[]);
   if(!files.length) return;
   const startIdx = photoFiles.length;
-  const existingThumbsBefore = document.querySelectorAll('#photoGrid .photo-thumb-wrap').length;
-  photoFiles = [...photoFiles, ...files];
   const grid = document.getElementById('photoGrid');
+  const hasCoverAlready = !!(grid && grid.querySelector('.photo-thumb-wrap.is-cover'));
+  photoFiles = [...photoFiles, ...files];
   const addBtn = document.getElementById('photoAddBtn');
 
   // Create a thumbnail slot for every selected file up front, in the order they
-  // were picked, so which one becomes "Cover" doesn't depend on which file's
+  // were picked, so which one defaults to "Cover" doesn't depend on which file's
   // FileReader happens to finish reading first.
   const wraps = files.map((file,i) => {
     const fname = file.name;
     const idx = startIdx+i;
-    const isCover = existingThumbsBefore===0 && i===0;
+    const isCover = !hasCoverAlready && i===0;
+    if (isCover) imagePlacements[fname] = 'cover';
     focalPoints[fname] = 'center';
     const wrap = document.createElement('div');
-    wrap.className = 'photo-thumb-wrap';
+    wrap.className = 'photo-thumb-wrap' + (isCover?' is-cover':'');
     wrap.dataset.newIdx = idx;
     wrap.dataset.newname = fname;
     wrap.innerHTML = `<img alt="" style="object-position:center;background:var(--surface2);">
       <button class="photo-del" onclick="removeNewPhoto(this,${idx},'${fname}')">&#x00D7;</button>
-      ${isCover?'<div class="photo-label">Cover</div>':`<select class="photo-placement" onchange="setPlacement('${fname}',this.value)" style="position:absolute;top:0;left:0;right:0;font-size:9px;padding:2px;background:rgba(0,0,0,0.7);color:#fff;border:none;border-radius:8px 8px 0 0;text-align:center;">${buildPlacementOptions(undefined)}</select>`}
+      <select class="photo-placement" onchange="setPlacement('${fname}',this.value)" style="position:absolute;top:0;left:0;right:0;font-size:9px;padding:2px;background:rgba(0,0,0,0.7);color:#fff;border:none;border-radius:8px 8px 0 0;text-align:center;">${buildPlacementOptions(isCover?'cover':undefined)}</select>
       <select class="photo-focal" onchange="setFocalPoint('${fname}',this.value)" style="position:absolute;bottom:0;left:0;right:0;font-size:10px;padding:2px;background:rgba(0,0,0,0.7);color:#fff;border:none;border-radius:0 0 8px 8px;text-align:center;">
         <option value="center">Center</option>
         <option value="top">Top</option>
@@ -848,14 +850,6 @@ function removeNewPhoto(btn,idx,fname) {
   photoBases[idx]=null;
   if(fname){delete focalPoints[fname];delete imagePlacements[fname];}
   btn.closest('.photo-thumb-wrap').remove();
-  const first = document.querySelector('#photoGrid .photo-thumb-wrap');
-  if (first && !first.querySelector('.photo-label')) {
-    const placementSel = first.querySelector('.photo-placement');
-    if (placementSel) { delete imagePlacements[first.dataset.existing||first.dataset.newname]; placementSel.remove(); }
-    const lbl = document.createElement('div');
-    lbl.className = 'photo-label'; lbl.textContent = 'Cover';
-    first.appendChild(lbl);
-  }
 }
 
 async function handleAIExpand() {
@@ -916,15 +910,18 @@ async function handlePublish() {
     const isEdit=!!state.editingPost;
     const mergedPlacement={...(state.editingPost?.imagePlacement||{}), ...imagePlacements};
     const imagePlacementObj={};
-    imageNames.slice(1).forEach(f=>{
+    imageNames.forEach(f=>{
       const v=mergedPlacement[f];
-      if(v!==undefined&&v!==null&&v!=='')imagePlacementObj[f]=Number(v);
+      if(v==='cover')imagePlacementObj[f]='cover';
+      else if(v!==undefined&&v!==null&&v!=='')imagePlacementObj[f]=Number(v);
     });
+    const coverNames=imageNames.filter(f=>imagePlacementObj[f]==='cover');
+    const primaryImage=coverNames[0]||imageNames[0]||'';
     const postObj={
       id:isEdit?state.editingPost.id:genId(),
       category:category||'Uncategorized',title,
       excerpt:excerpt||'',
-      image:imageNames[0]||'',
+      image:primaryImage,
       images:imageNames,
       videos:getVideoUrls(),
       video:getVideoUrls()[0]||'',  // backward compat
