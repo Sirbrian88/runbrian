@@ -1,5 +1,30 @@
 [
   {
+    "id": "mrtcm40ofmk2",
+    "category": "Ultra Running",
+    "title": "MyWeather.Space",
+    "excerpt": "When I go on multi day races, planning for weather is often a challenge as you cant just search the nearest town on a weather app, as something totally different will happen in the mountains. So, rather than complain, I built my own app.",
+    "image": "search types.jpg",
+    "images": [
+      "search types.jpg",
+      "weather gpx.jpg",
+      "pace chart.jpg",
+      "calc times.jpg"
+    ],
+    "videos": [],
+    "video": "",
+    "focalPoints": {
+      "search types.jpg": "center",
+      "weather gpx.jpg": "center",
+      "pace chart.jpg": "center",
+      "calc times.jpg": "center"
+    },
+    "date": "2026-07-20",
+    "readTime": 3,
+    "featured": true,
+    "body": "# MyWeather.Space: Because Mountain Weather Apps Are Lying to You\n\nLook, I'm going to be honest with you—I built this thing because I was sick of being wrong.\n\nIt started on a particularly miserable multi-day race where I checked the weather for the nearest town—some valley settlement fifteen miles away—and planned my entire kit around that forecast. Seemed reasonable. Except it was 35 degrees warmer in that town than it was at the 9,000-foot ridge I'd be crossing at 2 AM. That's not a planning adjustment. That's a catastrophe waiting to happen.\n\nSo rather than do what any sensible person would do (complain loudly and move on), I decided to build an app. And yeah, that sounds like overkill. But if you've ever stood on a mountain at three in the morning shaking because your weather app promised sunshine, you'd build an app too.\n\n**Here's the thing about MyWeather.Space:** it's designed specifically for people who refuse to stick to paved roads and valley towns. You can search for weather exactly where you need it—whether that's a specific summit, the mysterious col you're crossing at dawn, or literally anywhere your gut tells you to go. Drop a pin on the map. Input coordinates. Search by text. Or just use your current location. The power is yours.\n\nBut the real magic? That's the GPX import.\n\nUpload your race route or trail adventure, and the app doesn't just give you a generic forecast. It breaks down the weather at each waypoint—every checkpoint, every aid station—so you actually know what you're walking into. If there aren't waypoints marked, it gives you forecasts every ten miles. You can finally answer that question that's been haunting me for years: \"What will it actually be like *there*?\"\n\nHere's where it gets legitimately useful: the Timetable tool. Because weather isn't static, and neither is your race pace. You adjust your estimated times between waypoints, fine-tune how long you'll rest at each aid station, and the app calculates your arrival time at every point along your journey. Then it gives you the *actual* forecast for when you'll *actually* be there. Revolutionary, right? Except it shouldn't be.\n\nI've layered in AI-powered modeling across multiple weather sources, with terrain insights built in—because mountains aren't just tall ground; they create their own weather. It's as accurate as I can make it.\n\nSo go give it a shot at **www.myweather.space**. Try uploading your next adventure. Search for that sketchy summit you're eyeing. See what the mountain's actually going to throw at you.\n\nAnd if something's broken, if the forecast seems off, or if you have an idea that would make this better? Drop me a line at **Brian@runbrian.com**. I genuinely want to hear it.\n\nBecause we've all been caught out by mountain weather. Let's stop doing that."
+  },
+  {
     "id": "mqu31s1i3qwi",
     "category": "Travel",
     "title": "Havasu Falls - Day One.",
