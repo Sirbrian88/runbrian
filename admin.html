@@ -109,6 +109,20 @@ input[type=file] { display:none; }
 .related-item input[type=checkbox] { width:20px; height:20px; accent-color:var(--accent); flex-shrink:0; }
 .related-item label { font-size:14px; color:var(--text); text-transform:none; letter-spacing:0; cursor:pointer; line-height:1.3; }
 
+/* Training */
+.train-status { font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; white-space:nowrap; margin-left:6px; }
+.train-status.today { background:rgba(232,100,44,.3); color:var(--accent); }
+.train-status.done { background:rgba(76,175,80,.2); color:var(--green); }
+.train-status.nolog { background:rgba(240,160,90,.2); color:var(--accent2); }
+.strava-chip { display:flex; align-items:center; gap:10px; background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:10px 12px; margin-bottom:8px; }
+.strava-chip-info { flex:1; min-width:0; }
+.strava-chip-name { font-size:14px; font-weight:600; }
+.strava-chip-stats { font-size:12px; color:var(--muted); margin-top:2px; }
+.strava-chip-remove { background:none; border:none; color:var(--red); font-size:18px; cursor:pointer; padding:4px 8px; line-height:1; }
+.import-day-preview { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:12px; margin-bottom:8px; }
+.import-day-preview .idp-date { font-weight:700; font-size:14px; color:var(--accent2); }
+.import-day-preview .idp-plan { font-size:13px; color:var(--muted); margin-top:4px; white-space:pre-line; }
+
 /* Toast */
 #toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(100px); background:var(--surface); color:var(--text); padding:14px 24px; border-radius:100px; font-size:14px; font-weight:500; border:1px solid var(--border); z-index:9999; transition:transform .3s ease; white-space:nowrap; max-width:calc(100% - 40px); text-align:center; box-shadow:0 4px 24px rgba(0,0,0,.5); }
 #toast.show { transform:translateX(-50%) translateY(0); }
@@ -174,6 +188,7 @@ let state = {
   token: localStorage.getItem('gh_token') || '',
   anthropicKey: localStorage.getItem('anthropic_key') || '',
   posts: [], editingPost: null,
+  trainingDays: [], editingTrainingDay: null, importParsed: [], importRawText: '',
 };
 
 let photoFiles = [];
@@ -221,6 +236,20 @@ async function savePostsJson(posts, sha) {
   return ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/posts.json`, {
     method:'PUT',
     body:JSON.stringify({ message:'Update posts.json via admin', content:btoa(b), sha, branch:BRANCH }),
+  });
+}
+
+async function fetchTraining() {
+  const data = await ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/training.json`);
+  const json = new TextDecoder().decode(Uint8Array.from(atob(data.content.replace(/\n/g,'')), c=>c.charCodeAt(0)));
+  return { days: JSON.parse(json), sha: data.sha };
+}
+async function saveTrainingJson(days, sha) {
+  const enc = new TextEncoder().encode(JSON.stringify(days, null, 2));
+  let b=''; for (let i=0;i<enc.length;i+=8192) b+=String.fromCharCode(...enc.slice(i,i+8192));
+  return ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/training.json`, {
+    method:'PUT',
+    body:JSON.stringify({ message:'Update training.json via admin', content:btoa(b), sha, branch:BRANCH }),
   });
 }
 
@@ -338,10 +367,143 @@ function renderCategorySelect(current) {
   </select>`;
 }
 
+// ─── Training: schedule text parser ───
+const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const SCHEDULE_HEADER_RE = /^(Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)\s*(?:(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2})(?:st|nd|rd|th)?)?\s*:\s*(.*)$/i;
+
+function parseScheduleText(raw) {
+  const text = (raw||'').replace(/\r\n/g,'\n').trim();
+  if (!text) return [];
+  const blocks = text.split(/\n\s*\n+/);
+  const results = [];
+  let lastDate = null;
+  for (const block of blocks) {
+    const lines = block.split('\n').map(l=>l.trim()).filter(Boolean);
+    if (!lines.length) continue;
+    const m = lines[0].match(SCHEDULE_HEADER_RE);
+    if (!m) continue;
+    const dayNameRaw = m[1], monthName = m[2], dayNum = m[3], restFirst = m[4];
+    const dayName = dayNameRaw.charAt(0).toUpperCase() + dayNameRaw.slice(1).toLowerCase();
+    let date;
+    if (monthName && dayNum) {
+      const year = lastDate ? lastDate.getFullYear() : new Date().getFullYear();
+      const monthIdx = MONTH_NAMES.findIndex(mn=>mn.toLowerCase()===monthName.toLowerCase());
+      date = new Date(year, monthIdx, parseInt(dayNum,10));
+      if (lastDate && date < lastDate && (lastDate - date) > 300*86400000) {
+        date = new Date(year+1, monthIdx, parseInt(dayNum,10));
+      }
+    } else if (lastDate) {
+      date = new Date(lastDate);
+      date.setDate(date.getDate()+1);
+    } else {
+      const t = new Date(); t.setHours(0,0,0,0);
+      const targetIdx = DAY_NAMES.indexOf(dayName);
+      let d = new Date(t);
+      while (d.getDay() !== targetIdx) d.setDate(d.getDate()+1);
+      date = d;
+    }
+    lastDate = date;
+    const planLines = [restFirst||'', ...lines.slice(1)].filter(Boolean);
+    const iso = date.toISOString().split('T')[0];
+    results.push({
+      id: 'd_' + iso,
+      date: iso,
+      dayLabel: `${dayName}, ${MONTH_NAMES[date.getMonth()]} ${date.getDate()}`,
+      plan: planLines.join('\n'),
+      note: '',
+      completed: false,
+      stravaActivities: [],
+    });
+  }
+  return results;
+}
+
+// ─── Training: Strava sync ───
+async function stravaAccessToken() {
+  const refresh = localStorage.getItem('strava_refresh');
+  if (!refresh) throw new Error('Connect Strava in Settings first');
+  const clientId = localStorage.getItem('strava_client_id') || '252608';
+  const clientSecret = localStorage.getItem('strava_client_secret') || '1807ba66a14418a1255ec114bcfaebda8a4440b6';
+  const tr = await fetch('https://www.strava.com/oauth/token', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ client_id:clientId, client_secret:clientSecret, refresh_token:refresh, grant_type:'refresh_token' })
+  });
+  const td = await tr.json();
+  if (!td.access_token) throw new Error(td.message || 'Strava authorization failed');
+  if (td.refresh_token && td.refresh_token !== refresh) localStorage.setItem('strava_refresh', td.refresh_token);
+  return td.access_token;
+}
+
+function stravaActivityToObj(a) {
+  const meters = a.distance||0;
+  const miles = Math.round((meters/1609.344)*100)/100;
+  const movingSec = a.moving_time||0;
+  let pace = '';
+  if (miles>0 && movingSec>0) {
+    const paceSecPerMi = movingSec/miles;
+    const mm = Math.floor(paceSecPerMi/60), ss = Math.round(paceSecPerMi%60);
+    pace = `${mm}:${String(ss).padStart(2,'0')}/mi`;
+  }
+  return {
+    id: a.id, name: a.name, type: a.type || a.sport_type || 'Activity',
+    distanceMiles: miles, movingTimeSec: movingSec, elapsedTimeSec: a.elapsed_time||0,
+    elevGainFt: Math.round((a.total_elevation_gain||0)*3.28084),
+    pace, url: `https://www.strava.com/activities/${a.id}`,
+    startDateLocal: a.start_date_local,
+  };
+}
+
+async function fetchStravaActivities(afterEpochSec) {
+  const token = await stravaAccessToken();
+  let page=1, all=[];
+  while (true) {
+    const res = await fetch(`https://www.strava.com/api/v3/athlete/activities?after=${afterEpochSec}&per_page=100&page=${page}`, { headers:{Authorization:'Bearer '+token} });
+    const batch = await res.json();
+    if (!Array.isArray(batch) || batch.length===0) break;
+    all = all.concat(batch);
+    if (batch.length<100 || page>5) break;
+    page++;
+  }
+  return all;
+}
+
+async function syncStravaToTraining() {
+  const pending = state.trainingDays.filter(d => d.date <= today() && (!d.stravaActivities || d.stravaActivities.length===0));
+  if (pending.length===0) { toast('Nothing to sync — every logged day already has Strava data','success'); return; }
+  const minDate = pending.reduce((m,d)=> d.date<m?d.date:m, pending[0].date);
+  const afterEpoch = Math.floor(new Date(minDate+'T00:00:00').getTime()/1000) - 86400;
+  const activities = await fetchStravaActivities(afterEpoch);
+  const byDate = {};
+  activities.forEach(a=>{
+    const d = (a.start_date_local||'').slice(0,10);
+    if (!d) return;
+    (byDate[d]=byDate[d]||[]).push(stravaActivityToObj(a));
+  });
+  let matchedCount=0;
+  const updated = state.trainingDays.map(day=>{
+    if (byDate[day.date] && byDate[day.date].length && (!day.stravaActivities || day.stravaActivities.length===0)) {
+      matchedCount++;
+      return {...day, stravaActivities: byDate[day.date], completed:true};
+    }
+    return day;
+  });
+  const {sha} = await fetchTraining();
+  await saveTrainingJson(updated, sha);
+  state.trainingDays = updated;
+  toast(matchedCount>0 ? `Linked Strava activities for ${matchedCount} day(s)` : 'Synced — no matching activities found for pending days','success');
+}
+
+async function syncStravaForDay(date) {
+  const afterEpoch = Math.floor(new Date(date+'T00:00:00').getTime()/1000) - 3600;
+  const activities = await fetchStravaActivities(afterEpoch);
+  return activities.filter(a => (a.start_date_local||'').slice(0,10) === date).map(stravaActivityToObj);
+}
+
 // ─── Render ───
 function render() {
   const app = document.getElementById('app');
-  const screens = { loading:renderLoading, pin:renderPin, setup:renderSetup, list:renderList, form:renderForm, settings:renderSettings, success:renderSuccess };
+  const screens = { loading:renderLoading, pin:renderPin, setup:renderSetup, list:renderList, form:renderForm, settings:renderSettings, success:renderSuccess, training:renderTrainingList, trainingForm:renderTrainingDayForm, trainingImport:renderTrainingImport };
   app.innerHTML = (screens[state.screen] || renderLoading)();
   attachEvents();
 }
@@ -394,6 +556,7 @@ function renderList() {
   return `<header>
     <h1>Run<span>Brian</span></h1>
     <div class="header-btns">
+      <button class="btn-icon" id="trainingNavBtn" title="Training Log">&#x1F3C3;</button>
       <button class="btn-icon" id="settingsBtn" title="Settings">&#x2699;&#xFE0F;</button>
       <button class="btn-secondary btn-sm" id="newPostBtn">+ New Post</button>
     </div>
@@ -563,6 +726,112 @@ function renderSettings() {
   </div>`;
 }
 
+function renderTrainingList() {
+  const days = state.trainingDays.slice().sort((a,b)=> a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
+  const todayStr = today();
+  return `<header>
+    <button class="back-btn" id="trainBackToPostsBtn">&larr; Posts</button>
+    <div class="header-btns">
+      <button class="btn-icon" id="trainSyncBtn" title="Sync Strava">&#x1F504;</button>
+      <button class="btn-secondary btn-sm" id="trainImportBtn">+ Import Schedule</button>
+    </div>
+  </header>
+  <div class="screen">
+    <div class="section-header">
+      <div class="section-title">Training <span style="color:var(--muted);font-weight:400;font-size:14px;">(${days.length})</span></div>
+    </div>
+    ${days.length===0
+      ? `<div class="empty"><div class="empty-icon">&#x1F3C3;</div>No training days yet. Import your coach's schedule to get started.</div>`
+      : days.map(d => renderTrainingCard(d, todayStr)).join('')}
+  </div>`;
+}
+
+function renderTrainingCard(d, todayStr) {
+  const hasStrava = d.stravaActivities && d.stravaActivities.length>0;
+  const isToday = d.date === todayStr;
+  const isFuture = d.date > todayStr;
+  let statusBadge = '';
+  if (isToday) statusBadge = `<span class="train-status today">TODAY</span>`;
+  else if (hasStrava || d.completed) statusBadge = `<span class="train-status done">&#x2713; Logged</span>`;
+  else if (!isFuture) statusBadge = `<span class="train-status nolog">No log</span>`;
+  const planPreview = (d.plan||'').split('\n')[0].slice(0,70);
+  const metaBits = [];
+  if (d.note) metaBits.push('&#x1F4DD; Note added');
+  if (hasStrava) metaBits.push(`${d.stravaActivities.length} Strava activit${d.stravaActivities.length===1?'y':'ies'}`);
+  return `<div class="post-card train-card" data-id="${d.id}">
+    <div class="post-thumb-placeholder">${hasStrava?'&#x1F3C3;':'&#x1F4C5;'}</div>
+    <div class="post-info">
+      <div class="post-meta" style="margin-bottom:4px;">${escHtml(d.dayLabel||d.date)}${statusBadge}</div>
+      <div class="post-title">${escHtml(planPreview)}${(d.plan||'').length>70?'…':''}</div>
+      <div class="post-meta">${metaBits.join(' &middot; ')}</div>
+    </div>
+  </div>`;
+}
+
+function renderTrainingDayForm() {
+  const d = state.editingTrainingDay;
+  if (!d) return renderTrainingList();
+  const stravaHtml = (d.stravaActivities||[]).map((a,i) => `
+    <div class="strava-chip">
+      <div class="strava-chip-info">
+        <div class="strava-chip-name">${escHtml(a.name||a.type||'Activity')}</div>
+        <div class="strava-chip-stats">${a.distanceMiles?a.distanceMiles+' mi &middot; ':''}${a.movingTimeSec?Math.round(a.movingTimeSec/60)+' min':''}${a.elevGainFt?' &middot; '+a.elevGainFt+' ft gain':''}${a.pace?' &middot; '+escHtml(a.pace):''}</div>
+      </div>
+      <button class="strava-chip-remove" data-idx="${i}" data-action="removeStrava" title="Unlink">&#x00D7;</button>
+    </div>`).join('') || `<div style="color:var(--muted);font-size:13px;">No Strava activity linked yet.</div>`;
+
+  return `<header>
+    <button class="back-btn" id="trainFormBackBtn">&larr; Training</button>
+    <div class="header-btns"><button class="btn-secondary btn-sm btn-danger" id="trainDeleteBtn">Delete</button></div>
+  </header>
+  <div class="screen" style="display:flex;flex-direction:column;gap:20px;">
+    <div style="font-size:18px;font-weight:700;">${escHtml(d.dayLabel||d.date)}</div>
+    <div class="field"><label>Coach's Plan</label>
+      <textarea id="fPlan" rows="6">${escHtml(d.plan||'')}</textarea></div>
+    <div class="field"><label>Your Notes <span style="color:var(--muted);font-size:11px;">(how it actually went)</span></label>
+      <textarea id="fNote" rows="5" placeholder="How did it go? Weather, how you felt, what you'd change...">${escHtml(d.note||'')}</textarea></div>
+    <div class="toggle-row">
+      <span class="toggle-label">&#x2705; Mark Completed</span>
+      <div class="toggle ${d.completed?'on':''}" id="completedToggle"></div>
+    </div>
+    <div class="field">
+      <label>Strava Activities <span style="color:var(--muted);font-size:11px;">(auto-linked by date)</span></label>
+      ${stravaHtml}
+      <button type="button" class="btn-secondary btn-sm" id="trainResyncBtn" style="margin-top:8px;">&#x1F504; Re-check Strava for this day</button>
+    </div>
+    <div class="field"><label>Add Strava Link Manually <span style="color:var(--muted);font-size:11px;">(fallback)</span></label>
+      <input type="text" id="manualStravaUrl" placeholder="https://www.strava.com/activities/123456789">
+      <button type="button" class="btn-secondary btn-sm" id="addManualStravaBtn" style="margin-top:8px;">Add</button>
+    </div>
+    <button class="btn-primary" id="saveTrainingDayBtn">&#x1F4BE; Save Day</button>
+    <div style="height:20px;"></div>
+  </div>`;
+}
+
+function renderTrainingImport() {
+  const parsed = state.importParsed || [];
+  return `<header>
+    <button class="back-btn" id="trainImportBackBtn">&larr; Training</button>
+    <div></div>
+  </header>
+  <div class="screen" style="display:flex;flex-direction:column;gap:16px;">
+    <div style="font-size:18px;font-weight:700;">&#x1F4E5; Import Schedule</div>
+    <div style="color:var(--muted);font-size:13px;">Paste the exact block of text your coach sends. Each day starts with a weekday name (optionally with a date), then a colon.</div>
+    <div class="field"><textarea id="importText" rows="14" placeholder="Thursday August 27th: Get out of the hotel...">${escHtml(state.importRawText||'')}</textarea></div>
+    <button class="btn-secondary" id="parseImportBtn">Parse</button>
+    ${parsed.length>0 ? `
+      <div class="divider"></div>
+      <div style="font-size:15px;font-weight:700;">Preview &mdash; ${parsed.length} day${parsed.length===1?'':'s'}</div>
+      ${parsed.map((d)=>`<div class="import-day-preview">
+        <div class="idp-date">${escHtml(d.dayLabel)}</div>
+        <div class="idp-plan">${escHtml((d.plan||'').slice(0,140))}${(d.plan||'').length>140?'…':''}</div>
+      </div>`).join('')}
+      <button class="btn-primary" id="confirmImportBtn">&#x1F680; Import ${parsed.length} Day${parsed.length===1?'':'s'}</button>
+    ` : ''}
+    <div style="height:20px;"></div>
+  </div>`;
+}
+
 function renderSuccess() {
   return `<div class="success-screen">
     <div class="success-icon">&#x1F389;</div>
@@ -681,6 +950,8 @@ function attachEvents() {
   if(newPostBtn)newPostBtn.addEventListener('click',()=>{state.editingPost=null;photoFiles=[];photoBases=[];removedPhotos=[];focalPoints={};imagePlacements={};videoRowCount=0;state.screen='form';render();});
   const refreshBtn=$('refreshBtn');
   if(refreshBtn)refreshBtn.addEventListener('click',()=>loadAndShowList());
+  const trainingNavBtn=$('trainingNavBtn');
+  if(trainingNavBtn)trainingNavBtn.addEventListener('click',()=>loadAndShowTraining());
 
   // Post cards
   document.querySelectorAll('.post-card').forEach(card=>{
@@ -688,6 +959,128 @@ function attachEvents() {
       const post=state.posts.find(p=>p.id===card.dataset.id);
       if(post){state.editingPost=post;photoFiles=[];photoBases=[];removedPhotos=[];focalPoints={};imagePlacements={};videoRowCount=0;state.screen='form';render();}
     });
+  });
+
+  // Training list
+  const trainBackToPostsBtn=$('trainBackToPostsBtn');
+  if(trainBackToPostsBtn)trainBackToPostsBtn.addEventListener('click',()=>loadAndShowList());
+  const trainImportBtn=$('trainImportBtn');
+  if(trainImportBtn)trainImportBtn.addEventListener('click',()=>{state.importParsed=[];state.importRawText='';state.screen='trainingImport';render();});
+  const trainSyncBtn=$('trainSyncBtn');
+  if(trainSyncBtn)trainSyncBtn.addEventListener('click',async()=>{
+    trainSyncBtn.disabled=true;trainSyncBtn.innerHTML='<span class="spinner"></span>';
+    try{ await syncStravaToTraining(); render(); }
+    catch(e){ toast('Strava sync failed: '+e.message,'error',5000); }
+    finally{ const btn=$('trainSyncBtn'); if(btn){btn.disabled=false;btn.innerHTML='&#x1F504;';} }
+  });
+  document.querySelectorAll('.train-card').forEach(card=>{
+    card.addEventListener('click',()=>{
+      const day=state.trainingDays.find(d=>d.id===card.dataset.id);
+      if(day){state.editingTrainingDay=JSON.parse(JSON.stringify(day));state.screen='trainingForm';render();}
+    });
+  });
+
+  // Training import
+  const trainImportBackBtn=$('trainImportBackBtn');
+  if(trainImportBackBtn)trainImportBackBtn.addEventListener('click',()=>{state.screen='training';render();});
+  const parseImportBtn=$('parseImportBtn');
+  if(parseImportBtn)parseImportBtn.addEventListener('click',()=>{
+    const raw=$('importText').value;
+    state.importRawText=raw;
+    const parsed=parseScheduleText(raw);
+    if(parsed.length===0){toast('Could not find any recognizable days — check the format','error');return;}
+    state.importParsed=parsed;
+    render();
+  });
+  const confirmImportBtn=$('confirmImportBtn');
+  if(confirmImportBtn)confirmImportBtn.addEventListener('click',async()=>{
+    confirmImportBtn.disabled=true;confirmImportBtn.innerHTML='<span class="spinner"></span>Importing&hellip;';
+    try{
+      const {days,sha}=await fetchTraining();
+      const byDate={};
+      days.forEach(d=>{byDate[d.date]=d;});
+      state.importParsed.forEach(pd=>{
+        const existing=byDate[pd.date];
+        if(existing){ existing.plan=pd.plan; existing.dayLabel=pd.dayLabel; }
+        else { byDate[pd.date]=pd; }
+      });
+      const merged=Object.values(byDate).sort((a,b)=> a.date<b.date?-1:a.date>b.date?1:0);
+      await saveTrainingJson(merged,sha);
+      state.trainingDays=merged;
+      toast(`Imported ${state.importParsed.length} day(s)`,'success');
+      state.importParsed=[];state.importRawText='';
+      state.screen='training';render();
+    }catch(e){toast('Import failed: '+e.message,'error',5000);confirmImportBtn.disabled=false;confirmImportBtn.innerHTML='&#x1F680; Import';}
+  });
+
+  // Training day form
+  const trainFormBackBtn=$('trainFormBackBtn');
+  if(trainFormBackBtn)trainFormBackBtn.addEventListener('click',()=>{state.screen='training';render();});
+  const completedToggle=$('completedToggle');
+  if(completedToggle)completedToggle.addEventListener('click',()=>completedToggle.classList.toggle('on'));
+  const trainDeleteBtn=$('trainDeleteBtn');
+  if(trainDeleteBtn)trainDeleteBtn.addEventListener('click',async()=>{
+    const day=state.editingTrainingDay;if(!day)return;
+    if(!confirm(`Delete "${day.dayLabel||day.date}"?`))return;
+    try{
+      const {days,sha}=await fetchTraining();
+      const updated=days.filter(d=>d.id!==day.id);
+      await saveTrainingJson(updated,sha);
+      state.trainingDays=updated;state.editingTrainingDay=null;state.screen='training';render();toast('Day deleted','success');
+    }catch(e){toast('Delete failed: '+e.message,'error');}
+  });
+  document.querySelectorAll('[data-action="removeStrava"]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const idx=parseInt(btn.dataset.idx,10);
+      state.editingTrainingDay.stravaActivities.splice(idx,1);
+      render();
+    });
+  });
+  const addManualStravaBtn=$('addManualStravaBtn');
+  if(addManualStravaBtn)addManualStravaBtn.addEventListener('click',async()=>{
+    const url=$('manualStravaUrl').value.trim();
+    const m=url.match(/strava\.com\/activities\/(\d+)/);
+    if(!m){toast('Paste a valid Strava activity URL','error');return;}
+    addManualStravaBtn.disabled=true;addManualStravaBtn.innerHTML='<span class="spinner"></span>';
+    try{
+      const token=await stravaAccessToken();
+      const res=await fetch(`https://www.strava.com/api/v3/activities/${m[1]}`,{headers:{Authorization:'Bearer '+token}});
+      const a=await res.json();
+      if(!a.id)throw new Error(a.message||'Activity not found');
+      state.editingTrainingDay.stravaActivities=state.editingTrainingDay.stravaActivities||[];
+      state.editingTrainingDay.stravaActivities.push(stravaActivityToObj(a));
+      toast('Activity added','success');
+      render();
+    }catch(e){toast('Could not fetch activity: '+e.message,'error');}
+    finally{ const btn=$('addManualStravaBtn'); if(btn){btn.disabled=false;btn.innerHTML='Add';} }
+  });
+  const trainResyncBtn=$('trainResyncBtn');
+  if(trainResyncBtn)trainResyncBtn.addEventListener('click',async()=>{
+    trainResyncBtn.disabled=true;trainResyncBtn.innerHTML='<span class="spinner"></span>Checking&hellip;';
+    try{
+      const found=await syncStravaForDay(state.editingTrainingDay.date);
+      if(found.length){ state.editingTrainingDay.stravaActivities=found; toast(`Found ${found.length} activit${found.length===1?'y':'ies'}`,'success'); }
+      else { toast('No Strava activities found for this date','error'); }
+      render();
+    }catch(e){toast('Strava check failed: '+e.message,'error');}
+  });
+  const saveTrainingDayBtn=$('saveTrainingDayBtn');
+  if(saveTrainingDayBtn)saveTrainingDayBtn.addEventListener('click',async()=>{
+    saveTrainingDayBtn.disabled=true;saveTrainingDayBtn.innerHTML='<span class="spinner"></span>Saving&hellip;';
+    try{
+      const day=state.editingTrainingDay;
+      day.plan=$('fPlan').value;
+      day.note=$('fNote').value;
+      day.completed=$('completedToggle')?.classList.contains('on')||false;
+      const {days,sha}=await fetchTraining();
+      const idx=days.findIndex(d=>d.id===day.id);
+      let updated;
+      if(idx>=0){updated=[...days];updated[idx]=day;}else{updated=[...days,day];}
+      await saveTrainingJson(updated,sha);
+      state.trainingDays=updated;
+      toast('Saved!','success');
+      state.screen='training';render();
+    }catch(e){toast('Save failed: '+e.message,'error',5000);saveTrainingDayBtn.disabled=false;saveTrainingDayBtn.innerHTML='&#x1F4BE; Save Day';}
   });
 
   // Form back/delete
@@ -971,6 +1364,17 @@ async function loadAndShowList() {
     state.screen='list';
   }
   catch(e){toast('Failed to load posts: '+e.message,'error',5000);state.screen='list';state.posts=[];}
+  render();
+}
+
+async function loadAndShowTraining() {
+  state.screen='loading';render();
+  try {
+    const {days}=await fetchTraining();
+    state.trainingDays=days;
+  }
+  catch(e){toast('Failed to load training log: '+e.message,'error',5000);state.trainingDays=state.trainingDays||[];}
+  state.screen='training';
   render();
 }
 
