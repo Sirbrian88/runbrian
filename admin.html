@@ -1376,6 +1376,13 @@ async function loadAndShowTraining() {
   catch(e){toast('Failed to load training log: '+e.message,'error',5000);state.trainingDays=state.trainingDays||[];}
   state.screen='training';
   render();
+  // Auto-sync Strava in the background if connected — no click needed.
+  if (localStorage.getItem('strava_refresh') && state.trainingDays.some(d => d.date <= today() && (!d.stravaActivities || d.stravaActivities.length===0))) {
+    try {
+      await syncStravaToTraining();
+      if (state.screen==='training') render();
+    } catch(e) { /* silent — Sync button in header still available if this fails */ }
+  }
 }
 
 async function init() {
