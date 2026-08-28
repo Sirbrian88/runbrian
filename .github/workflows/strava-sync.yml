@@ -1,0 +1,33 @@
+name: Sync Strava Activities
+
+on:
+  schedule:
+    - cron: '0 */3 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Sync Strava activities into training.json
+        env:
+          STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
+        run: node scripts/strava-sync.mjs
+      - name: Commit changes if any
+        run: |
+          git config user.name "strava-sync-bot"
+          git config user.email "actions@users.noreply.github.com"
+          if ! git diff --quiet -- training.json; then
+            git add training.json
+            git commit -m "Auto-sync Strava activities [skip ci]"
+            git push
+          else
+            echo "No changes to commit."
+          fi

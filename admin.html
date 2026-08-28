@@ -556,6 +556,7 @@ function renderList() {
   return `<header>
     <h1>Run<span>Brian</span></h1>
     <div class="header-btns">
+      <a class="btn-icon" href="https://runbrian.com" target="_blank" rel="noopener" title="View Live Site" style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;">&#x1F310;</a>
       <button class="btn-icon" id="trainingNavBtn" title="Training Log">&#x1F3C3;</button>
       <button class="btn-icon" id="settingsBtn" title="Settings">&#x2699;&#xFE0F;</button>
       <button class="btn-secondary btn-sm" id="newPostBtn">+ New Post</button>
@@ -710,6 +711,8 @@ function renderSettings() {
     <div class="field"><label>Strava Client ID</label><input type="text" id="stravaClientId" value="${sc||''}" placeholder="12345" autocomplete="off"></div>
     <div class="field"><label>Strava Client Secret</label><input type="password" id="stravaClientSecret" placeholder="xxxxxxxxxxxx" autocomplete="off"></div>
     <div class="field"><label>Strava Refresh Token</label><input type="password" id="stravaRefresh" value="${sr?'set (hidden)':''}" placeholder="paste from setup script" autocomplete="off"></div>
+    ${sr?`<button type="button" class="btn-secondary btn-sm" id="copyStravaRefreshBtn">&#x1F4CB; Copy Refresh Token</button>
+    <div style="color:var(--muted);font-size:12px;">Paste this into your GitHub repo's Settings &rarr; Secrets and variables &rarr; Actions as <strong>STRAVA_REFRESH_TOKEN</strong> so runs auto-sync even when you don't open this app.</div>`:''}
     <button class="btn-primary" id="saveStravaBtn">Save Strava Settings</button>
     <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;font-size:13px;color:var(--muted);">
       <strong style="color:var(--text);display:block;margin-bottom:4px;">Setup:</strong>
@@ -732,6 +735,7 @@ function renderTrainingList() {
   return `<header>
     <button class="back-btn" id="trainBackToPostsBtn">&larr; Posts</button>
     <div class="header-btns">
+      <a class="btn-icon" href="https://runbrian.com/training.html" target="_blank" rel="noopener" title="View Live Site" style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;">&#x1F310;</a>
       <button class="btn-icon" id="trainSyncBtn" title="Sync Strava">&#x1F504;</button>
       <button class="btn-secondary btn-sm" id="trainImportBtn">+ Import Schedule</button>
     </div>
@@ -935,6 +939,14 @@ function attachEvents() {
     if(sec)localStorage.setItem('strava_client_secret',sec);
     if(ref&&ref!=='set (hidden)')localStorage.setItem('strava_refresh',ref);
     toast('Strava settings saved!','success');
+  });
+
+  const copyStravaRefreshBtn=$('copyStravaRefreshBtn');
+  if(copyStravaRefreshBtn)copyStravaRefreshBtn.addEventListener('click',async()=>{
+    const val=localStorage.getItem('strava_refresh')||'';
+    if(!val){toast('No refresh token saved yet','error');return;}
+    try{ await navigator.clipboard.writeText(val); toast('Copied! Paste it into GitHub as STRAVA_REFRESH_TOKEN','success',4000); }
+    catch(e){ toast('Could not copy automatically — long-press the field instead','error'); }
   });
 
   const clearCredsBtn=$('clearCredsBtn');
