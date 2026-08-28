@@ -6,7 +6,20 @@
     "plan": "Get out of the hotel and on the road. Off the treadmill.\nGoal is 5-6 miles. Power walk for 1 mile then for the rest of the run relaxed pace/zone 2 going 4/1. Run 4 minutes power walk 1 minute.\nPT exercises.\nStretch.",
     "note": "was tough. Walked last 2 miles. probably due to a slight hangover after last nights fun.",
     "completed": true,
-    "stravaActivities": []
+    "stravaActivities": [
+      {
+        "id": 19926403536,
+        "name": "Morning Trail Run",
+        "type": "Run",
+        "distanceMiles": 6.1,
+        "movingTimeSec": 5755,
+        "elapsedTimeSec": 5961,
+        "elevGainFt": 135,
+        "pace": "15:43/mi",
+        "url": "https://www.strava.com/activities/19926403536",
+        "startDateLocal": "2026-08-27T09:38:34Z"
+      }
+    ]
   },
   {
     "id": "d_2026-08-28",
